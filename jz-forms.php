@@ -7,6 +7,9 @@ $files = array(
     "js/jz-forms/JZ.js",
     "js/jz-forms/JZ/Observable.js",
     "js/jz-forms/JZ/Widget.js",
+    "js/jz-forms/JZ/Widget/Text.js",
+    "js/jz-forms/JZ/Widget/Container.js",
+    "js/jz-forms/JZ/Widget/Container/Form.js",
     "js/jz-forms/JZ/Builder.js",
     "js/jz-forms/init.js"
 );

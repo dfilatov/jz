@@ -8,11 +8,29 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
     },
 
+    getId : function() {
+
+        var result = JZ._identifyElement(this.element);
+
+        return (this.getId = function() {
+            return result;
+        })();
+
+    },
+
+    getName : function() {
+
+        return element.attr('name');
+
+    },
+
     focus : function() {
 
         this.element.focus();
 
     },
+
+    addChild : function(widget) {},
 
     _getDefaultParams : function() {
 
