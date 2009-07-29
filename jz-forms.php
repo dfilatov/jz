@@ -15,7 +15,9 @@ $files = array(
     "js/JZ/Widget/Container/Form.js",
     "js/JZ/Value.js",
     "js/JZ/Dependence.js",
-    "js/JZ/DependenceComposition.js",
+    "js/JZ/Dependence/Composition.js",
+    "js/JZ/Dependence/Composition/AND.js",
+    "js/JZ/Dependence/Composition/OR.js",
     "js/JZ/Builder.js",
     "js/init.js"
 );
