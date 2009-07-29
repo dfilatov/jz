@@ -3,9 +3,10 @@ JZ.Dependence.Composition= $.inherit(JZ.Dependence, {
 	getFrom : function() {
 
 		var result = [];
-		return $.each(this._params.dependencies, function() {
+		$.each(this._params.dependencies, function() {
 			result.concat(this.getFrom());
 		});
+		return result;
 
 	},
 
