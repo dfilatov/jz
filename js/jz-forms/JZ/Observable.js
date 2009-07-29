@@ -2,7 +2,7 @@ JZ.Observable = $.inherit({
 
     bind : function (type, data, fn, context) {
 
-        jQuery.event.addWithContext(this, type, data, fn, context);
+        jQuery.event.bindWithContext(this, type, data, fn, context);
         return this;
 
     },
@@ -94,7 +94,7 @@ JZ.Observable = $.inherit({
             object && object.destroy && object.destroy();
             delete this[name];
         }
-        
+
     }
 
 });

@@ -2,52 +2,80 @@ JZ.Builder = $.inherit({
 
     __constructor : function(element) {
 
-        this.element = element;
-        this.widgets = [];
-        this.widgetsByName = {};
-        this.widgetsById = {};
+        this._element = element;
+        this._widgets = [];
+        this._widgetsByName = {};
+        this._widgetsById = {};
 
     },
 
     build : function() {
 
         var _this = this, widget;
-        $.each(this.element.find('.' + JZ.CSS_CLASS_WIDGET), function() {
+        $.each(this._element.add(this._element.find('.' + JZ.CSS_CLASS_WIDGET)), function() {
             widget = _this._makeWidgetByElement($(this));
-            _this.widgets.push(_this.widgetsById[widget.getId()] = widget);
+            _this._widgets.push(_this._widgetsById[widget.getId()] = widget);
         });
 
         // Строим хэш по именам после создании дерева виджетов, потому что имена некорорых виджетов зависят от детей
-        var i = 0;
-        while(widget = _this.widgets[i++]) {
-            _this.widgets[widget.getName()] = widget;
+        var i = 0, name;
+        while(widget = _this._widgets[i++]) {
+            name = widget.getName();
+            name && (_this._widgets[name] = widget);
         }
+
+        var result = this._widgets[0];
+
+        delete this._element;
+        delete this._widgets;
+        delete this._widgetsByName;
+        delete this._widgetsById;
+
+        result.init();
+
+        return result;
 
     },
 
     _makeWidgetByElement : function(element) {
 
-        var params = $.isFunction(element[0].onclick)? element[0].onclick().jz || {} : {},
-            result = new this.__self._elementToWidgetClass(element, this.__self._getClassElement(element));
-            ;
+        var params = this.__self._extractParamsFromElement(element),
+            result = new (this.__self._typeToWidgetClass(params.type))(element, this.__self._getClassElement(element, params), params);
+
+        params.type != 'form' && this._getParentWidget(element).addChild(result);
 
         return result;
 
+    },
+
+    _getParentWidget : function(element) {
+
+        return this._widgetsById[JZ._identifyElement(element.parents('.' + JZ.CSS_CLASS_WIDGET + ':first'))];
+
     }
 
-}, {
+},
+{
 
-    _getClassElement : function(element) {
+    _getClassElement : function(element, params) {
 
-        var tagName = element[0].tagName.toLowerCase();
+        if(params.container) {
+            return element.closest(params.container);
+        }
 
-        if(tagName == '')
+        switch(params.type) {
+            case 'form':
+            case 'fieldset':
+            case 'button':
+                return element;
+            break;
 
-        var parent = element;
-        while(parent = parent.parent()) {
-            if(parent.hasClass(JZ.CSS_CLASS_WIDGET)) {
-                return;
-            }
+            case 'state':
+                return element.parent();
+            break;
+
+            default:
+                return element.parent().parent();
         }
 
     },
@@ -57,41 +85,66 @@ JZ.Builder = $.inherit({
         var result = $.isFunction(element[0].onclick)? element[0].onclick().jz || {} : {};
 
         if(!result.type) {
-            
+           result.type = this._extractTypeFromElement(element);
         }
 
+        return result;
 
     },
 
-    _elementToWidgetClass : function(element) {
-
-        var result = this._cssClassToWidgetClass(element.attr('class'));
-        if(result) {
-            return result;
-        }
+    _extractTypeFromElement : function(element) {
 
         var tagName = element[0].tagName.toLowerCase();
+
         if(tagName == 'input') {
-            return this._cssClassToWidgetClass('zf-text');
+            switch(element.attr('type')) {
+                case 'radio':
+                case 'checkbox':
+                    return 'state';
+                break;
+
+                case 'image':
+                case 'submit':
+                    return 'submit';
+                break;
+            }
         }
+
+        if(tagName == 'select' || tagName == 'fieldset' || tagName == 'form') {
+            return tagName;
+        }
+
+        return this._cssClassToType(element.attr('class')) || 'text';
 
     },
 
-    _cssClassToWidgetClass : (function() {
+    _cssClassToType : (function() {
 
-        var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(jz-number)'),
-            classes = {
-                'jz-text'   : JZ.Widget.Text,
-                'jz-number' : JZ.Widget.Text.Number
-            };
+        var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|submit)');
         return function(cssClass) {
             if(cache[cssClass]) {
                 return cache[cssClass];
             }
             var result = cssClass.match(typeRE);
             if(result) {
-                return cache[cssClass] = classes(result[1]);
+                return cache[cssClass] = result[1];
             }
+        };
+
+    })(),
+
+    _typeToWidgetClass : (function() {
+
+        var classes = {
+            'text'     : JZ.Widget.Text,
+            'number'   : JZ.Widget.Text.Number,
+            'submit'   : JZ.Widget.Button.Submit,
+            'fieldset' : JZ.Widget.Container,
+            'form'     : JZ.Widget.Container.Form
+        };
+
+        return function(type) {
+            return classes[type] || JZ._throwException('undefined type "' + type + '"');
         };
 
     })()

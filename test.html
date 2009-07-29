@@ -1,15 +1,23 @@
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>jz-forms</title>
         <script type="text/javascript" src="js/jquery/jquery-1.3.2.js"></script>
         <script type="text/javascript" src="jz-forms.php"></script>
     </head>
     <body>
-        <form class="jz">
+        <form class="jz" action=".">
             <dl>
                 <dt><label for="input-name">name</label></dt>
-                <dd><input class="jz" name="name" id="input-name"/></dd>
+                <dd><input class="jz" name="name" id="input-name" onclick="return {jz:{focusOnInit:true}}"/></dd>
             </dl>
+            <dl>
+                <dt><label for="input-number">number</label></dt>
+                <dd><input class="jz jz-number" name="number" id="input-number"/></dd>
+            </dl>
+            <div>
+                <input type="submit" class="jz" value="Отправить"/>
+            </div>
         </form>
     </body>
 </html>

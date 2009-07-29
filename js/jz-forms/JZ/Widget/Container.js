@@ -4,31 +4,31 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
         this.__base(element, classElement, params);
 
-        this.children = [];
+        this._children = [];
 
     },
 
     addChild : function(widget) {
 
-        this.children.push(widget);
+        this._children.push(widget);
 
     },
 
     focus : function() {
 
-        this.children[0] && this.children[0].focus();
+        this._children[0] && this._children[0].focus();
 
     },
 
-    _init : function() {
+    init : function() {
 
-        this._applyFnToChildren('_init');
+        this._applyFnToChildren('init');
 
     },
 
     _applyFnToChildren : function(name, args) {
 
-        var children = this.children, i = 0, child;
+        var children = this._children, i = 0, child;
         while(child = children[i++]) {
             child[name].apply(child, args);
         }

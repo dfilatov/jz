@@ -1,4 +1,4 @@
-jQuery.event.addWithContext = function (elem, type, data, handler, context) {
+jQuery.event.bindWithContext = function (elem, type, data, handler, context) {
     var fn;
 
     // http://ajaxian.com/archives/working-aroung-the-instanceof-memory-leak
@@ -22,6 +22,6 @@ jQuery.event.addWithContext = function (elem, type, data, handler, context) {
 
 jQuery.fn.bind = function (type, data, fn, context) {
     return type === 'unload' ? this.one(type, data, fn) : this.each(function(){
-        jQuery.event.addWithContext(this, type, data, fn, context);
+        jQuery.event.bindWithContext(this, type, data, fn, context);
     });
 };

@@ -8,11 +8,17 @@ var JZ = {
 
     },
 
+    _throwException : function(text) {
+
+        throw 'JZException: ' + text;
+
+    },
+
     _identifyElement : (function() {
 
         var counter = 1;
         return function(element) {
-            return element.attr('id') || element.__id || (element.__id = counter++);
+            return element.attr('id') || element[0].__id || (element[0].__id = '__id-' + counter++);
         };
 
     })()
