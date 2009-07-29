@@ -21,7 +21,13 @@ JZ.Builder = $.inherit({
 		var i = 0, name;
 		while(widget = _this._widgets[i++]) {
 			name = widget.getName();
-			name && (_this._widgets[name] = widget);
+			name && (_this._widgetsByName[name] = widget);
+		}
+
+		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
+		i = 0;
+		while(widget = _this._widgets[i++]) {
+			this._buildDependencies(widget);
 		}
 
 		var result = this._widgets[0];
@@ -51,6 +57,65 @@ JZ.Builder = $.inherit({
 	_getParentWidget : function(element) {
 
 		return this._widgetsById[JZ._identifyElement(element.parents('.' + JZ.CSS_CLASS_WIDGET + ':first'))];
+
+	},
+
+	_buildDependencies : function(widget) {
+
+		var params = widget._params, _this = this;
+
+		$.each(['enabled', 'valid', 'required'], function() {
+			if(this in params) {
+				widget.addDependence(this, _this._buildDependence(this, widget, params[this]));
+			}
+		});
+
+	},
+
+	_buildDependence : function(type, widget, data) {
+
+		return $.isArray(data)?
+			new JZ.Dependence.Composition({
+				logic        : data[typeof data[0] == 'string'? 0 : 1],
+				dependencies : typeof data[0] == 'string'?
+					[this._buildDependence(type, widget, data[1])] :
+					[this._buildDependence(type, widget, data[0]), this._buildDependence(type, widget, data[2])]
+			}) :
+			this[this.__self._dependenceTypeToFn(type)](widget, data);
+
+	},
+
+	_buildEnabledDependence : function(widget, data) {
+
+		return new JZ.Dependence($.extend(data, { widget : this._getFromWidget(data, widget) }));
+
+	},
+
+	_buildRequiredDependence : function(widget, data) {
+
+		return new JZ.Dependence.Required($.extend(data, { widget : this._getFromWidget(data, widget) }));
+
+	},
+
+	_getFromWidget : function(params, widget) {
+
+		var result;
+
+		if(params.id) {
+			result = this._widgetsById[params.id];
+		}
+		else if(params.name) {
+			result = this._widgetsByName[params.name];
+		}
+		else {
+			return widget;
+		}
+
+		if(!result) {
+			JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
+		}
+
+		return result;
 
 	}
 
@@ -145,6 +210,16 @@ JZ.Builder = $.inherit({
 
 		return function(type) {
 			return classes[type] || JZ._throwException('undefined type "' + type + '"');
+		};
+
+	})(),
+
+	_dependenceTypeToFn : (function() {
+
+		var fns = {};
+
+		return function(type) {
+			return fns[type] || (fns[type] = '_build' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'Dependence');
 		};
 
 	})()

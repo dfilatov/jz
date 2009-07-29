@@ -3,21 +3,21 @@ JZ.Widget.Text = $.inherit(JZ.Widget, {
 	_bindEvents : function() {
 
 		this._element
-				.bind('focus', this._onFocus, this)
-				.bind('blur', this._onBlur, this)
-				.bind('change keyup', this._onChange, this);
+			.bind('focus', this._onFocus, this)
+			.bind('blur', this._onBlur, this)
+			.bind('change keyup', this._onChange, this);
 
 	},
 
 	_onFocus : function() {
 
-		this.addClass(this.__self.CSS_CLASS_FOCUSED);
+		this.addCSSClass(this.__self.CSS_CLASS_FOCUSED);
 
 	},
 
 	_onBlur : function() {
 
-		this.removeClass(this.__self.CSS_CLASS_FOCUSED);
+		this.removeCSSClass(this.__self.CSS_CLASS_FOCUSED);
 
 	},
 

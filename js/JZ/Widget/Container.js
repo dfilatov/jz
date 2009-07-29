@@ -42,6 +42,13 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	_setForm : function(form) {
+
+		this._applyFnToChildren('_setForm', arguments);
+		this.__base(form);
+
+	},
+
 	_destruct : function() {
 
 		this._applyFnToChildren('_destruct');

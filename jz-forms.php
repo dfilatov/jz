@@ -16,8 +16,7 @@ $files = array(
     "js/JZ/Value.js",
     "js/JZ/Dependence.js",
     "js/JZ/Dependence/Composition.js",
-    "js/JZ/Dependence/Composition/AND.js",
-    "js/JZ/Dependence/Composition/OR.js",
+    "js/JZ/Dependence/Required.js",
     "js/JZ/Builder.js",
     "js/init.js"
 );

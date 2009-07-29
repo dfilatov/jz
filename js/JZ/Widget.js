@@ -6,6 +6,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._classElement = classElement || element;
 		this._params = $.extend(this._getDefaultParams(), params);
 		this._parent = null;
+		this._form = null;
 		this._isRequired = false;
 		this._isValid = true;
 		this._isEnabled = true;
@@ -39,15 +40,30 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	addClass : function(name) {
+	hasCSSClass : function(name) {
+
+		return this._classElement.hasClass(name);
+
+	},
+
+	addCSSClass : function(name) {
 
 		this._classElement.addClass(name);
 
 	},
 
-	removeClass : function(name) {
+	removeCSSClass : function(name) {
 
 		this._classElement.removeClass(name);
+
+	},
+
+	replaceCSSClass : function(nameFrom, nameTo) {
+
+		if(this.hasCSSClass(nameFrom)) {
+			this.removeCSSClass(nameFrom);
+		}
+		this.addCSSClass(nameTo);
 
 	},
 
@@ -55,11 +71,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._bindEvents();
 
-		if (this._hasValue()) {
+		if(this._hasValue()) {
 			this._initValue();
 		}
 
-		if (this._params.focusOnInit) {
+		if(this._params.focusOnInit) {
 			this.focus();
 		}
 
@@ -79,7 +95,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	isReady : function() {
 
-		return !this.isRequired() && this.isValid();
+		return this.isEnabled() && !this.isRequired() && this.isValid();
 
 	},
 
@@ -96,9 +112,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		}
 
 		this._enableElements();
-		this.removeClass(this.__self.CSS_CLASS_DISABLED);
+		this.removeCSSClass(this.__self.CSS_CLASS_DISABLED);
 		this._isEnabled = true;
-		this.trigger('enable');
+		this.trigger('enable', this);
 
 	},
 
@@ -109,9 +125,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		}
 
 		this._disableElements();
-		this.addClass(this.__self.CSS_CLASS_DISABLED);
+		this.addCSSClass(this.__self.CSS_CLASS_DISABLED);
 		this._isEnabled = false;
-		this.trigger('disable');
+		this.trigger('disable', this);
 
 	},
 
@@ -141,18 +157,28 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._dependencies[type] = dependence;
 
-		var ids = {};
+		var ids = {}, _this = this;
 		$.each(dependence.getFrom(), function() {
 			if(ids[this.getId()]) {
 				return true;
 			}
 			ids[this.getId()] = true;
-			this.bind('change', this._checkDependencies, this);
+			this.bind('change', function() {
+				this._checkDependencies();				
+			}, _this);
 		});
 
 	},
 
 	addChild : function(widget) {},
+
+	_setForm : function(form) {
+
+		this._form = form;
+		form._addWidget(this);
+		this._checkDependencies();
+
+	},
 
 	_getDefaultParams : function() {
 
@@ -201,17 +227,42 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_checkDependencies : (function() {
 
-		var order = ['required', 'valid'], length = order.length;
+		var order = ['enabled', 'valid', 'required'], length = order.length;
 		return function() {
-			var i = 0;
-			while(i++ < length) {
-				this._processDependenceResult(order[i], this._dependencies[order[i]].check());
+			console.log(this.getId())
+			var i = 0, type;
+			while(i < length) {
+				type = order[i++];
+				this._dependencies[type] && this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
 			}
 		};
 
-	}),
+	})(),
 
-	_processDependenceResult : function(type, result) {
+	_processEnabledDependenceCheck : function(check) {
+
+		this[check.result? 'enable' : 'disable']();
+
+	},
+
+	_processRequiredDependenceCheck : function(check) {
+
+		this._updateRequired(!check.result);
+
+	},
+
+	_updateRequired : function(isRequired) {
+
+		if(this._isRequired) {
+			if(!isRequired) {
+				this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK);
+			}
+		}
+		else if(isRequired) {
+			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED_OK, this.__self.CSS_CLASS_REQUIRED);
+		}
+
+		this._isRequired = isRequired;
 
 	},
 
@@ -228,6 +279,16 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	CSS_CLASS_REQUIRED    : JZ.CSS_CLASS_WIDGET + '-required',
 	CSS_CLASS_REQUIRED_OK : JZ.CSS_CLASS_WIDGET + '-required-ok',
 	CSS_CLASS_INVALID     : JZ.CSS_CLASS_WIDGET + '-invalid',
-	CSS_CLASS_INVALID_OK  : JZ.CSS_CLASS_WIDGET + '-invalid-ok'
+	CSS_CLASS_INVALID_OK  : JZ.CSS_CLASS_WIDGET + '-invalid-ok',
+
+	_dependenceTypeToFn : (function() {
+
+		var fns = {};
+
+		return function(type) {
+			return fns[type] || (fns[type] = '_process' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'DependenceCheck');
+		};
+
+	})()
 
 });
