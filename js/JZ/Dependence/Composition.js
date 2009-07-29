@@ -2,8 +2,9 @@ JZ.Dependence.Composition= $.inherit(JZ.Dependence, {
 
 	getFrom : function() {
 
-		return $.map(this._params.dependencies, function(dependence) {
-			return dependence.getFrom();
+		var result = [];
+		return $.each(this._params.dependencies, function() {
+			result.concat(this.getFrom());
 		});
 
 	},
