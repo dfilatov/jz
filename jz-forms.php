@@ -4,17 +4,20 @@ $files = array(
     "js/jquery/jquery.context.js",
     "js/jquery/jquery.inherit.js",
     "js/jquery/jquery.debounce.js",
-    "js/jz-forms/JZ.js",
-    "js/jz-forms/JZ/Observable.js",
-    "js/jz-forms/JZ/Widget.js",
-    "js/jz-forms/JZ/Widget/Text.js",
-    "js/jz-forms/JZ/Widget/Text/Number.js",
-    "js/jz-forms/JZ/Widget/Button.js",
-    "js/jz-forms/JZ/Widget/Button/Submit.js",
-    "js/jz-forms/JZ/Widget/Container.js",
-    "js/jz-forms/JZ/Widget/Container/Form.js",
-    "js/jz-forms/JZ/Builder.js",
-    "js/jz-forms/init.js"
+    "js/JZ.js",
+    "js/JZ/Observable.js",
+    "js/JZ/Widget.js",
+    "js/JZ/Widget/Text.js",
+    "js/JZ/Widget/Text/Number.js",
+    "js/JZ/Widget/Button.js",
+    "js/JZ/Widget/Button/Submit.js",
+    "js/JZ/Widget/Container.js",
+    "js/JZ/Widget/Container/Form.js",
+    "js/JZ/Value.js",
+    "js/JZ/Dependence.js",
+    "js/JZ/DependenceComposition.js",
+    "js/JZ/Builder.js",
+    "js/init.js"
 );
 
 $result = "";

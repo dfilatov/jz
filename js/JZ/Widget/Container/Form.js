@@ -39,7 +39,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
     },
 
     _onWidgetChange : function(event, widget) {
-
+		
         var widgetData = this._widgetsDataById[widget.getId()], isReady = widget.isReady();
         if(widgetData.isReady == isReady) {
             return;

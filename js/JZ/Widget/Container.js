@@ -10,6 +10,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
     addChild : function(widget) {
 
+		widget._parent = this;
         this._children.push(widget);
 
     },
@@ -23,8 +24,32 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
     init : function() {
 
         this._applyFnToChildren('init');
+		this.__base();
 
     },
+
+	enable : function() {
+
+		this._applyFnToChildren('enable');
+		this.__base();
+
+	},
+
+	disable : function() {
+
+		this._applyFnToChildren('disable');
+		this.__base();
+
+	},
+
+	_destruct : function() {
+
+		this._applyFnToChildren('_destruct');
+		this.__base();
+
+		delete this._children;
+
+	},
 
     _applyFnToChildren : function(name, args) {
 

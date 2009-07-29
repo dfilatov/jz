@@ -1,11 +1,5 @@
 JZ.Widget.Text = $.inherit(JZ.Widget, {
 
-    createValue : function(value) {
-
-        return JZ.Value(value);
-
-    },
-
     _bindEvents : function() {
 
         this._element
@@ -41,7 +35,7 @@ JZ.Widget.Text = $.inherit(JZ.Widget, {
 
     _extractValueFromElement : function() {
 
-        return this._element.value;
+        return this._element.val();
 
     },
 
