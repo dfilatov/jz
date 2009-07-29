@@ -1,54 +1,54 @@
 JZ.Widget.Text = $.inherit(JZ.Widget, {
 
-    _bindEvents : function() {
+	_bindEvents : function() {
 
-        this._element
-            .bind('focus', this._onFocus, this)
-            .bind('blur', this._onBlur, this)
-            .bind('change keyup', this._onChange, this);
+		this._element
+				.bind('focus', this._onFocus, this)
+				.bind('blur', this._onBlur, this)
+				.bind('change keyup', this._onChange, this);
 
-    },
+	},
 
-    _onFocus : function() {
+	_onFocus : function() {
 
-        this.addClass(this.__self.CSS_CLASS_FOCUSED);
+		this.addClass(this.__self.CSS_CLASS_FOCUSED);
 
-    },
+	},
 
-    _onBlur : function() {
+	_onBlur : function() {
 
-        this.removeClass(this.__self.CSS_CLASS_FOCUSED);
+		this.removeClass(this.__self.CSS_CLASS_FOCUSED);
 
-    },
+	},
 
-    _onChange : function() {
+	_onChange : function() {
 
-        this._updateValue();
+		this._updateValue();
 
-    },
+	},
 
-    _hasValue : function() {
+	_hasValue : function() {
 
-        return true;
+		return true;
 
-    },
+	},
 
-    _extractValueFromElement : function() {
+	_extractValueFromElement : function() {
 
-        return this._element.val();
+		return this._element.val();
 
-    },
+	},
 
-    _enableElements : function() {
+	_enableElements : function() {
 
-        this._element.attr('disabled', false);
+		this._element.attr('disabled', false);
 
-    },
+	},
 
-    _disableElements : function() {
+	_disableElements : function() {
 
-        this._element.attr('disabled', true);
+		this._element.attr('disabled', true);
 
-    }
+	}
 
 });

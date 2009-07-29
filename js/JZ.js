@@ -1,26 +1,26 @@
 var JZ = {
 
-    CSS_CLASS_WIDGET : 'jz',
+	CSS_CLASS_WIDGET : 'jz',
 
-    build : function(element) {
+	build : function(element) {
 
-        return new this.Builder(element).build();
+		return new this.Builder(element).build();
 
-    },
+	},
 
-    _throwException : function(text) {
+	_throwException : function(text) {
 
-        throw 'JZException: ' + text;
+		throw 'JZException: ' + text;
 
-    },
+	},
 
-    _identifyElement : (function() {
+	_identifyElement : (function() {
 
-        var counter = 1;
-        return function(element) {
-            return element.attr('id') || element[0].__id || (element[0].__id = '__id-' + counter++);
-        };
+		var counter = 1;
+		return function(element) {
+			return element.attr('id') || element[0].__id || (element[0].__id = '__id-' + counter++);
+		};
 
-    })()
+	})()
 
 };
