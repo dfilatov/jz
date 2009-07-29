@@ -4,7 +4,7 @@ JZ.Dependence.Composition= $.inherit(JZ.Dependence, {
 
 		var result = [];
 		$.each(this._params.dependencies, function() {
-			result.concat(this.getFrom());
+			result = result.concat(this.getFrom());
 		});
 		return result;
 
