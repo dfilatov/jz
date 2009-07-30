@@ -3,11 +3,11 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 	_setForm : function(form) {
 
 		this.__base(form);
-		form.bind('change-ready', this._onChangeReady, this);
+		form.bind('ready-change', $.bindContext(this._onReadyChange, this));
 
 	},
 
-	_onChangeReady : function(event, isReady) {
+	_onReadyChange : function(event, isReady) {
 
 		this[isReady? 'enable' : 'disable']();
 

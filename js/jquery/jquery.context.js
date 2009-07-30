@@ -25,3 +25,9 @@ jQuery.fn.bind = function (type, data, fn, context) {
         jQuery.event.bindWithContext(this, type, data, fn, context);
     });
 };
+
+jQuery.bindContext = function(fn, context) {
+	return function() {
+		return fn.apply(context, arguments);	
+	};
+};

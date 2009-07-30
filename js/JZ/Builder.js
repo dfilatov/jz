@@ -87,7 +87,7 @@ JZ.Builder = $.inherit({
 
 	_buildEnabledDependence : function(widget, data) {
 
-		return new JZ.Dependence($.extend(data, { widget : this._getFromWidget(data, widget) }));
+		return new JZ.Dependence.Enabled($.extend(data, { widget : this._getFromWidget(data, widget) }));
 
 	},
 

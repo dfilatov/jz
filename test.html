@@ -9,11 +9,11 @@
         <form class="jz" action=".">
             <dl>
                 <dt><label for="input-name">name</label></dt>
-                <dd><input class="jz" name="name" id="input-name" onclick="return {jz:{focusOnInit:true,required:{}}}"/></dd>
+                <dd><input class="jz" name="name" id="input-name" onclick="return {jz:{focusOnInit:true,required:{min:3}}}"/></dd>
             </dl>
             <dl>
                 <dt><label for="input-number">number</label></dt>
-                <dd><input class="jz jz-number" name="number" id="input-number" onclick="return {jz:{enabled:{name:'name',pattern:/2/}}}"/></dd>
+                <dd><input class="jz jz-number" name="number" id="input-number" onclick="return {jz:{enabled:[[{name:'name',pattern:/2/},'and',['not',{name:'name',pattern:/3/}]],'or',{name:'name',pattern:/4/}]}}"/></dd>
             </dl>
             <div>
                 <input type="submit" class="jz" value="Отправить"/>

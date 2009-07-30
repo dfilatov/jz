@@ -13,28 +13,41 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		this.__base();
 		this._setForm(this);
+		this._checkDependencies();
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
 		this.trigger('init');
 
 	},
 
-	_checkDependencies : function() {},
+	_checkDependencies : function() {
+
+		var _this = this;
+		$.each(this._widgetsDataById, function() {
+			if(_this !== this.widget) {
+				this.widget._checkDependencies();
+			}
+		});
+
+	},
 
 	_addWidget : function(widget) {
 
 		this._widgetsDataById[widget.getId()] = {
-			widget  : widget.bind('change enable disable', this._onWidgetChange, this),
-			isReady : widget.isReady()
+			widget  : widget === this?
+				widget :
+				widget.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this)),
+			isReady : true
 		};
 
 	},
 
-	_onWidgetChange : function(event, widget) {
+	_onWidgetReadyChange : function(event, widget) {
 
 		var widgetData = this._widgetsDataById[widget.getId()], isReady = widget.isReady();
 		if(widgetData.isReady == isReady) {
 			return;
 		}
+
 		this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
 		widgetData.isReady = isReady;
 

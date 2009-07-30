@@ -95,7 +95,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	isReady : function() {
 
-		return this.isEnabled() && !this.isRequired() && this.isValid();
+		return !this.isEnabled() || (!this.isRequired() && this.isValid());
 
 	},
 
@@ -163,9 +163,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				return true;
 			}
 			ids[this.getId()] = true;
-			this.bind('change', function() {
-				this._checkDependencies();				
-			}, _this);
+			this.bind('change', $.bindContext(_this._checkDependencies, _this));
 		});
 
 	},
@@ -175,8 +173,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_setForm : function(form) {
 
 		this._form = form;
-		form._addWidget(this);
-		this._checkDependencies();
+		form._addWidget(this);		
 
 	},
 
@@ -229,11 +226,17 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var order = ['enabled', 'valid', 'required'], length = order.length;
 		return function() {
-			console.log(this.getId())
-			var i = 0, type;
+			var i = 0, type, check, isReady = this.isReady();
 			while(i < length) {
 				type = order[i++];
-				this._dependencies[type] && this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
+				if(this._dependencies[type]) {
+					check = this._dependencies[type].check();
+					check.params = $.makeArray(check.params);
+					this[this.__self._dependenceTypeToFn(type)](check);
+				}
+			}
+			if(isReady != this.isReady()) {
+				this.trigger('ready-change', this);
 			}
 		};
 
@@ -241,7 +244,18 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_processEnabledDependenceCheck : function(check) {
 
-		this[check.result? 'enable' : 'disable']();
+		if(check.result) {
+			this.enable();
+			var i = 0, param;
+			while(param = check.params[i++]) {
+				if(param.focusOnEnable) {
+					return this.focus();
+				}
+			}
+		}
+		else {
+			this.disable();
+		}
 
 	},
 

@@ -13,26 +13,26 @@ JZ.Dependence.Composition= $.inherit(JZ.Dependence, {
 	check : function() {
 
 		if(this._params.logic == 'not') {
-			(this.check = function() {
+			return (this.check = $.bindContext(function() {
 				var check = this._params.dependencies[0].check();
 				return {
-					check  : !check.result,
+					result : !check.result,
 					params : $.makeArray(check.params)
 				};
-			})();
+			}, this))();
 		}
 		else {
-			(this.check = function() {
+			return (this.check = $.bindContext(function() {
+
 				var checkLeft = this._params.dependencies[0].check(),
 					checkRight = this._params.dependencies[1].check();
-
 				return {
-					check  : this._params.logic == 'or'?
+					result : this._params.logic == 'or'?
 						checkLeft.result || checkRight.result :
 						checkLeft.result && checkRight.result,
 					params : $.makeArray(checkLeft.params).concat($.makeArray(checkRight.params))
 				};
-			})();
+			}, this))();
 		}
 
 	}
