@@ -6,6 +6,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		this._widgetsDataById = {};
 		this._unreadyCounter = 0;
+		this._changedCounter = 0;
 
 	},
 
@@ -15,7 +16,33 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._setForm(this);
 		this._checkDependencies();
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
-		this.trigger('init');
+		if(this._unreadyCounter == 0) { // инициирующее событие
+			this.trigger('ready-change', this);
+		}
+		this.trigger('init', this);
+
+	},
+
+	isReady : function() {
+
+		return this._unreadyCounter == 0 && (!this._params.heedChanges || this._changedCounter > 0);
+
+	},
+
+	_bindEvents : function() {
+
+		this._element.submit($.bindContext(this._onSubmit, this));
+
+	},
+
+	_onSubmit : function() {
+
+		if(this.isReady()) {
+			this._beforeSubmit();
+			return true;
+		}
+
+		return false;
 
 	},
 
@@ -30,6 +57,14 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	_getDefaultParams : function() {
+
+		return {
+			heedChanges : false
+		};
+
+	},
+
 	_addWidget : function(widget) {
 
 		this._widgetsDataById[widget.getId()] = {
@@ -38,6 +73,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 				widget.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this)),
 			isReady : true
 		};
+
+		if(this._params.heedChanges && widget._hasValue()) {
+			widget.bind('initial-value-change', $.bindContext(this._onWidgetInitialValueChange, this));
+		}
 
 	},
 
@@ -50,8 +89,18 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
 		widgetData.isReady = isReady;
+		this.trigger('ready-change', this);
 
-		this.trigger('ready-change', this._unreadyCounter == 0);
+	},
+
+	_onWidgetInitialValueChange : function(event, isInitialValueChanged) {
+
+		var counter = this._changedCounter;
+		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);		
+
+		if(counter + this._changedCounter == 1) {
+			this.trigger('ready-change', this);
+		}
 
 	}
 

@@ -28,17 +28,17 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
-	enable : function() {
+	enable : function(byParent) {
 
-		this._applyFnToChildren('enable');
-		this.__base();
+		this.__base(byParent);
+		this._applyFnToChildren('enable', [true]);
 
 	},
 
 	disable : function() {
 
-		this._applyFnToChildren('disable');
 		this.__base();
+		this._applyFnToChildren('disable');
 
 	},
 
@@ -46,6 +46,13 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this._applyFnToChildren('_setForm', arguments);
 		this.__base(form);
+
+	},
+
+	_beforeSubmit : function() {
+
+		this._applyFnToChildren('_beforeSubmit');
+		this.__base();
 
 	},
 

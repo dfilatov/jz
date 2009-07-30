@@ -105,15 +105,23 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	enable : function() {
+	enable : function(byParent) {
 
 		if(this.isEnabled() || !this._parent.isEnabled()) {
 			return;
 		}
 
+		if(byParent && this._dependencies['enabled']) {
+			return this._checkDependencies('enabled');
+		}
+
 		this._enableElements();
 		this.removeCSSClass(this.__self.CSS_CLASS_DISABLED);
+		var isReady = this.isReady();
 		this._isEnabled = true;
+		if(isReady != this.isReady()) {
+			this.trigger('ready-change', this);
+		}
 		this.trigger('enable', this);
 
 	},
@@ -126,7 +134,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._disableElements();
 		this.addCSSClass(this.__self.CSS_CLASS_DISABLED);
+		var isReady = this.isReady();
 		this._isEnabled = false;
+		if(isReady != this.isReady()) {
+			this.trigger('ready-change', this);
+		}
 		this.trigger('disable', this);
 
 	},
@@ -142,8 +154,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		if(this._value.isEqual(value)) {
 			return;
 		}
+		var isInitialValueChanged = this._isInitialValueChanged();
 		this._value = value;
-		this.trigger('change', this);
+		this.trigger('value-change', this);
+		if(isInitialValueChanged != this._isInitialValueChanged()) {
+			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
+			this.trigger('initial-value-change', !isInitialValueChanged);
+		}
 
 	},
 
@@ -160,10 +177,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		var ids = {}, _this = this;
 		$.each(dependence.getFrom(), function() {
 			if(ids[this.getId()]) {
-				return true;
+				return;
 			}
 			ids[this.getId()] = true;
-			this.bind('change', $.bindContext(_this._checkDependencies, _this));
+			this.bind('value-change enable disable', $.bindContext(function(event) {
+				this._checkDependencies();
+			}, _this));
 		});
 
 	},
@@ -173,7 +192,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_setForm : function(form) {
 
 		this._form = form;
-		form._addWidget(this);		
+		form._addWidget(this);
 
 	},
 
@@ -216,6 +235,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_isInitialValueChanged : function() {
+
+		return !this._initialValue.isEqual(this._value);
+
+	},
+
 	_updateValue : function() {
 
 		this.setValue(this.createValue(this._extractValueFromElement()));
@@ -224,9 +249,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_checkDependencies : (function() {
 
-		var order = ['enabled', 'valid', 'required'], length = order.length;
-		return function() {
-			var i = 0, type, check, isReady = this.isReady();
+		var fullOrder = ['enabled', 'valid', 'required'];
+		return function(onlyType) {
+			var i = 0, type, check, order = !!onlyType? [onlyType] : fullOrder,
+				length = order.length, isReady = this.isReady();
 			while(i < length) {
 				type = order[i++];
 				if(this._dependencies[type]) {
@@ -283,11 +309,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_extractValueFromElement : function() {},
 	_bindEvents : function() {},
 	_enableElements : function() {},
-	_disableElements : function() {}
+	_disableElements : function() {},
+	_beforeSubmit : function() {}
 
 }, {
 
+	CSS_CLASS_HIDDEN      : JZ.CSS_CLASS_WIDGET + '-hidden',
 	CSS_CLASS_INITED      : JZ.CSS_CLASS_WIDGET + '-inited',
+	CSS_CLASS_CHANGED     : JZ.CSS_CLASS_WIDGET + '-changed',
 	CSS_CLASS_FOCUSED     : JZ.CSS_CLASS_WIDGET + '-focused',
 	CSS_CLASS_DISABLED    : JZ.CSS_CLASS_WIDGET + '-disabled',
 	CSS_CLASS_REQUIRED    : JZ.CSS_CLASS_WIDGET + '-required',
