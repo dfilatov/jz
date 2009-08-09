@@ -14,26 +14,40 @@ JZ.Dependence.Composition= $.inherit(JZ.Dependence, {
 
 		if(this._params.logic == 'not') {
 			return (this.check = $.bindContext(function() {
-				var check = this._params.dependencies[0].check();
+				var dependence = this._params.dependencies[0];
+				var check = dependence.check();				
 				return {
-					result : !check.result,
-					params : $.makeArray(check.params)
+					result : dependence._precheck() && !check.result,
+					params : check.params
 				};
 			}, this))();
 		}
 		else {
 			return (this.check = $.bindContext(function() {
-
 				var checkLeft = this._params.dependencies[0].check(),
 					checkRight = this._params.dependencies[1].check();
 				return {
 					result : this._params.logic == 'or'?
 						checkLeft.result || checkRight.result :
 						checkLeft.result && checkRight.result,
-					params : $.makeArray(checkLeft.params).concat($.makeArray(checkRight.params))
+					params : this._params.logic == 'or'?
+						this._onOr(checkLeft, checkRight) :
+						this._onAnd(checkRight, checkRight)
 				};
 			}, this))();
 		}
+
+	},
+
+	_onOr : function(checkLeft, checkRight) {
+
+		return this._params.dependencies[0].__self._onOr(checkLeft, checkRight);
+
+	},
+
+	_onAnd : function(checkLeft, checkRight) {
+
+		return this._params.dependencies[0].__self._onAnd(checkLeft, checkRight);
 
 	}
 

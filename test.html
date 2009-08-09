@@ -10,21 +10,25 @@
         <form class="jz" action="." onclick="return {jz:{heedChanges:true}}">
             <dl>
                 <dt><label for="input-name">name</label></dt>
-                <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2}}}"/></dd>
+                <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
             </dl>
-            <dl>
+            <!--dl>
                 <dt><label for="input-number">number</label></dt>
-                <dd><input class="jz jz-number" name="number" id="input-number" onclick="return {jz:{enabled:{name:'name',pattern:/.?/}}}"/></dd>
+                <dd><input class="jz jz-number" name="number" id="input-number" onclick="return {jz:{enabled:[{name:'name',pattern:/.{2}/,focusOnEnable:false},'and',{name:'name',pattern:/.+/,focusOnEnable:false}]}}"/></dd>
             </dl>
 			<fieldset class="jz" onclick="return {jz:{enabled:{name:'name',pattern:/3/}}}">
 				<dl>
 					<dt><label for="input-last">last</label></dt>
 					<dd><input class="jz" name="" id="input-last" onclick="return {jz:{required:{},enabled:{name:'name',pattern:/2/}}}"/></dd>
 				</dl>
-			</fieldset>
+			</fieldset-->
             <div>
                 <input type="submit" class="jz" value="Отправить" onclick="return {jz:{sdisableOnNoReady:false}}"/>
             </div>
         </form>
     </body>
 </html>
+<!--
+
+
+-->

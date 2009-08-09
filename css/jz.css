@@ -2,6 +2,10 @@
 	visibility: hidden;
 }
 
+.jz-invisible {
+	display: none;
+}
+
 .jz dd {
 	position: relative;
 }
@@ -12,7 +16,6 @@
 	top: 0;
 	color: #CCC;
 }
-
 
 .jz-invalid input {
 	color: #FF0000;

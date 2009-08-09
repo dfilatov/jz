@@ -1,10 +1,10 @@
 JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 
-	check : function() {
+	_processParams : function(result) {
 
-		var check = this.__base();
-		check.params.focusOnEnable = check.result && this._params.focusOnEnable;
-		return check;
+		return {
+			focusOnEnable : result && this._params.focusOnEnable
+		};
 
 	},
 
@@ -12,6 +12,24 @@ JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 
 		return {
 			focusOnEnable : false
+		};
+
+	}
+
+}, {
+
+	_onOr : function(checkLeft, checkRight) {
+
+		return {
+			focusOnEnable : checkLeft.params.focusOnEnable || checkRight.params.focusOnEnable
+		};
+
+	},
+
+	_onAnd : function(checkLeft, checkRight) {
+
+		return {
+			focusOnEnable : checkLeft.params.focusOnEnable && checkRight.params.focusOnEnable
 		};
 
 	}

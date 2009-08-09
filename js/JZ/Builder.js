@@ -97,6 +97,12 @@ JZ.Builder = $.inherit({
 
 	},
 
+	_buildValidDependence : function(widget, data) {
+
+		return new JZ.Dependence.Valid($.extend(data, { widget : this._getFromWidget(data, widget) }));
+
+	},
+
 	_getFromWidget : function(params, widget) {
 
 		var result;

@@ -251,14 +251,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var fullOrder = ['enabled', 'valid', 'required'];
 		return function(onlyType) {
-			var i = 0, type, check, order = !!onlyType? [onlyType] : fullOrder,
+			var i = 0, type, order = !!onlyType? [onlyType] : fullOrder,
 				length = order.length, isReady = this.isReady();
 			while(i < length) {
 				type = order[i++];
 				if(this._dependencies[type]) {
-					check = this._dependencies[type].check();
-					check.params = $.makeArray(check.params);
-					this[this.__self._dependenceTypeToFn(type)](check);
+					this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
 				}
 			}
 			if(isReady != this.isReady()) {
@@ -272,11 +270,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		if(check.result) {
 			this.enable();
-			var i = 0, param;
-			while(param = check.params[i++]) {
-				if(param.focusOnEnable) {
-					return this.focus();
-				}
+			if(check.params.focusOnEnable) {
+				this.focus();
 			}
 		}
 		else {
@@ -291,18 +286,52 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_processValidDependenceCheck : function(check) {
+
+		this._updateValid(check.result);
+		var _this = this;
+		$.each(check.params.invalidCSSClasses, function() {
+			_this[(this.add? 'add' : 'remove') + 'CSSClass'](this.name);
+		});
+
+	},
+
 	_updateRequired : function(isRequired) {
 
-		if(this._isRequired) {
-			if(!isRequired) {
-				this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK);
-			}
+		if(this._isRequired == isRequired) {
+			return;
 		}
-		else if(isRequired) {
+
+		if(isRequired) {
 			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED_OK, this.__self.CSS_CLASS_REQUIRED);
+		}
+		else {
+			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK);
 		}
 
 		this._isRequired = isRequired;
+
+	},
+
+	_updateValid : function(isValid) {
+
+		if(this._isValid == isValid) {
+			return;
+		}
+
+		if(isValid) {
+			if(this.getValue().isEmpty()) {
+				this.removeCSSClass(this.__self.CSS_CLASS_INVALID);
+			}
+			else {
+				this.replaceCSSClass(this.__self.CSS_CLASS_INVALID, this.__self.CSS_CLASS_INVALID_OK);
+			}
+		}
+		else {
+			this.replaceCSSClass(this.__self.CSS_CLASS_INVALID_OK, this.__self.CSS_CLASS_INVALID);
+		}
+
+		this._isValid = isValid;
 
 	},
 
@@ -315,6 +344,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 }, {
 
 	CSS_CLASS_HIDDEN      : JZ.CSS_CLASS_WIDGET + '-hidden',
+	CSS_CLASS_INVISIBLE   : JZ.CSS_CLASS_WIDGET + '-invisible',
 	CSS_CLASS_INITED      : JZ.CSS_CLASS_WIDGET + '-inited',
 	CSS_CLASS_CHANGED     : JZ.CSS_CLASS_WIDGET + '-changed',
 	CSS_CLASS_FOCUSED     : JZ.CSS_CLASS_WIDGET + '-focused',

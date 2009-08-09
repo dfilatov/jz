@@ -14,12 +14,28 @@ JZ.Dependence = $.inherit({
 
 	check : function() {
 
+		var result = this._precheck() && this._processResult();
+		
 		return {
-			result : this._params.widget.isEnabled() && this._params.widget.getValue().match(this._params.pattern),
-			params : {}
+			result : result,
+			params : this._processParams(result)
 		};
 
 	},
+
+	_precheck : function() {
+
+		return this._params.widget.isEnabled();
+
+	},
+
+	_processResult : function() {
+
+		return this._params.widget.getValue().match(this._params.pattern);
+
+	},
+
+	_processParams : function(result) {},
 
 	_getDefaultParams : function() {
 
@@ -28,5 +44,24 @@ JZ.Dependence = $.inherit({
 		};
 
 	}
+
+}, {
+
+	getClassByType : function(type) {
+
+		switch(type) {
+			case 'enabled':
+				return this.Enabled;
+			return;
+
+			case 'required':
+				return this.Required;
+			return;
+		}
+
+	},
+
+	_onOr : function() {},
+	_onAnd : function() {}
 
 });
