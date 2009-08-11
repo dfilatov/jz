@@ -298,10 +298,6 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_updateRequired : function(isRequired) {
 
-		if(this._isRequired == isRequired) {
-			return;
-		}
-
 		if(isRequired) {
 			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED_OK, this.__self.CSS_CLASS_REQUIRED);
 		}
@@ -315,13 +311,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_updateValid : function(isValid) {
 
-		if(this._isValid == isValid) {
-			return;
-		}
-
 		if(isValid) {
 			if(this.getValue().isEmpty()) {
-				this.removeCSSClass(this.__self.CSS_CLASS_INVALID);
+				this.removeCSSClass(this.__self.CSS_CLASS_INVALID + ' ' + this.__self.CSS_CLASS_INVALID_OK);
 			}
 			else {
 				this.replaceCSSClass(this.__self.CSS_CLASS_INVALID, this.__self.CSS_CLASS_INVALID_OK);

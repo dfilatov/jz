@@ -63,7 +63,6 @@ JZ.Builder = $.inherit({
 	_buildDependencies : function(widget) {
 
 		var params = widget._params, _this = this;
-
 		$.each(['enabled', 'valid', 'required'], function() {
 			if(this in params) {
 				widget.addDependence(this, _this._buildDependence(this, widget, params[this]));
@@ -75,12 +74,10 @@ JZ.Builder = $.inherit({
 	_buildDependence : function(type, widget, data) {
 
 		return $.isArray(data)?
-			new JZ.Dependence.Composition({
-				logic        : data[typeof data[0] == 'string'? 0 : 1],
-				dependencies : typeof data[0] == 'string'?
-					[this._buildDependence(type, widget, data[1])] :
-					[this._buildDependence(type, widget, data[0]), this._buildDependence(type, widget, data[2])]
-			}) :
+			(typeof data[0] == 'string'?
+				new JZ.Dependence.Composition.NOT({ dependencies : [this._buildDependence(type, widget, data[1])] }) :
+				new JZ.Dependence.Composition[data[1].toUpperCase()]({ dependencies :
+					[this._buildDependence(type, widget, data[0]), this._buildDependence(type, widget, data[2])] })) :
 			this[this.__self._dependenceTypeToFn(type)](widget, data);
 
 	},

@@ -27,7 +27,7 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 }, {
 
-	_onOr : function(checkLeft, checkRight) {
+	_onOR : function(checkLeft, checkRight) {
 
 		return {
 			invalidCSSClasses : checkLeft.params.invalidCSSClasses.concat(checkRight.params.invalidCSSClasses)
@@ -35,7 +35,7 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	},
 
-	_onAnd : function(checkLeft, checkRight) {
+	_onAND : function(checkLeft, checkRight) {
 
 		return this._onOr(checkLeft, checkRight);
 
