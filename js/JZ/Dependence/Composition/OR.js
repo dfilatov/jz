@@ -1,4 +1,4 @@
-JZ.Dependence.Composition.AND = $.inherit(JZ.Dependence.Composition, {
+JZ.Dependence.Composition.OR = $.inherit(JZ.Dependence.Composition, {
 
 	__constructor : function(params) {
 

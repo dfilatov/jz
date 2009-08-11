@@ -7,7 +7,7 @@
         <script type="text/javascript" src="jz-forms.php"></script>
     </head>
     <body>
-        <form class="jz" action="." onclick="return {jz:{heedChanges:true}}">
+        <form class="jz" action="." onclick="return {jz:{heedChanges:false}}">
             <!--dl>
                 <dt><label for="input-name">name</label></dt>
                 <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
@@ -15,7 +15,7 @@
 			<dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
-					<select class="jz" id="input-select" onclick="return {jz:{valid:{pattern:/2/}}}">
+					<select class="jz" id="input-select" onclick="return {jz:{valid:[{pattern:/2/}, 'or', {pattern:/3/}]}}">
 						<option value="1">option-1</option>
 						<option value="2">option-2</option>
 						<option value="3">option-3</option>
