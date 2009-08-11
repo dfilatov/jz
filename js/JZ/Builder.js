@@ -135,6 +135,7 @@ JZ.Builder = $.inherit({
 			case 'form':
 			case 'fieldset':
 			case 'button':
+			case 'submit':
 				return element;
 			break;
 
@@ -206,6 +207,7 @@ JZ.Builder = $.inherit({
 		var classes = {
 			'text'	   : JZ.Widget.Text,
 			'number'   : JZ.Widget.Text.Number,
+			'select'   : JZ.Widget.Select,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,
 			'form'	   : JZ.Widget.Container.Form

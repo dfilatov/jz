@@ -8,10 +8,20 @@
     </head>
     <body>
         <form class="jz" action="." onclick="return {jz:{heedChanges:true}}">
-            <dl>
+            <!--dl>
                 <dt><label for="input-name">name</label></dt>
                 <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
-            </dl>
+            </dl-->
+			<dl>
+				<dt><label for="input-select">select</label></dt>
+				<dd>
+					<select class="jz" id="input-select" onclick="return {jz:{valid:{pattern:/2/}}}">
+						<option value="1">option-1</option>
+						<option value="2">option-2</option>
+						<option value="3">option-3</option>
+					</select>
+				</dd>
+			</dl>
             <!--dl>
                 <dt><label for="input-number">number</label></dt>
                 <dd><input class="jz jz-number" name="number" id="input-number" onclick="return {jz:{enabled:[{name:'name',pattern:/.{2}/,focusOnEnable:false},'and',{name:'name',pattern:/.+/,focusOnEnable:false}]}}"/></dd>

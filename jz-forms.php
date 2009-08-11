@@ -9,6 +9,7 @@ $files = array(
     "js/JZ/Widget.js",
     "js/JZ/Widget/Text.js",
     "js/JZ/Widget/Text/Number.js",
+    "js/JZ/Widget/Select.js",
     "js/JZ/Widget/Button.js",
     "js/JZ/Widget/Button/Submit.js",
     "js/JZ/Widget/Container.js",
