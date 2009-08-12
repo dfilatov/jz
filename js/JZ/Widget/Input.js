@@ -32,6 +32,12 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	},
 
+	_setValueToElement : function(value) {
+
+		this._element.val(value.toString());
+
+	},
+
 	_enableElements : function() {
 
 		this._element.attr('disabled', false);

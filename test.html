@@ -13,6 +13,10 @@
                 <dd><input value="1" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
             </dl>
 			<dl>
+                <dt><label for="input-combo">combo</label></dt>
+                <dd><input value="1" class="jz jz-combo" name="combo" id="input-combo" onclick="return {jz:{list:{source:'local',values:['москва', 'красноярск','санкт-перербург','красногорск']}}}"/></dd>
+            </dl>
+			<dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
 					<select class="jz" id="input-select" onclick="return {jz:{valid:[{pattern:/2/}, 'or', {pattern:/3/}]}}">

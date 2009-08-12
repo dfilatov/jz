@@ -10,6 +10,7 @@ $files = array(
     "js/JZ/Widget/Input.js",
     "js/JZ/Widget/Input/Text.js",
     "js/JZ/Widget/Input/Text/Number.js",
+    "js/JZ/Widget/Input/Text/Combo.js",
     "js/JZ/Widget/Input/Select.js",
     "js/JZ/Widget/Button.js",
     "js/JZ/Widget/Button/Submit.js",

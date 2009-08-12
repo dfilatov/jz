@@ -149,13 +149,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	setValue : function(value) {
+	setValue : function(value, prevent) {
 
 		if(this._value.isEqual(value)) {
 			return;
 		}
 		var isInitialValueChanged = this._isInitialValueChanged();
 		this._value = value;
+		!prevent && this._setValueToElement(value);
 		this.trigger('value-change', this);
 		if(isInitialValueChanged != this._isInitialValueChanged()) {
 			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
@@ -243,7 +244,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_updateValue : function() {
 
-		this.setValue(this.createValue(this._extractValueFromElement()));
+		this.setValue(this.createValue(this._extractValueFromElement()), true);
 
 	},
 
@@ -328,6 +329,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	},
 
 	_extractValueFromElement : function() {},
+	_setValueToElement : function() {},
 	_bindEvents : function() {},
 	_enableElements : function() {},
 	_disableElements : function() {},
