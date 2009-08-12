@@ -1,11 +1,10 @@
-JZ.Widget.Select = $.inherit(JZ.Widget, {
+JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	_bindEvents : function() {
 
 		this._element
 			.focus($.bindContext(this._onFocus, this))
-			.blur($.bindContext(this._onBlur, this))
-			.bind('change', $.bindContext(this._onChange, this));
+			.blur($.bindContext(this._onBlur, this));
 
 	},
 
@@ -18,12 +17,6 @@ JZ.Widget.Select = $.inherit(JZ.Widget, {
 	_onBlur : function() {
 
 		this.removeCSSClass(this.__self.CSS_CLASS_FOCUSED);
-
-	},
-
-	_onChange : function() {
-
-		this._updateValue();
 
 	},
 

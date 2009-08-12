@@ -205,9 +205,9 @@ JZ.Builder = $.inherit({
 	_typeToWidgetClass : (function() {
 
 		var classes = {
-			'text'	   : JZ.Widget.Text,
-			'number'   : JZ.Widget.Text.Number,
-			'select'   : JZ.Widget.Select,
+			'text'	   : JZ.Widget.Input.Text,
+			'number'   : JZ.Widget.Input.Text.Number,
+			'select'   : JZ.Widget.Input.Select,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,
 			'form'	   : JZ.Widget.Container.Form
