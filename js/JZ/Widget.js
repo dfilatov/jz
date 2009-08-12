@@ -37,6 +37,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	focus : function() {
 
 		this._element.focus();
+		return this;
 
 	},
 
@@ -152,7 +153,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	setValue : function(value, prevent) {
 
 		if(this._value.isEqual(value)) {
-			return;
+			return this;
 		}
 		var isInitialValueChanged = this._isInitialValueChanged();
 		this._value = value;
@@ -162,6 +163,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
 			this.trigger('initial-value-change', !isInitialValueChanged);
 		}
+		return this;
 
 	},
 
@@ -342,6 +344,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	CSS_CLASS_INITED      : JZ.CSS_CLASS_WIDGET + '-inited',
 	CSS_CLASS_CHANGED     : JZ.CSS_CLASS_WIDGET + '-changed',
 	CSS_CLASS_FOCUSED     : JZ.CSS_CLASS_WIDGET + '-focused',
+	CSS_CLASS_SELECTED    : JZ.CSS_CLASS_WIDGET + '-selected',
 	CSS_CLASS_DISABLED    : JZ.CSS_CLASS_WIDGET + '-disabled',
 	CSS_CLASS_REQUIRED    : JZ.CSS_CLASS_WIDGET + '-required',
 	CSS_CLASS_REQUIRED_OK : JZ.CSS_CLASS_WIDGET + '-required-ok',

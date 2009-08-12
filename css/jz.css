@@ -5,6 +5,19 @@ form.jz li {
 	list-style-type: none;
 }
 
+form.jz dl {
+	position: relative;
+}
+
+form.jz dt {
+	float: left;
+	width: 10em;
+}
+
+form.jz dd {
+	display: inline;
+}
+
 .jz-hidden {
 	visibility: hidden;
 }
@@ -18,7 +31,7 @@ form.jz li {
 }
 
 .jz-focused {
-	background: red;
+	z-index: 2;
 }
 
 .jz-placeholder {
@@ -30,16 +43,31 @@ form.jz li {
 
 .jz-list {
 	position: absolute;
+	left: 0;
 	width: 100%;
 	border: 1px solid #000;
 	background: #FFF;
 }
 
+.jz-list iframe {
+	position: absolute;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	background: #FFF;
+}
+
 .jz-list li {
 	padding: 0.1em 0.3em;
+	cursor: default;
+	white-space: nowrap;
 }
 
 .jz-list li:hover {
+	background: #EFEFEF;
+}
+
+.jz-list li.jz-selected {
 	background: #CCC;
 }
 

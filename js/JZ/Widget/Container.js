@@ -1,8 +1,8 @@
 JZ.Widget.Container = $.inherit(JZ.Widget, {
 
-	__constructor : function(element, classElement, params) {
+	__constructor : function() {
 
-		this.__base(element, classElement, params);
+		this.__base.apply(this, arguments);
 
 		this._children = [];
 

@@ -1,8 +1,8 @@
 JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
-	__constructor : function(element, classElement, params) {
+	__constructor : function() {
 
-		this.__base(element, classElement, params);
+		this.__base.apply(this, arguments);
 
 		this._widgetsDataById = {};
 		this._unreadyCounter = 0;
@@ -96,7 +96,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_onWidgetInitialValueChange : function(event, isInitialValueChanged) {
 
 		var counter = this._changedCounter;
-		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);		
+		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);
 
 		if(counter + this._changedCounter == 1) {
 			this.trigger('ready-change', this);
