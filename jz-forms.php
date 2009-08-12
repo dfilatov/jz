@@ -16,6 +16,7 @@ $files = array(
     "js/JZ/Widget/Button/Submit.js",
     "js/JZ/Widget/Container.js",
     "js/JZ/Widget/Container/Form.js",
+    "js/JZ/Storage.js",
     "js/JZ/Value.js",
     "js/JZ/Dependence.js",
     "js/JZ/Dependence/Composition.js",
