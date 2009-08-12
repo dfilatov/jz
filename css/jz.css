@@ -1,5 +1,10 @@
-form.jz ul,
-form.jz li {
+form.jz * {
+	font-family: Arial, sans-serif;
+	font-size: 0.95em;
+}
+
+.jz ul,
+.jz li {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
@@ -28,6 +33,7 @@ form.jz dd {
 
 .jz dd {
 	position: relative;
+	background: red;
 }
 
 .jz-focused {

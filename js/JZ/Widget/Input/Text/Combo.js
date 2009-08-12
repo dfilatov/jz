@@ -14,7 +14,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_bindEvents : function() {
 
 		this.__base();
-		this._element.keyup($.bindContext(this._onKeyUp, this));
+		this._element
+			.keydown($.bindContext(this._onKeyDown, this))
+			.keyup($.bindContext(this._onKeyUp, this));
 
 	},
 
@@ -32,6 +34,24 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
+	_onKeyDown : function(event) {
+
+		if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+			return;
+		}
+
+		switch(event.keyCode) {
+			case 38:
+				this._prev();
+				return false;
+
+			case 40:
+				this._next();
+				return false;
+		}
+
+	},
+
 	_onKeyUp : function(event) {
 
 		if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
@@ -40,18 +60,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		switch(event.keyCode) {
 			case 13:
-				this
-					._selectItemByIndex(this._hilightedIndex)
-					._hideList();
+				if(this._isListShowed) {
+					this._hideList();
+					return false;
+				}
 			break;
 
 			case 38:
-				this._prev();
-			break;
-
 			case 40:
-				this._next();
-			break;
+				return false;
 
 			default:
 				this._updateList();
@@ -78,6 +95,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			.eq(index).addClass(this.__self.CSS_CLASS_SELECTED);
 
 		this._hilightedIndex = index;
+
+		this._selectItemByIndex(index);
 
 	},
 
