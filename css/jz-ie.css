@@ -1,3 +1,12 @@
+form.jz dd {
+	zoom: 1;
+}
+
 .jz-list {
-	
+	top: 1.7em;
+	width: expression(this.previousSibling.offsetWidth + 'px'); 
+}
+
+.jz-list iframe {
+	height: expression(this.parentNode.offsetHeight + 'px');
 }
