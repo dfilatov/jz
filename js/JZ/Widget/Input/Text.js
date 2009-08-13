@@ -59,6 +59,13 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 			 return result;
 		})();
 
+	},
+
+	_destruct : function() {
+
+		this._disablePlaceholder();
+		this.__base();
+
 	}
 
 }, {
