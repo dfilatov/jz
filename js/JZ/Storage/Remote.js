@@ -2,9 +2,6 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 
 	filter : function(value, callback) {
 
-		if(!value) {
-			return callback([]);
-		}
 		var params = this._params;
 		$.ajax($.extend(params.ajax, {
 			success  : callback,
