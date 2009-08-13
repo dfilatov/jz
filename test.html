@@ -19,6 +19,10 @@
                 <dd><input value="" class="jz jz-combo" name="combo" id="input-combo" onclick="return {jz:{placeholder:'test',storage:{source:'local',list:['москва', 'красноярск','санкт-перербург','красногорск']}}}"/></dd>
             </dl>
 			<dl>
+                <dt><label for="input-combo2">suggest</label></dt>
+                <dd><input value="" class="jz jz-combo" name="suggest" id="input-combo2" onclick="return {jz:{placeholder:'test',storage:{source:'remote',url:'/suggest.php'}}}"/></dd>
+            </dl>
+			<dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
 					<select class="jz" id="input-select" onclick="return {jz:{valid:[{pattern:/2/}, 'or', {pattern:/3/}]}}">

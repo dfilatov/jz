@@ -4,9 +4,7 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 		this.__base(form);
 
-		if(this._params.disableOnNoReady) {
-			form.bind('ready-change', $.bindContext(this._updateState, this));
-		}
+		this._params.disableOnNoReady && form.bind('ready-change', $.bindContext(this._updateState, this));
 
 	},
 
@@ -27,9 +25,7 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 	_beforeSubmit : function() {
 
-		if(this._params.disableOnSubmit) {
-			this.disable();
-		}
+		this._params.disableOnSubmit && this.disable();
 
 	},
 

@@ -4,6 +4,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		this.__base.apply(this, arguments);
 
+		this._element.attr('autocomplete', 'off');
 		this._isListShowed = false;
 		this._hilightedIndex = -1;
 		this._itemsCount = 0;
@@ -16,7 +17,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this.__base();
 		this._element
 			.keydown($.bindContext(this._onKeyDown, this))
-			.keyup($.bindContext(this._onKeyUp, this));
+			.keyup($.debounce(this._onKeyUp, 100, this));
 
 	},
 
@@ -54,7 +55,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyUp : function(event) {
 
-		if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+		if(!this._isFocused || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
 			return;
 		}
 
@@ -106,13 +107,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return this;
 		}
 
-		return this.setValue(this.createValue(this._getList().find('li').eq(index).text()));
+		return this.setValue(this.createValue(this._lastSearchVal = this._getList().find('li').eq(index).text()));
 
 	},
 
 	_showList : function() {
 
-		if(this._isListShowed) {
+		if(this._isListShowed || !this._itemsCount) {
 			return;
 		}
 
@@ -188,7 +189,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_getStorage : function() {
 
-		var result = new JZ.Storage(this._params.storage);
+		var result = this._params.storage.source == 'remote'?
+			new JZ.Storage.Remote($.extend({ name : this.getName()}, this._params.storage)) :
+			new JZ.Storage.Local(this._params.storage);
 		return (this._getStorage = function() {
 			return result;
 		})();

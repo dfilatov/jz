@@ -4,6 +4,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		this.__base.apply(this, arguments);
 
+		this._widgetsByName = {};
 		this._widgetsDataById = {};
 		this._unreadyCounter = 0;
 		this._changedCounter = 0;
@@ -16,16 +17,23 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._setForm(this);
 		this._checkDependencies();
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
+		this.trigger('init', this);
+
 		if(this._unreadyCounter == 0) { // инициирующее событие
 			this.trigger('ready-change', this);
 		}
-		this.trigger('init', this);
 
 	},
 
 	isReady : function() {
 
 		return this._unreadyCounter == 0 && (!this._params.heedChanges || this._changedCounter > 0);
+
+	},
+
+	getWidgetByName : function(name) {
+
+		return this._widgetsByName[name];
 
 	},
 
@@ -75,6 +83,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 				widget.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this)),
 			isReady : true
 		};
+
+		!!widget.getName() && (this._widgetsByName[widget.getName()] = widget);
 
 		if(this._params.heedChanges && widget._hasValue()) {
 			widget.bind('initial-value-change', $.bindContext(this._onWidgetInitialValueChange, this));
