@@ -5,12 +5,22 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 		if(!value) {
 			return callback([]);
 		}
-		var params = {};
-		params[this._params.name] = value;
-		$.each(this._params.widgets, function() {
-			params[this.getName()] = this.getValue().toString();	
-		});
-		$.post(this._params.url, params, callback, this._params.type || 'json');
+		var params = this._params;
+		$.ajax($.extend(params.ajax, {
+			success  : callback,
+			error    : function() {
+				callback([]);
+			},
+			dataType : params.ajax.dataType || 'json',
+			data     : (function() {
+				var result = {};
+				result[params.name] = value;
+				$.each(params.widgets, function() {
+					result[this.getName()] = this.getValue().get();
+				});
+				return result;
+			})()
+		}));
 
 	}
 

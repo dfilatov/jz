@@ -5,7 +5,7 @@ JZ.Value = $.inherit({
 		this._value = null;
 		this.reset();
 
-		if (typeof value != 'undefined') {
+		if(typeof value != 'undefined') {
 			this.set(value);
 		}
 
