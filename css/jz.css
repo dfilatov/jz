@@ -21,6 +21,7 @@ form.jz dl {
 
 .jz dd {
 	display: inline;
+	display: inline-block;
 	position: relative;
 }
 
@@ -38,7 +39,7 @@ form.jz dl {
 
 .jz-placeholder {
 	position: absolute;
-	margin: 0.25em 0.2em;
+	margin: 0.25em 0.4em;
 	color: #CCC;
 }
 
@@ -58,7 +59,9 @@ form.jz dl {
 }
 
 .jz-list ul {
-	border: 1px solid #000;
+	border: 1px solid #999;
+	-webkit-box-shadow: rgba(0,0,0,0.1) 0.2em 0.2em 0.2em;
+	-moz-box-shadow: rgba(0,0,0,0.1) 0.2em 0.2em 0.2em;
 }
 
 .jz-list li {
