@@ -9,7 +9,7 @@
         <script type="text/javascript" src="jz-forms.php"></script>
     </head>
     <body>
-        <form class="jz" action="." onclick="return {jz:{heedChanges:false}}">
+        <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:true}}">
             <dl>
                 <dt><label for="input-name">name</label></dt>
                 <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
@@ -42,6 +42,15 @@
                 <input type="submit" class="jz" value="Отправить" onclick="return {jz:{sdisableOnNoReady:false}}"/>
             </div>
         </form>
+		<script type="text/javascript">
+
+		JZ.bind('init', function() {
+			$('form').data('jz').bind('ready-change', function(event, form) {
+				//console.log(form.isReady());
+			});
+		});
+
+		</script>
     </body>
 </html>
 <!--

@@ -70,6 +70,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	init : function() {
 
+		this._element.data('jz', this);
+
 		this._bindEvents();
 
 		if(this._hasValue()) {
