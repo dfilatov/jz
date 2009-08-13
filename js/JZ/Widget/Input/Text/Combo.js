@@ -189,8 +189,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_getStorage : function() {
 
-		var result = this._params.storage.source == 'remote'?
-			new JZ.Storage.Remote($.extend({ name : this.getName()}, this._params.storage)) :
+		var _this = this, result = this._params.storage.source == 'remote'?
+			new JZ.Storage.Remote($.extend({
+					name : this.getName(),
+					widgets : $.map((this._params.storage.values || '').split(','), function(name) {
+						return _this._form.getWidgetByName($.trim(name));
+					})
+				}, this._params.storage)) :
 			new JZ.Storage.Local(this._params.storage);
 		return (this._getStorage = function() {
 			return result;
