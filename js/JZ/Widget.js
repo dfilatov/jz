@@ -183,7 +183,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				return;
 			}
 			ids[this.getId()] = true;
-			this.bind('value-change enable disable', $.bindContext(function(event) {
+			this.bind('value-change enable disable', $.bindContext(function() {
 				this._checkDependencies();
 			}, _this));
 		});

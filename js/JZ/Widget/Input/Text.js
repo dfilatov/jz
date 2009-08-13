@@ -2,8 +2,8 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	init : function() {
 
-		!this._params.focusOnInit && this._enablePlaceholder();
 		this.__base();
+		!this._isFocused && this._enablePlaceholder();
 
 	},
 

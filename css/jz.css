@@ -1,6 +1,6 @@
 form.jz * {
 	font-family: Arial, sans-serif;
-	font-size: 0.95em;
+	font-size: 1em;
 }
 
 .jz ul,
@@ -14,13 +14,14 @@ form.jz dl {
 	position: relative;
 }
 
-form.jz dt {
+.jz dt {
 	float: left;
 	width: 10em;
 }
 
-form.jz dd {
+.jz dd {
 	display: inline;
+	position: relative;
 }
 
 .jz-hidden {
@@ -29,11 +30,6 @@ form.jz dd {
 
 .jz-invisible {
 	display: none;
-}
-
-.jz dd {
-	position: relative;
-	background: red;
 }
 
 .jz-focused {

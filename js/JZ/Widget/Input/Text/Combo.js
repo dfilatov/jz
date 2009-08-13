@@ -162,7 +162,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		var result = $('<div class="' + this.__self.CSS_CLASS_LIST + ' ' + this.__self.CSS_CLASS_HIDDEN + '">' +
-		   '<iframe frameborder="0" src="javascript:' + "'<body style=\\'background:none\;overflow:hidden\\'>'" +
+		   '<iframe frameborder="0" tabindex="-1" src="javascript:' + "'<body style=\\'background:none\;overflow:hidden\\'>'" +
 		   '"></iframe><ul/></div>')
 			.mousedown($.bindContext(function(event) {
 				this.setValue(this.createValue($(event.target).closest('li').text()));
