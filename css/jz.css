@@ -43,6 +43,8 @@ form.jz dl {
 	color: #CCC;
 }
 
+/* combo */
+
 .jz-list {
 	position: absolute;
 	left: 0;
@@ -78,10 +80,23 @@ form.jz dl {
 	background: #CCC;
 }
 
+.jz-comboarrow {
+	width: 20px;
+	background-image: url(../i/jz.png);
+	background-position: -47px 0.4em;
+	background-repeat: no-repeat;
+	height: 100%;
+	//position: absolute;
+}
+
 .jz-invalid input {
 	color: #FF0000;
 }
 
 .jz-invalid-ok input {
 	color: #009000;
+}
+
+.jz-focused {
+	sborder: 1px solid red;
 }

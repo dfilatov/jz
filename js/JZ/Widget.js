@@ -36,7 +36,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	focus : function() {
 
-		this._element.focus();
+		this._element[0].focus();
 		return this;
 
 	},

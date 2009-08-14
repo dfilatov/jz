@@ -9,6 +9,35 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._hilightedIndex = -1;
 		this._itemsCount = 0;
 		this._lastSearchVal = null;
+		this._preventOnBlur = false;
+		this._preventOnFocus = false;
+		this._preventUpdate = false;
+		this._focusOnBlur = false;
+
+		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
+
+		this._updateList = $.debounce(function(val) {
+
+			var searchVal = typeof val == 'undefined'? this._element.val() : val;
+			if(this._lastSearchVal === this._element.val() && typeof val == 'undefined') {
+				return this._showList();
+			}
+			this._lastSearchVal = searchVal;
+			this._getStorage().filter(searchVal, $.bindContext(function(list) {
+				this._itemsCount = list.length;
+				this._hilightedIndex = -1;
+				if(!!list.length) {
+					this._getList().html($.map(list, function(val) {
+						return '<li>' + val + '</li>';
+					}).join(''));
+					this._showList();
+				}
+				else {
+					this._hideList();
+				}
+			}, this));
+
+		}, 50);
 
 	},
 
@@ -17,21 +46,68 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this.__base();
 		this._element
 			.keydown($.bindContext(this._onKeyDown, this))
-			.keyup($.debounce(this._onKeyUp, 100, this));
+			.keyup($.bindContext(this._onKeyUp, this));
+		this._params.arrow && this._params.arrow
+			.mousedown($.bindContext(this._onArrowMouseDown, this))
+			.click($.bindContext(this._onArrowClick, this));
 
 	},
 
 	_onFocus : function() {
 
-		this.__base();
-		this._updateList();
+		if(!this._preventOnFocus) {
+			this.__base();
+			if(!this._preventUpdate) {
+				this._updateList();
+			}
+			else {
+				this._preventUpdate = false;
+			}
+		}
+		else {
+			this._preventOnFocus = false;
+		}
 
 	},
 
 	_onBlur : function() {
 
-		this.__base();
-		this._hideList();
+		if(!this._preventOnBlur) {
+			this.__base();
+			this._hideList();
+		}
+		else {
+			this._preventOnBlur = false;
+		}
+
+		if(this._focusOnBlur) {
+			this._focusOnBlur = false;
+			setTimeout($.bindContext(this.focus, this), 0);
+		}
+
+	},
+
+	_onArrowMouseDown : function() {
+
+		 this._preventOnBlur = true;
+
+	},
+
+	_onArrowClick : function() {
+
+		if(this._isListShowed) {
+			this._hideList();
+			this._preventOnFocus = true;
+			this.focus();
+		}
+		else {
+			this._preventUpdate = true;
+			this
+				.focus()
+				._updateList('');
+			this._preventOnBlur = false;
+		}
+		return false;
 
 	},
 
@@ -133,29 +209,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_updateList : function() {
-
-		var val = this._element.val();
-		if(this._lastSearchVal === val) {
-			return this._showList();
-		}
-		this._lastSearchVal = val;
-		this._getStorage().filter(val, $.bindContext(function(list) {
-			this._itemsCount = list.length;
-			this._hilightedIndex = -1;
-			if(!!list.length) {
-				this._getList().html($.map(list, function(val) {
-					return '<li>' + val + '</li>';
-				}).join(''));
-				this._showList();
-			}
-			else {
-				this._hideList();
-			}
-		}, this));
-
-	},
-
 	_getListContainer : function(onlyForDestruct) {
 
 		if(onlyForDestruct) {
@@ -166,8 +219,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		   '<iframe frameborder="0" tabindex="-1" src="javascript:' + "'<body style=\\'background:none\;overflow:hidden\\'>'" +
 		   '"></iframe><ul/></div>')
 			.mousedown($.bindContext(function(event) {
-				this.setValue(this.createValue($(event.target).closest('li').text()));
+				this._preventUpdate = true;
+				this._focusOnBlur = true;
 				this
+					.setValue(this.createValue(this._lastSearchVal = $(event.target).closest('li').text()))
 					.focus()
 					._hideList();
 			}, this));

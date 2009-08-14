@@ -46,7 +46,7 @@ JZ.Builder = $.inherit({
 	_makeWidgetByElement : function(element) {
 
 		var params = this.__self._extractParamsFromElement(element),
-				result = new (this.__self._typeToWidgetClass(params.type))(element, this.__self._getClassElement(element, params), params);
+			result = new (this.__self._typeToWidgetClass(params.type))(element, this.__self._getClassElement(element, params), params);
 
 		params.type != 'form' && this._getParentWidget(element).addChild(result);
 
@@ -155,6 +155,11 @@ JZ.Builder = $.inherit({
 
 		if(!result.type) {
 			result.type = this._extractTypeFromElement(element);
+		}
+
+		if(result.type == 'combo') {
+			var arrow = element.next('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
+			!!arrow.length && (result.arrow = arrow);
 		}
 
 		return result;

@@ -1,10 +1,12 @@
 form.jz dd {
 	zoom: 1;
+	background: red;
+	display: inline;
 }
 
 .jz-list {
-	top: 1.7em;
-	width: expression(this.previousSibling.offsetWidth + 'px'); 
+	top: 1.55em;
+	width: expression(this.previousSibling.offsetWidth + 'px');
 }
 
 .jz-list iframe {

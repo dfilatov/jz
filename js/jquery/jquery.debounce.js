@@ -24,6 +24,7 @@ $.extend({
 		return function() {
 
 			var args = arguments;
+			context = context || this;
 
 			if(invokeAsap && !timer) {
 				fn.apply(context, args);
