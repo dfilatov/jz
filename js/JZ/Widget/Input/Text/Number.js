@@ -46,17 +46,14 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_onBlur : function() {
 
 		this.__base();
+		this._element.val() != this.getValue().toString() && this._element.val(this.getValue().toString());
 
 	},
 
 	_onKeyDown : function(event) {
 
-		if(event.ctrlKey || event.metaKey || $.inArray(event.keyCode, [46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1 ||
-			(event.keyCode >= 48 && event.keyCode <= 57) ||
-			(this._params.allowNegative && event.keyCode == 109 &&
-				this._element.val().charAt(0) != '-' && this._element.getSelection().start == 0) ||
-			(this._params.allowFloat && (event.keyCode == 188 || event.keyCode == 190) && !/\.|\,/.test(this._element.val()) &&
-				(this._element.val().charAt(0) != '-' || this._element.getSelection().start > 0))
+		if(event.ctrlKey || event.metaKey || $.inArray(event.keyCode, [190, 189, 188, 109, 46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1 ||
+			(event.keyCode >= 48 && event.keyCode <= 57)
 			) {
 			return this._keyDownAllowed = true;
 		}
@@ -67,7 +64,28 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyPress : function(event) {
 
-		return this._keyDownAllowed || event.charCode === 0;
+		if(event.charCode === 0) {
+			return true;
+		}
+
+		if(!this._keyDownAllowed) {
+			return false;
+		}
+
+		var keyCode = event.keyCode || event.charCode;
+
+		if($.inArray(keyCode, [44,45,46]) == -1) {
+			return true;
+		}
+
+		var selection = this._element.getSelection();
+		if(this._params.allowNegative && keyCode == 45) {
+			return (this._element.val().charAt(0) != '-' && selection.start == 0) ||
+				   selection.text.indexOf('-') > -1;
+		}
+		return this._params.allowFloat && ((!/\.|\,/.test(this._element.val()) &&
+			   (this._element.val().charAt(0) != '-' || selection.start > 0)) ||
+			   selection.text.indexOf('.') > -1 || selection.text.indexOf(',') > -1);
 
 	},
 
