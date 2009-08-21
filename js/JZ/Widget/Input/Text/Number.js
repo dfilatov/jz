@@ -84,8 +84,9 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 			return (this._element.val().charAt(0) != '-' && selection.start == 0) ||
 				   selection.text.indexOf('-') > -1;
 		}
+
 		return this._params.allowFloat && ((!/\.|\,/.test(this._element.val()) &&
-			   (this._element.val().charAt(0) != '-' || selection.start > 0)) ||
+			   (this._element.val().charAt(0) != '-' || selection.start > 0 || selection.text.indexOf('-') > -1)) ||
 			   selection.text.indexOf('.') > -1 || selection.text.indexOf(',') > -1);
 
 	},
