@@ -3,7 +3,8 @@ JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 	_processParams : function(result) {
 
 		return {
-			focusOnEnable : result && this._params.focusOnEnable
+			focusOnEnable : result && this._params.focusOnEnable,
+			hideOnDisable : !result && this._params.hideOnDisable
 		};
 
 	},
@@ -11,7 +12,8 @@ JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 	_getDefaultParams : function() {
 
 		return {
-			focusOnEnable : false
+			focusOnEnable : false,
+			hideOnDisable : false
 		};
 
 	}
@@ -21,7 +23,8 @@ JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 	_onOR : function(checkLeft, checkRight) {
 
 		return {
-			focusOnEnable : checkLeft.params.focusOnEnable || checkRight.params.focusOnEnable
+			focusOnEnable : checkLeft.params.focusOnEnable || checkRight.params.focusOnEnable,
+			hideOnDisable : checkLeft.params.hideOnDisable || checkRight.params.hideOnDisable
 		};
 
 	},
@@ -29,7 +32,8 @@ JZ.Dependence.Enabled = $.inherit(JZ.Dependence, {
 	_onAND : function(checkLeft, checkRight) {
 
 		return {
-			focusOnEnable : checkLeft.params.focusOnEnable && checkRight.params.focusOnEnable
+			focusOnEnable : checkLeft.params.focusOnEnable && checkRight.params.focusOnEnable,
+			hideOnDisable : checkLeft.params.hideOnDisable && checkRight.params.hideOnDisable
 		};
 
 	}

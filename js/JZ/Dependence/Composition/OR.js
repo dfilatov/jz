@@ -30,10 +30,10 @@ JZ.Dependence.Composition.OR = $.inherit(JZ.Dependence.Composition, {
 
 		return this._params.dependencies[0].__self._onOR({
 			result : this._resultLeft,
-			params : this._params.dependencies[0]._processParams(this._resultLeft.result)
+			params : this._params.dependencies[0]._processParams(this._resultLeft)
 		}, {
 			result : this._resultRight,
-			params : this._params.dependencies[1]._processParams(this._resultRight.result)
+			params : this._params.dependencies[1]._processParams(this._resultRight)
 		});
 
 	}

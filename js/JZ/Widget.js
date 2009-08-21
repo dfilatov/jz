@@ -50,12 +50,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	addCSSClass : function(name) {
 
 		this._classElement.addClass(name);
+		return this;
 
 	},
 
 	removeCSSClass : function(name) {
 
 		this._classElement.removeClass(name);
+		return this;
 
 	},
 
@@ -96,6 +98,18 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	isEnabled : function() {
 
 		return this._isEnabled;
+
+	},
+
+	show : function() {
+
+		return this.removeCSSClass(this.__self.CSS_CLASS_INVISIBLE);
+
+	},
+
+	hide : function() {
+
+		return this.addCSSClass(this.__self.CSS_CLASS_INVISIBLE);
 
 	},
 
@@ -288,12 +302,16 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		if(check.result) {
 			this.enable();
+			this.show();
 			if(check.params.focusOnEnable) {
 				this.focus();
 			}
 		}
 		else {
 			this.disable();
+			if(check.params.hideOnDisable) {
+				this.hide();
+			}
 		}
 
 	},
