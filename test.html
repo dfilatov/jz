@@ -9,10 +9,14 @@
         <script type="text/javascript" src="jz-forms.php"></script>
     </head>
     <body>
-        <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:true}}">
+        <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:false}}">
+			<dl>
+				<dt><label for="input-number">number</label></dt>
+				<dd><input class="jz jz-number" id="input-number" name="number" onclick="return {jz:{focusOnInit:true,allowNegative:true,allowFloat:true,required:{}}}"/></dd>
+			</dl>
             <dl>
                 <dt><label for="input-name">name</label></dt>
-                <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',focusOnInit:true,required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
+                <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
             </dl>
 			<dl>
                 <dt><label for="input-combo">combo</label></dt>
@@ -48,6 +52,7 @@
             <div>
                 <input type="submit" class="jz" value="Отправить" onclick="return {jz:{sdisableOnNoReady:false}}"/>
             </div>
+			<input type="radio" checked/>
         </form>
 		<script type="text/javascript">
 

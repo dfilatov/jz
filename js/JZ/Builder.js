@@ -212,7 +212,7 @@ JZ.Builder = $.inherit({
 		var classes = {
 			'text'	   : JZ.Widget.Input.Text,
 			'number'   : JZ.Widget.Input.Text.Number,
-			'combo'   : JZ.Widget.Input.Text.Combo,
+			'combo'    : JZ.Widget.Input.Text.Combo,
 			'select'   : JZ.Widget.Input.Select,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,

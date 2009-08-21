@@ -11,7 +11,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	init : function() {
+	_init : function() {
 
 		this.__base();
 		this._setForm(this);

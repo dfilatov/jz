@@ -1,73 +1,41 @@
-ZForms.Value.Number = ZForms.Value.inheritTo(
-	{
+JZ.Value.Number = $.inherit(JZ.Value, {
 
-		set : function(mValue) {
+	set : function(value) {
 
-			this.mValue = parseFloat(mValue.toString().replace(/[^0-9\.\,\-]/g, '').replace(/\,/g, '.'));
+		this._value = parseFloat(value.toString().replace(/[^0-9\.\,\-]/g, '').replace(/\,/g, '.'));
 
-		},
+	},
 
-		match : function(rPattern) {
+	match : function(pattern) {
 
-			return rPattern.test(isNaN(this.mValue)? '' : this.mValue.toString());
+		return pattern.test(isNaN(this._value)? '' : this._value.toString());
 
-		},
+	},
 
-		isEmpty : function() {
+	isEmpty : function() {
 
-			return isNaN(this.mValue);
+		return isNaN(this._value);
 
-		},
+	},
 
-		isEqual : function(mValue) {
+	isGreater : function(value) {
 
-			if(!this.checkForCompareTypes(mValue)) {
-				return false;
-			}
+		return this._checkForCompareTypes(value) &&
+			   this.get() > new this.__self((value instanceof JZ.Value)? value.get() : value).get();
 
-			var oValue = (mValue instanceof this.__self)?
-				mValue :
-				new this.__self(
-					(mValue instanceof ZForms.Value)?
-						mValue.get() :
-						mValue
-					)
-				;
+	},
 
-			return this.get() === oValue.get();
+	checkForCompareTypes : function(value) {
 
-		},
+		return value instanceof this.__self || (value instanceof JZ.Value && !isNaN(parseFloat(value.get()))) ||
+			   typeof value == 'number' || (typeof value == 'string' && !isNaN(parseFloat(value.toString())));
 
-		isGreater : function(mValue) {
+	},
 
-			if(!this.checkForCompareTypes(mValue)) {
-				return false;
-			}
+	toString : function() {
 
-			var oValue = (mValue instanceof this.__self)?
-				mValue :
-				new this.__self(
-					(mValue instanceof ZForms.Value)?
-						mValue.get() :
-						mValue
-					)
-				;
-
-			return this.get() > oValue.get();
-
-		},
-
-		checkForCompareTypes : function(mValue) {
-
-			return mValue instanceof this.__self || (mValue instanceof ZForms.Value && !isNaN(parseFloat(mValue.get()))) || typeof(mValue) == 'number' || (typeof(mValue) == 'string' && !isNaN(parseFloat(mValue.toString())));
-
-		},
-
-		toStr : function() {
-
-			return isNaN(this.mValue)? '' : this.mValue.toString();
-
-		}
+		return isNaN(this._value)? '' : this._value.toString().replace('.', JZ.Resources.getNumberSeparator());
 
 	}
-	);
+
+});

@@ -27,7 +27,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	getName : function() {
 
-		var result = this._element.attr('name');
+		var result = this._extractName();
 		return (this.getName = function() {
 			return result;
 		})();
@@ -70,17 +70,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	init : function() {
 
-		this._element.data('jz', this);
-
-		this._bindEvents();
-
-		if(this._hasValue()) {
-			this._initValue();
-		}
-
-		if(this._params.focusOnInit) {
-			this.focus();
-		}
+		// TODO
+		this._init();
 
 	},
 
@@ -193,6 +184,28 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	},
 
 	addChild : function(widget) {},
+
+	_init : function() {
+
+		this._element.data('jz', this);
+
+		this._bindEvents();
+
+		if(this._hasValue()) {
+			this._initValue();
+		}
+
+		if(this._params.focusOnInit) {
+			this.focus();
+		}
+
+	},
+
+	_extractName : function() {
+
+		return this._element.attr('name');
+
+	},
 
 	_setForm : function(form) {
 

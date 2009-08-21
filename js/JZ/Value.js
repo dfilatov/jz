@@ -44,14 +44,14 @@ JZ.Value = $.inherit({
 	isEqual : function(value) {
 
 		return this._checkForCompareTypes(value) &&
-			   this.get() === ((value instanceof this.__self) ? value : new this.__self(value)).get();
+			   this.get() === new this.__self((value instanceof JZ.Value)? value.get() : value).get();
 
 	},
 
 	isGreater : function(value) {
 
 		return this._checkForCompareTypes(value) &&
-			   this.get().length > ((value instanceof this.__self) ? value : new this.__self(value)).get().length;
+			   this.get().length > new this.__self((value instanceof JZ.Value)? value.get() : value).get().length;
 
 	},
 

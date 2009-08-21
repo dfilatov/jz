@@ -4,18 +4,19 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		this.__base.apply(this, arguments);
 
-		this._element.attr('autocomplete', 'off');
-		this._isListShowed = false;
+		this._isListShowed = this._preventOnBlur = this._preventOnFocus = this._preventUpdate = this._focusOnBlur = false;
 		this._hilightedIndex = -1;
 		this._itemsCount = 0;
-		this._lastSearchVal = null;
-		this._preventOnBlur = false;
-		this._preventOnFocus = false;
-		this._preventUpdate = false;
-		this._focusOnBlur = false;
+		this._lastSearchVal = this._updateList = null;
 
+	},
+
+	_init : function() {
+
+		this.__base();
+
+		this._element.attr('autocomplete', 'off');
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
-
 		this._updateList = $.debounce(function(val) {
 
 			var searchVal = typeof val == 'undefined'? this._element.val() : val;

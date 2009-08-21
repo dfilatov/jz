@@ -4,6 +4,7 @@ $files = array(
     "js/jquery/jquery.context.js",
     "js/jquery/jquery.inherit.js",
     "js/jquery/jquery.debounce.js",
+	"js/jquery/jquery.fieldselection.js",    
     "js/JZ.js",
     "js/JZ/Observable.js",
     "js/JZ/Widget.js",
@@ -20,6 +21,7 @@ $files = array(
     "js/JZ/Storage/Local.js",
     "js/JZ/Storage/Remote.js",
     "js/JZ/Value.js",
+    "js/JZ/Value/Number.js",
     "js/JZ/Dependence.js",
     "js/JZ/Dependence/Composition.js",
     "js/JZ/Dependence/Composition/NOT.js",
@@ -29,6 +31,7 @@ $files = array(
 	"js/JZ/Dependence/Valid.js",
     "js/JZ/Dependence/Enabled.js",
     "js/JZ/Builder.js",
+    "js/JZ/Resources.js",
     "js/init.js"
 );
 
