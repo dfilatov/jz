@@ -1,105 +1,92 @@
-ZForms.Value.Multiple = ZForms.Value.inheritTo(
-	{
+JZ.Value.Multiple = $.inherit(JZ.Value, {
 
-		reset : function() {
+	reset : function() {
 
-			this.set([]);
+		this.set([]);
 
-		},
-		
-		set : function(mValue) {
+	},
 
-			this.mValue = mValue instanceof Array? mValue : [mValue];
-		
-		},
+	set : function(value) {
 
-		match : function(rPattern) {	
-			
-			if(this.isEmpty()) {
-				return rPattern.test('');
-			}
+		this._value = $.makeArray(value);
 
-			for(var i = 0; i < this.mValue.length; i++) {
-				if(rPattern.test(this.mValue[i])) {
-					return true;
-				}
-			}
-	
-			return false;
-			
-		},
+	},
 
-		clone : function() {
-	
-			var oClonedValue = new this.__self();
-		
-			for(var i = 0; i < this.mValue.length; i++) {
-				oClonedValue.add(this.mValue[i]);
-			}
-		
-			return oClonedValue;
-			
-		},
-	
-		isEqual : function(mValue) {
-	
-			if(!(mValue instanceof this.__self || mValue instanceof Array)) {
-				return this.mValue.length == 1 && this.mValue[0] === (mValue instanceof ZForms.Value? mValue.get() : mValue);
-			} 
-	
-			var oValue = mValue instanceof this.__self? mValue : new this.__self(mValue);
-	
-			if(this.mValue.length != oValue.mValue.length) {
-				return false;
-			}
-	
-			for(var i = 0; i < this.mValue.length; i++) {
-				if(this.mValue[i] != oValue.mValue[i]) {
-					return false;
-				}
-			}
-	
-			return true;
-	
-		},
-		
-		isGreater : function(mValue) {
+	match : function(pattern) {
 
-			if(!(mValue instanceof this.__self || mValue instanceof Array)) {
-				return false;
-			} 
-	
-			return this.get().length > (mValue instanceof this.__self? mValue : new this.__self(mValue)).get().length;
-
-		},
-
-		checkForCompareTypes : function(mValue) {
-
-			return mValue instanceof this.__self || mValue instanceof Array;
-
-		},
-	
-		isEmpty : function() {
-	
-			return this.mValue.length == 0;
-	
-		},
-
-		add : function(mAddValue) {			
-
-			if(this.mValue.contains(mAddValue)) {
-				return;
-			}
-	
-			this.mValue.push(mAddValue);
-			
-		},
-
-		remove : function(mRemoveValue) {
-
-			this.mValue.remove(mRemoveValue);
-
+		if(this.isEmpty()) {
+			return pattern.test('');
 		}
-		
+
+		var i = 0, length = this._value.length;
+		while(i < length) {
+			if(pattern.test(this._value[i++])) {
+				return true;
+			}
+		}
+
+		return false;
+
+	},
+
+	clone : function() {
+
+		return new this.__self(this.get().concat([]));
+
+	},
+
+	isEmpty : function() {
+
+		return this._value.length == 0;
+
+	},
+
+	isContain : function(value) {
+
+		var i = 0, length = this._value.length;
+		while(i < length) {
+			if(this._value[i++] == value) {
+				return true;
+			}
+		}
+		return false;
+
+	},
+
+	isEqual : function(value) {
+
+		if(!this._checkForCompareTypes(value)) {
+			return false;
+		}
+
+		var compareValue = value instanceof this.__self? value.get() : value;
+
+		if(this._value.length != compareValue.length) {
+			return false;
+		}
+
+		var i = 0, length = this._value.length;
+		while(i < length) {
+			if(this._value[i] != compareValue[i++]) {
+				return false;
+			}
+		}
+
+		return true;
+
+	},
+
+	isGreater : function(value) {
+
+		return this._checkForCompareTypes(value) &&
+			   this._value.length > (value instanceof this.__self? value.get() : value).length;
+
+	},
+
+	_checkForCompareTypes : function(value) {
+
+		return value instanceof this.__self || $.isArray(value);
+
 	}
-	);
+
+});

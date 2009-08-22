@@ -32,7 +32,7 @@
 			<dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
-					<select class="jz" name="select" id="input-select" onclick="return {jz:{valid:[{name:'rb',pattern:/2/},'and',{pattern:/3/}]}}">
+					<select class="jz" name="select" id="input-select" onclick="return {jz:{valid:[{name:'cb',pattern:/1/},'and',{name:'rb',pattern:/1/}]}}">
 						<option value="1">option-1</option>
 						<option value="2">option-2</option>
 						<option value="3" selected="selected">option-3</option>
@@ -50,6 +50,20 @@
 					</div>
 					<div>
 						<input type="radio" name="rb" class="jz" id="rb-3" value="3"><label for="rb-3">rb-3</label>
+					</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>checkboxgroup</label></dt>
+				<dd class="jz jz-cbgroup">
+					<div>
+						<input type="checkbox" name="cb" class="jz" id="cb-1" value="1"><label for="cb-1">cb-1</label>
+					</div>
+					<div>
+						<input type="checkbox" name="cb" class="jz" id="cb-2" value="2" checked="checked"><label for="cb-2">cb-2</label>
+					</div>
+					<div>
+						<input type="checkbox" name="cb" class="jz" id="cb-3" value="3"><label for="cb-3">cb-3</label>
 					</div>
 				</dd>
 			</dl>
@@ -74,6 +88,10 @@
 			$('form').data('jz').bind('ready-change', function(event, form) {
 				//console.log(form.isReady());
 			});
+			var widget = $('.jz-cbgroup').data('jz');
+			widget.setValue(widget.createValue([1,3]));
+			var widget = $('.jz-rbgroup').data('jz');
+			widget.setValue(widget.createValue(1));
 			//$('form').data('jz')._destruct();
 		});
 

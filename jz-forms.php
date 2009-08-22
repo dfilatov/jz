@@ -26,6 +26,7 @@ $files = array(
     "js/JZ/Storage/Remote.js",
     "js/JZ/Value.js",
     "js/JZ/Value/Number.js",
+    "js/JZ/Value/Multiple.js",
     "js/JZ/Dependence.js",
     "js/JZ/Dependence/Composition.js",
     "js/JZ/Dependence/Composition/NOT.js",

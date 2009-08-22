@@ -25,16 +25,16 @@ JZ.Value.Number = $.inherit(JZ.Value, {
 
 	},
 
-	checkForCompareTypes : function(value) {
-
-		return value instanceof this.__self || (value instanceof JZ.Value && !isNaN(parseFloat(value.get()))) ||
-			   typeof value == 'number' || (typeof value == 'string' && !isNaN(parseFloat(value.toString())));
-
-	},
-
 	toString : function() {
 
 		return isNaN(this._value)? '' : this._value.toString().replace('.', JZ.Resources.getNumberSeparator());
+
+	},	
+
+	_checkForCompareTypes : function(value) {
+
+		return value instanceof this.__self || (value instanceof JZ.Value && !isNaN(parseFloat(value.get()))) ||
+			   typeof value == 'number' || (typeof value == 'string' && !isNaN(parseFloat(value.toString())));
 
 	}
 
