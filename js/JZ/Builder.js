@@ -20,8 +20,7 @@ JZ.Builder = $.inherit({
 		// Строим хэш по именам после создании дерева виджетов, потому что имена некорорых виджетов зависят от детей
 		var i = 0, name;
 		while(widget = _this._widgets[i++]) {
-			name = widget.getName();
-			name && (_this._widgetsByName[name] = widget);
+			widget._hasValue() && (_this._widgetsByName[widget.getName()] = widget);
 		}
 
 		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
@@ -139,6 +138,8 @@ JZ.Builder = $.inherit({
 				return element;
 			break;
 
+			case 'rbgroup':
+			case 'cbgroup':
 			case 'state':
 				return element.parent();
 			break;
@@ -194,7 +195,7 @@ JZ.Builder = $.inherit({
 
 	_cssClassToType : (function() {
 
-		var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|submit)');
+		var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|rbgroup|cbgroup|submit)');
 		return function(cssClass) {
 			if(cache[cssClass]) {
 				return cache[cssClass];
@@ -214,8 +215,11 @@ JZ.Builder = $.inherit({
 			'number'   : JZ.Widget.Input.Text.Number,
 			'combo'    : JZ.Widget.Input.Text.Combo,
 			'select'   : JZ.Widget.Input.Select,
+			'state'    : JZ.Widget.Input.State,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,
+			'rbgroup'  : JZ.Widget.Container.StateGroup.RadioButtons,
+			'cbgroup'  : JZ.Widget.Container.StateGroup.CheckBoxes,
 			'form'	   : JZ.Widget.Container.Form
 		};
 

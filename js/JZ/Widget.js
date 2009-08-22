@@ -63,9 +63,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	replaceCSSClass : function(nameFrom, nameTo) {
 
-		if(this.hasCSSClass(nameFrom)) {
-			this.removeCSSClass(nameFrom);
-		}
+		this.hasCSSClass(nameFrom) && this.removeCSSClass(nameFrom);
 		this.addCSSClass(nameTo);
 
 	},
@@ -327,7 +325,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._updateValid(check.result);
 		var _this = this;
 		$.each(check.params.invalidCSSClasses, function() {
-			_this[(this.add? 'add' : 'remove') + 'CSSClass'](this.name);
+			this.name && _this[(this.add? 'add' : 'remove') + 'CSSClass'](this.name);
 		});
 
 	},

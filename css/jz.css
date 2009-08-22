@@ -89,14 +89,11 @@ form.jz dl {
 	//position: absolute;
 }
 
+.jz-invalid label,
 .jz-invalid input {
 	color: #FF0000;
 }
 
 .jz-invalid-ok input {
 	color: #009000;
-}
-
-.jz-focused {
-	sborder: 1px solid red;
 }

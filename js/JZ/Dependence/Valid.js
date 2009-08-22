@@ -1,6 +1,6 @@
 JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
-	__precheck : function() {
+	_precheck : function() {
 
 		return this.__base() && !(this._params.bCheckEmpty && this._params.widget.getValue().isEmpty());
 
@@ -37,7 +37,7 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	_onAND : function(checkLeft, checkRight) {
 
-		return this._onOr(checkLeft, checkRight);
+		return this._onOR(checkLeft, checkRight);
 
 	}
 
