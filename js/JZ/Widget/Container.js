@@ -25,6 +25,11 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this._applyFnToChildren('init');
 		this.__base();
+		
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			this._bindChildEvents(child);
+		}
 
 	},
 
@@ -42,6 +47,14 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	_bindChildEvents : function(widget) {
+
+		!this._hasValue() && widget.bind('value-change enable disable', $.bindContext(function() {
+			this.trigger('value-change', this);
+		}, this));
+
+	},
+
 	_setForm : function(form) {
 
 		this._applyFnToChildren('_setForm', arguments);
@@ -53,6 +66,28 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this._applyFnToChildren('_beforeSubmit');
 		this.__base();
+
+	},
+
+	_checkRequired : function(params) {
+
+		if(this._hasValue()) {
+			return this.__base(params);
+		}
+
+		var children = this._children, i = 0, child, countRequiredChild = 0;
+		while(child = children[i++]) {
+			if(child._dependencies['required']) {
+				child.isRequired() && ++countRequiredChild;
+			}
+			else {
+				var pattern = params.pattern;
+				params.pattern = params.patternChild;
+				!child._checkRequired(params) && ++countRequiredChild;
+				params.pattern = pattern;
+			}
+		}
+		return countRequiredChild == 0;
 
 	},
 

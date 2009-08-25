@@ -11,6 +11,18 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	isReady : function() {
+
+		return this._unreadyCounter == 0 && (!this._params.heedChanges || this._changedCounter > 0);
+
+	},
+
+	getWidgetByName : function(name) {
+
+		return this._widgetsByName[name];
+
+	},
+
 	_init : function() {
 
 		this.__base();
@@ -25,17 +37,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	isReady : function() {
-
-		return this._unreadyCounter == 0 && (!this._params.heedChanges || this._changedCounter > 0);
-
-	},
-
-	getWidgetByName : function(name) {
-
-		return this._widgetsByName[name];
-
-	},
+	_bindChildEvents : function() {},
 
 	_bindEvents : function() {
 

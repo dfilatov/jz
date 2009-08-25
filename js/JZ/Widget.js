@@ -203,13 +203,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._bindEvents();
 
-		if(this._hasValue()) {
-			this._initValue();
-		}
-
-		if(this._params.focusOnInit) {
-			this.focus();
-		}
+		this._hasValue() && this._initValue();
+		this._params.focusOnInit && this.focus();
 
 	},
 
@@ -289,27 +284,27 @@ JZ.Widget = $.inherit(JZ.Observable, {
 					this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
 				}
 			}
-			if(isReady != this.isReady()) {
-				this.trigger('ready-change', this);
-			}
+			isReady != this.isReady() && this.trigger('ready-change', this);
 		};
 
 	})(),
+
+	_checkRequired : function(params) {
+
+	 	return this.getValue().match(params.pattern);
+
+	},
 
 	_processEnabledDependenceCheck : function(check) {
 
 		if(check.result) {
 			this.enable();
 			this.show();
-			if(check.params.focusOnEnable) {
-				this.focus();
-			}
+			check.params.focusOnEnable && this.focus();
 		}
 		else {
 			this.disable();
-			if(check.params.hideOnDisable) {
-				this.hide();
-			}
+			check.params.hideOnDisable && this.hide();
 		}
 
 	},

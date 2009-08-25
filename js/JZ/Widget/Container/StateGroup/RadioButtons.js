@@ -14,7 +14,7 @@ JZ.Widget.Container.StateGroup.RadioButtons = $.inherit(JZ.Widget.Container.Stat
 
 	},
 
-	_onChildChange : function(checked, index) {
+	_onChildChange : function(widget, index) {
 
 		this._checkedIndex > -1 && this._children[this._checkedIndex]._setChecked(false);
 		this._children[this._checkedIndex = index]._setChecked(true);

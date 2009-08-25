@@ -9,9 +9,11 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 
 	_onChange : function() {
 
-		this.trigger('change', this._element.attr('checked'));
+		this.trigger('value-change', this);
 
 	},
+
+	_checkDependencies : function() {},
 
 	_setChecked : function(checked) {
 

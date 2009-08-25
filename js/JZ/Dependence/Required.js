@@ -7,6 +7,13 @@ JZ.Dependence.Required = $.inherit(JZ.Dependence, {
 		this._params.pattern = this._params.min > 1?
 	    	new RegExp('\\S.{' + (this._params.min - 2) + ',}\\S') :
 			/\S+/;
+		this._params.patternChild = /\S+/;
+
+	},
+
+	_processResult : function() {
+
+		return this._params.widget._checkRequired(this._params);
 
 	},
 

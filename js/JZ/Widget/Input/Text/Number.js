@@ -17,10 +17,8 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_init : function() {
 
 		this.__base();
-		this._element.after(this._hiddenElement = $('<input type="hidden"' +
-			' value="' + this._element.val() + '"' +
-			(this._element.attr('id')? ' id="value-' + this._element.attr('id') + '"' : '') +
-			'/>'));
+		this._element.after(this._hiddenElement = $('<input type="hidden" value="' + this._element.val() + '"' +
+			(this._element.attr('id')? ' id="value-' + this._element.attr('id') + '"' : '') + '/>'));
 		if(this._element.attr('name')) {
 			this._hiddenElement.attr('name', this._element.attr('name'));
 			this._element.removeAttr('name');
