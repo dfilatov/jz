@@ -155,26 +155,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	setValue : function(value, prevent) {
+	setValue : function(value) {
 
-		if(this._value.isEqual(value)) {
-			return this;
-		}
-		var isInitialValueChanged = this._isInitialValueChanged();
-		this._value = value;
-		!prevent && this._setValueToElement(value);
-		this.trigger('value-change', this);
-		if(isInitialValueChanged != this._isInitialValueChanged()) {
-			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
-			this.trigger('initial-value-change', !isInitialValueChanged);
-		}
-		return this;
-
-	},
-
-	createValue : function(value) {
-
-		return new JZ.Value(value);
+		this._setValue(this._createValue(value));
 
 	},
 
@@ -211,6 +194,29 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_extractName : function() {
 
 		return this._element.attr('name');
+
+	},
+
+	_createValue : function(value) {
+
+		return new JZ.Value(value);
+
+	},
+
+	_setValue : function(value, prevent) {
+
+		if(this._value.isEqual(value)) {
+			return this;
+		}
+		var isInitialValueChanged = this._isInitialValueChanged();
+		this._value = value;
+		!prevent && this._setValueToElement(value);
+		this.trigger('value-change', this);
+		if(isInitialValueChanged != this._isInitialValueChanged()) {
+			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
+			this.trigger('initial-value-change', !isInitialValueChanged);
+		}
+		return this;
 
 	},
 
@@ -256,7 +262,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_initValue : function() {
 
-		this._initialValue = (this._value = this.createValue(this._extractValueFromElement())).clone();
+		this._initialValue = (this._value = this._createValue(this._extractValueFromElement())).clone();
 
 	},
 
@@ -268,7 +274,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_updateValue : function() {
 
-		this.setValue(this.createValue(this._extractValueFromElement()), true);
+		this._setValue(this._createValue(this._extractValueFromElement()), true);
 
 	},
 

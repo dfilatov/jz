@@ -8,7 +8,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	createValue : function(value) {
+	_createValue : function(value) {
 
 		return new JZ.Value.Number(value);
 
@@ -89,7 +89,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	setValue : function(value, prevent) {
+	_setValue : function(value, prevent) {
 
 		this._hiddenElement.val(value.get());
 		return this.__base(value, prevent);

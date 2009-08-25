@@ -184,7 +184,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return this;
 		}
 
-		return this.setValue(this.createValue(this._lastSearchVal = this._getList().find('li').eq(index).text()));
+		return this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
 
 	},
 
@@ -223,7 +223,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				this._preventUpdate = true;
 				this._focusOnBlur = true;
 				this
-					.setValue(this.createValue(this._lastSearchVal = $(event.target).closest('li').text()))
+					.setValue(this._lastSearchVal = $(event.target).closest('li').text())
 					.focus()
 					._hideList();
 			}, this));

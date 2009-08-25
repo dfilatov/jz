@@ -1,6 +1,6 @@
 JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateGroup, {
 
-	createValue : function(value) {
+	_createValue : function(value) {
 
 		return new JZ.Value.Multiple(value);
 
