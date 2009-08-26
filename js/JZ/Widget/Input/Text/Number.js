@@ -44,7 +44,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_onBlur : function() {
 
 		this.__base();
-		this._element.val() != this.getValue().toString() && this._element.val(this.getValue().toString());
+		this._element.val() != this._getValue().toString() && this._element.val(this._getValue().toString());
 
 	},
 

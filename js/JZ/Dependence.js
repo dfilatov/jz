@@ -31,7 +31,7 @@ JZ.Dependence = $.inherit({
 
 	_processResult : function() {
 
-		return this._params.widget.getValue().match(this._params.pattern);
+		return this._params.widget._getValue().match(this._params.pattern);
 
 	},
 

@@ -13,7 +13,7 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 				var result = {};
 				result[params.name] = value;
 				$.each(params.widgets, function() {
-					result[this.getName()] = this.getValue().get();
+					result[this.getName()] = this.getValue();
 				});
 				return result;
 			})()

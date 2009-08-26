@@ -151,7 +151,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	getValue : function() {
 
-		return this._value;
+		return this._value.get();
 
 	},
 
@@ -200,6 +200,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_createValue : function(value) {
 
 		return new JZ.Value(value);
+
+	},
+
+	_getValue : function() {
+
+		return this._value;
 
 	},
 
@@ -297,7 +303,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_checkRequired : function(params) {
 
-	 	return this.getValue().match(params.pattern);
+	 	return this._getValue().match(params.pattern);
 
 	},
 
@@ -347,7 +353,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_updateValid : function(isValid) {
 
 		if(isValid) {
-			if(this.getValue().isEmpty()) {
+			if(this._getValue().isEmpty()) {
 				this.removeCSSClass(this.__self.CSS_CLASS_INVALID + ' ' + this.__self.CSS_CLASS_INVALID_OK);
 			}
 			else {
