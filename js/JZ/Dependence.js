@@ -14,7 +14,8 @@ JZ.Dependence = $.inherit({
 
 	check : function() {
 
-		var result = this._precheck() && this._processResult();
+		var result = this._precheck() &&
+					 (this._params.fn? this._params.fn(this._params.widget) : this._processResult());
 
 		return {
 			result : result,
