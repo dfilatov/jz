@@ -12,7 +12,7 @@
         <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:false}}">
 			<dl>
 				<dt><label for="input-number">number</label></dt>
-				<dd><input class="jz jz-number" id="input-number" name="number" onclick="return {jz:{placeholder:'number',focusOnInit:true,allowNegative:true,allowFloat:true,required:{}}}"/></dd>
+				<dd><input value="s23" class="jz jz-number" id="input-number" name="number" onclick="return {jz:{placeholder:'number',focusOnInit:true,allowNegative:true,allowFloat:true,required:{}}}"/></dd>
 			</dl>
             <dl>
                 <dt><label for="input-name">name</label></dt>
@@ -103,6 +103,7 @@
 			var widget = $('.jz-rbgroup').data('jz');
 			widget.setValue(1);
 			//$('form').data('jz')._destruct();
+			console.log($('form').data('jz').serialize());
 		});
 
 		</script>

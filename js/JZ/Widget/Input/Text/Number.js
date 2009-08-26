@@ -23,6 +23,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 			this._hiddenElement.attr('name', this._element.attr('name'));
 			this._element.removeAttr('name');
 		}
+		this._checkElementValue();
 
 	},
 
@@ -44,6 +45,12 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_onBlur : function() {
 
 		this.__base();
+		this._checkElementValue();
+
+	},
+
+	_checkElementValue : function() {
+
 		this._element.val() != this._getValue().toString() && this._element.val(this._getValue().toString());
 
 	},
