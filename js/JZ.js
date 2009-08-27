@@ -28,7 +28,7 @@ var JZ = {
 
 		var counter = 1;
 		return function(element) {
-			return element.attr('id') || element[0].__id || (element[0].__id = '__id-' + counter++);
+			return element.attr('id') || element.data('__id') || (element.data('__id', '__id-' + counter++).data('__id'));
 		};
 
 	})()

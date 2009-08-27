@@ -1,8 +1,10 @@
-jQuery.event.bindWithContext = function (elem, type, data, handler, context) {
+(function($) {
+
+$.event.bindWithContext = function (elem, type, data, handler, context) {
     var fn;
 
     // http://ajaxian.com/archives/working-aroung-the-instanceof-memory-leak
-    if (data && data.hasOwnProperty && data instanceof Function) {
+    if ($.isFunction(data)) {
         context = handler;
         handler = data;
         data = null;
@@ -20,14 +22,16 @@ jQuery.event.bindWithContext = function (elem, type, data, handler, context) {
     this.add(elem, type, handler);
 };
 
-jQuery.fn.bind = function (type, data, fn, context) {
+$.fn.bind = function (type, data, fn, context) {
     return type === 'unload' ? this.one(type, data, fn) : this.each(function(){
-        jQuery.event.bindWithContext(this, type, data, fn, context);
+        $.event.bindWithContext(this, type, data, fn, context);
     });
 };
 
-jQuery.bindContext = function(fn, context) {
+$.bindContext = function(fn, context) {
 	return function() {
-		return fn.apply(context, arguments);	
+		return fn.apply(context, arguments);
 	};
 };
+
+})(jQuery);

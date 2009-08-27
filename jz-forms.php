@@ -40,10 +40,10 @@ $files = array(
     "js/init.js"
 );
 
-$result = "";
+$result = "var JZ = (function($) {\n";
 foreach($files as $file) {
     $result .= file_get_contents($file);
 }
-print($result);
+print($result . "\nreturn JZ;})(jQuery)");
 
 ?>
