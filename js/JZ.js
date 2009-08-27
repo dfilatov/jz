@@ -8,6 +8,16 @@ var JZ = {
 
 	},
 
+	onInit : function(element, fn) {
+
+		element
+			.bind('init.jz', fn)
+			.each(function() {
+				$(this).data('jz') && fn.call(window, $.Event('init.jz'), $(this).data('jz'));
+			});
+
+	},
+
 	_throwException : function(text) {
 
 		throw 'JZException: ' + text;

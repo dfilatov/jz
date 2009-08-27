@@ -98,5 +98,3 @@ JZ.Observable = $.inherit({
 	}
 
 });
-
-$.extend(JZ, new JZ.Observable());

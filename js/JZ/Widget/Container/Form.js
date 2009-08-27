@@ -39,11 +39,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._setForm(this);
 		this._checkDependencies();
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
-		this.trigger('init', this);
-
-		if(this._unreadyCounter == 0) { // инициирующее событие
-			this.trigger('ready-change', this);
-		}
+		this._unreadyCounter == 0 && this.trigger('ready-change', this); // инициирующее событие
+		this._element.trigger('init.jz', this);
 
 	},
 
