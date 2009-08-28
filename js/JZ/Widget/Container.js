@@ -12,24 +12,13 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		widget._parent = this;
 		this._children.push(widget);
+		return this;
 
 	},
 
 	focus : function() {
 
 		this._children[0] && this._children[0].focus();
-
-	},
-
-	init : function() {
-
-		this._applyFnToChildren('init');
-		this.__base();
-		
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			this._bindChildEvents(child);
-		}
 
 	},
 
@@ -44,6 +33,18 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this.__base();
 		this._applyFnToChildren('disable');
+
+	},
+
+	_init : function() {
+
+		this._applyFnToChildren('_init');
+		this.__base();
+
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			this._bindChildEvents(child);
+		}
 
 	},
 

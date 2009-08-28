@@ -20,6 +20,7 @@ $files = array(
     "js/JZ/Widget/Container/StateGroup.js",
     "js/JZ/Widget/Container/StateGroup/CheckBoxes.js",
     "js/JZ/Widget/Container/StateGroup/RadioButtons.js",
+    "js/JZ/Widget/Container/Date.js",
     "js/JZ/Widget/Container/Form.js",
     "js/JZ/Storage.js",
     "js/JZ/Storage/Local.js",

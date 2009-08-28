@@ -19,6 +19,12 @@
                 <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
             </dl>
 			<dl>
+                <dt><label for="input-date">date</label></dt>
+                <dd>
+					<input value="" class="jz jz-date" name="date" id="input-date"/>
+				</dd>
+            </dl>
+			<dl>
                 <dt><label for="input-combo">combo</label></dt>
                 <dd>
 					<input value="кра" class="jz jz-combo" name="combo" id="input-combo" onclick="return {jz:{placeholder:'test',showAllOnFocus:true,storage:{source:'local',list:['москва', 'красноярск','санкт-перербург','красногорск']}}}"/>
@@ -101,7 +107,7 @@
 				});
 				$('.jz-cbgroup').data('jz').setValue([1,3]);
 				$('.jz-rbgroup').data('jz').setValue(1);
-				$('#input-number').data('jz').disable();
+				//$('#input-number').data('jz').disable();
 				//$('form').data('jz')._destruct();
 				//console.log($('form').data('jz').serialize());
 			});
