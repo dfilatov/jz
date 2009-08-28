@@ -103,6 +103,20 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
+	_enableElements : function() {
+
+		this.__base();
+		this._hiddenElement && this._hiddenElement.attr('disabled', false);
+
+	},
+
+	_disableElements : function() {
+
+		this.__base();
+		this._hiddenElement && this._hiddenElement.attr('disabled', true);
+
+	},
+
 	_getDefaultParams : function() {
 
 		return $.extend(this.__base(), {

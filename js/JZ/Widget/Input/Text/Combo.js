@@ -100,18 +100,30 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onArrowMouseDown : function() {
 
-		 this._preventOnBlur = true;
-		 this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
+		if(!this.isEnabled()) {
+			return;
+		}
+
+		this._preventOnBlur = true;
+		this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
 	_onArrowMouseUp : function() {
+
+		if(!this.isEnabled()) {
+			return;
+		}
 
 		this._params.arrow.removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
 	_onArrowClick : function() {
+
+		if(!this.isEnabled()) {
+			return;
+		}
 
 		if(this._isListShowed) {
 			this._hideList();
@@ -283,6 +295,24 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		return (this._getStorage = function() {
 			return result;
 		})();
+
+	},
+
+	_enableElements : function() {
+
+		this.__base();
+		this._params.arrow &&
+			(this._params.arrow.removeClass(this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
+			this._params.arrow.attr('disabled', false);
+
+	},
+
+	_disableElements : function() {
+
+		this.__base();
+		this._params.arrow &&
+			(this._params.arrow.addClass(this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
+			this._params.arrow.attr('disabled', true);
 
 	},
 
