@@ -53,6 +53,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			.keyup($.bindContext(this._onKeyUp, this));
 		this._params.arrow && this._params.arrow
 			.mousedown($.bindContext(this._onArrowMouseDown, this))
+			.mouseup($.bindContext(this._onArrowMouseUp, this))
 			.click($.bindContext(this._onArrowClick, this));
 
 	},
@@ -100,6 +101,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onArrowMouseDown : function() {
 
 		 this._preventOnBlur = true;
+		 this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
+
+	},
+
+	_onArrowMouseUp : function() {
+
+		this._params.arrow.removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
@@ -295,6 +303,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 }, {
 
-	CSS_CLASS_LIST : JZ.CSS_CLASS_WIDGET + '-list'
+	CSS_CLASS_LIST          : JZ.CSS_CLASS_WIDGET + '-list',
+	CSS_CLASS_ARROW_PRESSED : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed'
 
 });
