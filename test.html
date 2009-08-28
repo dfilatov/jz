@@ -21,7 +21,7 @@
 			<dl>
                 <dt><label for="input-combo">combo</label></dt>
                 <dd>
-					<input value="" class="jz jz-combo" name="combo" id="input-combo" onclick="return {jz:{placeholder:'test',storage:{source:'local',list:['москва', 'красноярск','санкт-перербург','красногорск']}}}"/>
+					<input value="кра" class="jz jz-combo" name="combo" id="input-combo" onclick="return {jz:{placeholder:'test',showAllOnFocus:true,storage:{source:'local',list:['москва', 'красноярск','санкт-перербург','красногорск']}}}"/>
 					<input type="button" class="jz-comboarrow"/>
 				</dd>
             </dl>
@@ -104,7 +104,7 @@
 				var widget = $('.jz-rbgroup').data('jz');
 				widget.setValue(1);
 				//$('form').data('jz')._destruct();
-				console.log($('form').data('jz').serialize());
+				//console.log($('form').data('jz').serialize());
 			});
 		});
 

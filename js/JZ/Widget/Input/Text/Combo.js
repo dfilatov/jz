@@ -7,7 +7,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._isListShowed = this._preventOnBlur = this._preventOnFocus = this._preventUpdate = this._focusOnBlur = false;
 		this._hilightedIndex = -1;
 		this._itemsCount = 0;
-		this._lastSearchVal = this._updateList = null;
+		this._lastSearchVal = this._keyDownValue = this._updateList = null;
 
 	},
 
@@ -19,7 +19,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
 		this._updateList = $.debounce(function(val) {
 
-			var searchVal = typeof val == 'undefined'? this._element.val() : val;
+			var searchVal = typeof val == 'undefined'? this._element.val() : val, _this = this;
 			if(this._lastSearchVal === this._element.val() && typeof val == 'undefined') {
 				return this._showList();
 			}
@@ -28,8 +28,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				this._itemsCount = list.length;
 				this._hilightedIndex = -1;
 				if(!!list.length) {
-					this._getList().html($.map(list, function(val) {
-						return '<li>' + val + '</li>';
+					var elementVal = this._element.val();
+					this._getList().html($.map(list, function(val, i) {
+						elementVal == val && (_this._hilightedIndex = i);
+						return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
+								'') + '>' + val + '</li>';
 					}).join(''));
 					this._showList();
 				}
@@ -59,7 +62,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		if(!this._preventOnFocus) {
 			this.__base();
 			if(!this._preventUpdate) {
-				this._updateList();
+				if(this._params.showAllOnFocus) {
+					this._updateList('');
+					this._lastSearchVal = this._element.val();
+				}
+				else {
+					this._updateList();
+				}
 			}
 			else {
 				this._preventUpdate = false;
@@ -114,6 +123,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyDown : function(event) {
 
+		this._keyDownValue = this._element.val();
+
 		if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
 			return;
 		}
@@ -144,12 +155,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				}
 			break;
 
-			case 38:
-			case 40:
-				return false;
+			case 9:
+				return;
 
 			default:
-				this._updateList();
+				this._keyDownValue != this._element.val() && this._updateList();
 		}
 
 	},
@@ -184,7 +194,16 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return this;
 		}
 
-		return this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
+		this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
+
+		var element = this._element[0];
+		if(element.createTextRange && !element.selectionStart) {
+			var range = element.createTextRange();
+			range.move('character', this._element.val().length);
+        	range.select();
+		}
+
+		return this;
 
 	},
 
@@ -256,6 +275,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		return (this._getStorage = function() {
 			return result;
 		})();
+
+	},
+
+	_getDefaultParams : function() {
+
+		return $.extend(this.__base(), {
+			showAllOnFocus : false
+		});
 
 	},
 
