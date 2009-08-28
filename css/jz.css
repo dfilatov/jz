@@ -93,6 +93,13 @@ form.jz dl {
 	background-color: red;
 }
 
+/* date widget */
+
+.jz-day,
+.jz-month {
+	margin-right: 0.2em;
+}
+
 .jz-day {
 	width: 1.3em;
 }

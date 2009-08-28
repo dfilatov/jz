@@ -29,12 +29,23 @@ JZ.Value.Number = $.inherit(JZ.Value, {
 
 		return isNaN(this._value)? '' : this._value.toString().replace('.', JZ.Resources.getNumberSeparator());
 
-	},	
+	},
 
 	_checkForCompareTypes : function(value) {
 
-		return value instanceof this.__self || (value instanceof JZ.Value && !isNaN(parseFloat(value.get()))) ||
-			   typeof value == 'number' || (typeof value == 'string' && !isNaN(parseFloat(value.toString())));
+		if(value instanceof this.__self || typeof value == 'number') {
+			return true;
+		}
+
+		if(value instanceof JZ.Value) {
+			return !isNaN(parseFloat(value.get()));
+		}
+
+		if(typeof value == 'string') {
+			return !isNaN(parseFloat(value));
+		}
+
+		return false;
 
 	}
 

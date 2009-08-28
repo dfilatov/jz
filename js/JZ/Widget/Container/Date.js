@@ -23,14 +23,12 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_createNumberInput : function(postfix, params) {
 
 		var element = $('<input' +
+			(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
 			' maxlength="' + params.maxLength + '"/>');
 		this._element.after(element);
 
-		return new JZ.Widget.Input.Text.Number(
-			element,
-			null,
-			params);
+		return new JZ.Widget.Input.Text.Number(element, null, params);
 
 	},
 
@@ -38,22 +36,27 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 		var element = $('<select' +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '">' +
-				$.map(JZ.Resources.getMonthsByType('genitive'), function(name, i) {
+				$.map(JZ.Resources.getMonthsByType(this._params.onlyMonths? 'normal' : 'genitive'), function(name, i) {
 					return '<option value="' + (i + 1) + '">' + name +'</option>';
 				}).join('') +
 			'</select>');
 		this._element.after(element);
 
-		return new JZ.Widget.Input.Select(
-			element,
-			null,
-			params);
+		return new JZ.Widget.Input.Select(element, null, params);
 
 	},
 
 	_hasValue : function() {
 
 		return true;
+
+	},
+
+	_getDefaultParams : function() {
+
+		return $.extend(this.__base(), {
+			onlyMonths : false
+		});
 
 	}
 
