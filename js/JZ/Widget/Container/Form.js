@@ -33,6 +33,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	destruct : function() {
+
+		this._destruct();
+
+	},
+
 	_init : function() {
 
 		this.__base();
@@ -56,8 +62,9 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		if(this.isReady()) {
 			this._beforeSubmit();
+			var preventSubmit = this._params.preventSubmit;
 			this.trigger('before-submit');
-			return !this._params.preventSubmit;
+			return !preventSubmit;
 		}
 
 		return false;

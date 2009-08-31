@@ -3,7 +3,6 @@
 $.event.bindWithContext = function (elem, type, data, handler, context) {
     var fn;
 
-    // http://ajaxian.com/archives/working-aroung-the-instanceof-memory-leak
     if ($.isFunction(data)) {
         context = handler;
         handler = data;

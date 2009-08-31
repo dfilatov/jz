@@ -5,7 +5,6 @@ form.jz dd {
 }
 
 .jz-list {
-	top: 1.55em;
 	width: expression(this.previousSibling.offsetWidth + 'px');
 }
 

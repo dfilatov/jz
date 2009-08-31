@@ -48,7 +48,7 @@ $result = "var JZ = (function($) {\n";
 foreach($files as $file) {
     $result .= file_get_contents($file);
 }
-$result .= "\nreturn JZ;})(jQuery)";
+$result .= "\nreturn JZ;})(jQuery);";
 print($result);
 
 file_put_contents("JZ.js", $result);

@@ -10,7 +10,7 @@
     </head>
     <body>
         <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:false}}">
-			<dl>
+			<!--dl>
 				<dt><label for="input-number">number</label></dt>
 				<dd><input value="s23" class="jz jz-number" id="input-number" name="number" onclick="return {jz:{placeholder:'number',focusOnInit:true,allowNegative:true,allowFloat:true,required:{fn:function(widget) { return widget.getValue() > 10 }}}}"/></dd>
 			</dl>
@@ -29,7 +29,7 @@
                 <dd>
 					<input value="2009-02-31 23:59:77" class="jz jz-datetime" name="datetime" id="input-datetime" onclick="return {jz:{required:{}}}"/>
 				</dd>
-            </dl>
+            </dl-->
 			<dl>
                 <dt><label for="input-combo">combo</label></dt>
                 <dd>
@@ -41,7 +41,7 @@
                 <dt><label for="input-combo2">suggest</label></dt>
                 <dd><input value="" class="jz jz-combo" name="suggest" id="input-combo2" onclick="return {jz:{placeholder:'test',storage:{source:'remote',ajax:{url:'/suggest.php',type:'POST'},values:'name,combo'}}}"/></dd>
             </dl>
-			<dl>
+			<!--dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
 					<select class="jz" name="select" id="input-select" onclick="return {jz:{valid:[{name:'cb',pattern:/1/},'and',{name:'rb',pattern:/1/}]}}">
@@ -93,7 +93,7 @@
             <dl>
                 <dt><label for="input-number2">number</label></dt>
                 <dd><input class="jz jz-number" name="number2" id="input-number2" onclick="return {jz:{enabled:[{name:'name',pattern:/.{2}/,focusOnEnable:true,hideOnDisable:true},'and',{name:'name',pattern:/.+/,focusOnEnable:true,hideOnDisable:true}]}}"/></dd>
-            </dl>
+            </dl-->
 			<!--fieldset class="jz" onclick="return {jz:{enabled:{name:'name',pattern:/3/}}}">
 				<dl>
 					<dt><label for="input-last">last</label></dt>
@@ -111,8 +111,8 @@
 				form.bind('ready-change', function(event, form) {
 					//console.log(form.isReady());
 				});
-				$('.jz-cbgroup').data('jz').setValue([1,3]);
-				$('.jz-rbgroup').data('jz').setValue(1);
+				//$('.jz-cbgroup').data('jz').setValue([1,3]);
+				//$('.jz-rbgroup').data('jz').setValue(1);
 				//$('#input-number').data('jz').disable();
 				//$('form').data('jz')._destruct();
 				//console.log($('form').data('jz').serialize());

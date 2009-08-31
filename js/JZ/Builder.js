@@ -17,8 +17,8 @@ JZ.Builder = $.inherit({
 			_this._widgets.push(_this._widgetsById[widget.getId()] = widget);
 		});
 
-		// Строим хэш по именам после создании дерева виджетов, потому что имена некорорых виджетов зависят от детей
-		var i = 0, name;
+		// Строим хэш по именам после создании дерева виджетов, потому что имена некоторых виджетов зависят от детей
+		var i = 0;
 		while(widget = _this._widgets[i++]) {
 			widget._hasValue() && (_this._widgetsByName[widget.getName()] = widget);
 		}
@@ -157,7 +157,7 @@ JZ.Builder = $.inherit({
 		}
 
 		if(result.type == 'combo') {
-			var arrow = element.next('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
+			var arrow = element.parent().find('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
 			!!arrow.length && (result.arrow = arrow);
 		}
 

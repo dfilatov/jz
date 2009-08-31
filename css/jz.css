@@ -3,13 +3,6 @@ form.jz * {
 	font-size: 1em;
 }
 
-.jz ul,
-.jz li {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-
 form.jz dl {
 	position: relative;
 }
@@ -47,8 +40,6 @@ form.jz dl {
 
 .jz-list {
 	position: absolute;
-	left: 0;
-	width: 100%;
 	background: #FFF;
 }
 
@@ -61,13 +52,17 @@ form.jz dl {
 }
 
 .jz-list ul {
+	margin: 0;
+	padding: 0;
 	border: 1px solid #999;
 	-webkit-box-shadow: rgba(0,0,0,0.1) 0.2em 0.2em 0.2em;
 	-moz-box-shadow: rgba(0,0,0,0.1) 0.2em 0.2em 0.2em;
 }
 
 .jz-list li {
+	margin: 0;
 	padding: 0.1em 0.3em;
+	list-style-type: none;
 	cursor: default;
 	white-space: nowrap;
 }
