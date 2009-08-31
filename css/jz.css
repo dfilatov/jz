@@ -96,11 +96,18 @@ form.jz dl {
 /* date widget */
 
 .jz-day,
-.jz-month {
+.jz-month,
+.jz-year,
+.jz-hour,
+.jz-minute,
+.jz-second {
 	margin-right: 0.2em;
 }
 
-.jz-day {
+.jz-day,
+.jz-hour,
+.jz-minute,
+.jz-second {
 	width: 1.3em;
 }
 

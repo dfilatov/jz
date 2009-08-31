@@ -34,19 +34,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 		return true;
 
-	},
-
-	_extractValueFromElement : function() {
-
-		return this._element.val();
-
-	},
-
-	_setValueToElement : function(value) {
-
-		this._element.val(value.toString());
-
-	},
+	},	
 
 	_enableElements : function() {
 

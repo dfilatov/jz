@@ -368,8 +368,19 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_extractValueFromElement : function() {},
-	_setValueToElement : function() {},
+	_extractValueFromElement : function() {
+
+		return this._element.val();
+
+	},
+
+	_setValueToElement : function(value) {
+
+		this._element.val(value.toString());
+
+	},
+
+
 	_bindEvents : function() {},
 	_enableElements : function() {},
 	_disableElements : function() {},

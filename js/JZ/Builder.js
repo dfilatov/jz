@@ -193,7 +193,7 @@ JZ.Builder = $.inherit({
 
 	_cssClassToType : (function() {
 
-		var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|date|rbgroup|cbgroup|submit)');
+		var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|rbgroup|cbgroup|submit)');
 		return function(cssClass) {
 			if(cache[cssClass]) {
 				return cache[cssClass];
@@ -214,6 +214,7 @@ JZ.Builder = $.inherit({
 			'combo'    : JZ.Widget.Input.Text.Combo,
 			'select'   : JZ.Widget.Input.Select,
 			'date'     : JZ.Widget.Container.Date,
+			'datetime' : JZ.Widget.Container.Date.Time,
 			'state'    : JZ.Widget.Input.State,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,

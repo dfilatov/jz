@@ -1,191 +1,144 @@
-ZForms.Value.Date.Time = ZForms.Value.Date.inheritTo(
-	{
-		
-		reset : function() {
+JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
-			this.__base();
-			
-			this.mValue[this.__self.PART_HOUR] = '';
-			this.mValue[this.__self.PART_MINUTE] = '';
-			this.mValue[this.__self.PART_SECOND] = '';
-	
-		},
+	reset : function() {
 
-		get : function() {
+		this._value = { second : '', minute : '', hour : '', day : '', month : '', year : '' };
 
-			if(this.isEmpty()) {
-				return '';
-			}
-				
-			return this.__base() + ' ' + this.getHour() + ':' + this.getMinute() + ':' + this.getSecond();
-	
-		},
+	},
 
-		set : function(mValue) {
+	get : function() {
 
-			var oDate = null;
-	
-			if(mValue instanceof Date) {
-				oDate = mValue;
-			}
-			else {	
+		if(this.isEmpty()) {
+			return '';
+		}
 
-				var aMatched = mValue.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2})( (-?\d{1,2}):(-?\d{1,2}):(-?\d{1,2}))?/);
-		
-				if(aMatched) {												
-					oDate = new Date(
-						parseInt(aMatched[1], 10),
-						parseInt(aMatched[2], 10) - 1,
-						parseInt(aMatched[3], 10),
-						aMatched[5]? parseInt(aMatched[5], 10) : 0,
-						aMatched[6]? parseInt(aMatched[6], 10) : 0,
-						aMatched[7]? parseInt(aMatched[7], 10) : 0
-						);
-				}
+		return this.__base() + ' ' + this.getHour() + ':' + this.getMinute() + ':' + this.getSecond();
 
-			}
+	},
 
-			if(oDate) {
-		
-				this.mValue[this.__self.PART_YEAR] = oDate.getFullYear();
-				this.mValue[this.__self.PART_MONTH] = oDate.getMonth() + 1;
-				this.mValue[this.__self.PART_DAY] = oDate.getDate();
-				this.mValue[this.__self.PART_HOUR] = oDate.getHours();
-				this.mValue[this.__self.PART_MINUTE] = oDate.getMinutes();
-				this.mValue[this.__self.PART_SECOND] = oDate.getSeconds();										
-		
-			}
-			else {		
-				this.reset();		
-			}			
-	
-		},
-	
-		isEqual : function(mValue) {
-	
-			if(mValue instanceof this.__self) {
-				return this.get() == mValue.get();
-			}
+	set : function(value) {
 
-			if(mValue instanceof ZForms.Value.Date) {
-				return this.get() == mValue.get() + ' 0:0:0';
-			}
+		var date;
 
-			if(mValue instanceof ZForms.Value || typeof(mValue) == 'string') {
-				return this.isEqual(new this.__self(typeof(mValue) == 'string'? mValue : mValue.get()));
-			}
+		if(value instanceof Date) {
+			date = value;
+		}
+		else {
+			var matches = value.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2}) (-?\d{1,2}):(-?\d{1,2}):(-?\d{1,2})/);
+			matches && (date = new Date(
+				parseInt(matches[1], 10),
+				parseInt(matches[2], 10) - 1,
+				parseInt(matches[3], 10),
+				parseInt(matches[4], 10),
+				parseInt(matches[5], 10),
+				parseInt(matches[6], 10)));
+		}
 
-			if(mValue instanceof Date) {
-				return this.get() == new this.__self(mValue).get();
-			}
+		if(date) {
+			this._value = {
+				second : date.getSeconds(),
+				minute : date.getMinutes(),
+				hour   : date.getHours(),
+				day    : date.getDate(),
+				month  : date.getMonth() + 1,
+				year   : date.getFullYear()
+			};
+		}
+		else {
+			this.reset();
+		}
 
-			return false;
-	
-		},
-	
-		isGreater : function(mValue) {
+	},
 
-			if(this.__base(mValue)) {
+	isEmpty : function() {
+
+		return this.__base() || this._value.hour === '' || this._value.minute === '' || this._value.second === '';
+
+	},
+
+	isEqual : function(value) {
+
+		if(value instanceof this.__self) {
+			return this.get() == value.get();
+		}
+
+		if(value instanceof JZ.Value.Date) {
+			return this.get() == value.get() + ' 0:0:0';
+		}
+
+		if(value instanceof JZ.Value) {
+			return this.get() == value.get();
+		}
+
+		if(value instanceof Date) {
+			return this.get() == new this.__self(value).get();
+		}
+
+		return this.get() === value;
+
+	},
+
+	isGreater : function(value) {
+
+		if(this.__base(value)) {
+			return true;
+		}
+
+		var value = (value instanceof this.__self)?
+			value :
+			new this.__self(
+				(value instanceof JZ.Value.Date?
+					value.get() + ' 0:0:0' :
+					(value instanceof JZ.Value? value.get() : value)));
+
+		if(this.getDay() == value.getDay()) {
+			if(this.getHour() > value.getHour()) {
 				return true;
 			}
-			
-			var oValue = (mValue instanceof this.__self)?
-				mValue :
-				new this.__self(
-					(mValue instanceof ZForms.Value.Date?
-						mValue.get() + ' 0:0:0' :
-						(mValue instanceof ZForms.Value?
-							mValue.get() :
-							mValue
-							)
-						)
-					);
-		
-			if(this.getDay() == oValue.getDay()) {
-		
-				if(this.getHour() > oValue.getHour()) {
+			else if(this.getHour() == value.getHour()) {
+				if(this.getMinute() > value.getMinute()) {
 					return true;
 				}
-				else if(this.getHour() == oValue.getHour()) {
-			
-					if(this.getMinute() > oValue.getMinute()) {
-						return true;
-					}
-					else {
-						return this.getMinute() == oValue.getMinute() && this.getSecond() > oValue.getSecond();
-					}
-			
+				else {
+					return this.getMinute() == value.getMinute() && this.getSecond() > value.getSecond();
 				}
-		
-			}
-	
-			return false;
-
-		},
-
-		checkForCompareTypes : function(mValue) {
-
-			if(mValue instanceof this.__self || mValue instanceof ZForms.Value.Date) {
-				return !mValue.isEmpty();
 			}
 
-			if(mValue instanceof ZForms.Value) {
-				return !(new ZForms.Value.Date(mValue.get()).isEmpty());
-			}
-
-			if(typeof(mValue) == 'string') {
-				return !(new ZForms.Value.Date.Time(mValue).isEmpty());
-			}
-
-			return mValue instanceof Date;				
-
-		},
-	
-		isEmpty : function() {
-		
-			return this.__base() ||				
-				this.mValue[this.__self.PART_HOUR] === '' ||
-				this.mValue[this.__self.PART_MINUTE] === '' ||
-				this.mValue[this.__self.PART_SECOND] === ''
-				;
-	
-		},
-
-		getHour : function() {
-	
-			return this.mValue[this.__self.PART_HOUR];
-	
-		},
-
-		getMinute : function() {
-	
-			return this.mValue[this.__self.PART_MINUTE];
-	
-		},
-
-		getSecond : function() {
-	
-			return this.mValue[this.__self.PART_SECOND];
-	
-		},
-		
-		toStr : function() {
-		
-			if(this.isEmpty()) {
-				return '';
-			}
-		
-			return this.__base() + ' ' + (this.getHour() < 10? '0' : '') + this.getHour() + ':' + (this.getMinute() < 10? '0' : '') + this.getMinute() + ':' + (this.getSecond() < 10? '0' : '') + this.getSecond();
-		
 		}
-		
+
+		return false;
+
 	},
-	// static
-	{
-	
-		PART_HOUR   : 'hour',
-		PART_MINUTE : 'minute',
-		PART_SECOND : 'second'
-		
+
+	getHour : function() {
+
+		return this._value.hour;
+
+	},
+
+	getMinute : function() {
+
+		return this._value.minute;
+
+	},
+
+	getSecond : function() {
+
+		return this._value.second;
+
+	},
+
+	toString : function() {
+
+		if(this.isEmpty()) {
+			return '';
+		}
+
+		return this.__base() +
+			   ' ' + (this.getHour() < 10? '0' : '') + this.getHour() +
+			   ':' + (this.getMinute() < 10? '0' : '') + this.getMinute() +
+			   ':' + (this.getSecond() < 10? '0' : '') + this.getSecond();
+
 	}
-	);
+
+});

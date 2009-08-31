@@ -36,6 +36,12 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	},
 
+	isEmpty : function() {
+
+		return !(this._value.year && this._value.month && this._value.day);
+
+	},
+
 	isEqual : function(value) {
 
 		if(value instanceof this.__self.Time) {
@@ -82,12 +88,6 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	},
 
-	isEmpty : function() {
-
-		return !(this._value.year && this._value.month && this.value.day);
-
-	},
-
 	getYear : function() {
 
 		return this._value.year;
@@ -110,13 +110,13 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 		return this.isEmpty()? '' :
 			this.getYear() + '-' + (this.getMonth() < 10? '0' : '') + this.getMonth() + '-' +
-				(this.getDay() < 10? '0' : '') + this.getDay()
+				(this.getDay() < 10? '0' : '') + this.getDay();
 
 	},
 
 	_checkForCompareTypes : function(value) {
 
-		if(value instanceof this.__self) {
+		if(value instanceof JZ.Value.Date || value instanceof JZ.Value.Date.Time) {
 			return !value.isEmpty();
 		}
 
