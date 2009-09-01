@@ -16,6 +16,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	getElement : function() {
+
+		return this._element;
+
+	},
+
 	getId : function() {
 
 		var result = JZ._identifyElement(this._element);
