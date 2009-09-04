@@ -33,6 +33,13 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	reinit : function() {
+
+		this._changedCounter = 0;
+		this.trigger('ready-change', this);
+
+	},
+
 	destruct : function() {
 
 		this._destruct();

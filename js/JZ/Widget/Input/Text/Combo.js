@@ -1,3 +1,4 @@
+
 JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	__constructor : function() {
@@ -7,7 +8,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._isListShowed = this._preventOnBlur = this._preventOnFocus = this._preventUpdate = this._focusOnBlur = false;
 		this._hilightedIndex = -1;
 		this._itemsCount = 0;
-		this._lastSearchVal = this._keyDownValue = this._updateList = null;
+		this._lastSearchVal = this._keyDownValue = this._updateList = this._reposTimer = this._lastOffset = null;
 
 	},
 
@@ -233,14 +234,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return;
 		}
 
-		var offset = this._element.offset();
-		this._getListContainer()
-			.css({
-				width : this._element.outerWidth() + 'px',
-				left  : offset.left + 'px',
-				top   : (offset.top + this._element.outerHeight()) + 'px'
-			})
-			.removeClass(this.__self.CSS_CLASS_INVISIBLE);
+		this._getListContainer().removeClass(this.__self.CSS_CLASS_INVISIBLE);
+		this._reposList();
 		this._isListShowed = true;
 
 	},
@@ -251,8 +246,29 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return;
 		}
 
+		this._reposTimer && clearTimeout(this._reposTimer);
 		this._getListContainer().addClass(this.__self.CSS_CLASS_INVISIBLE);
 		this._isListShowed = false;
+
+	},
+
+	_reposList : function() {
+
+		var offset = this._element.offset(),
+			offsetLeft = offset.left,
+			offsetTop = offset.top + this._element.outerHeight();
+
+		if(!(this._lastOffset && this._lastOffset.left == offsetLeft && this._lastOffset.top == offsetTop)) {
+			this._lastOffset = { left : offsetLeft, top : offsetTop };
+			this._getListContainer()
+				.css({
+					width : this._element.outerWidth() + 'px',
+					left  : offsetLeft + 'px',
+					top   : offsetTop + 'px'
+				});
+		}
+
+		this._params.reposList && (this._reposTimer = setTimeout($.bindContext(arguments.callee, this), 50));
 
 	},
 
@@ -324,7 +340,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getDefaultParams : function() {
 
 		return $.extend(this.__base(), {
-			showAllOnFocus : false
+			showAllOnFocus : false,
+			reposList      : false
 		});
 
 	},
