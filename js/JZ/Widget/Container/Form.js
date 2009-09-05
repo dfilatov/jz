@@ -33,11 +33,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	reinit : function() {
+	_reinit : function() {
 
-		this._reinit();
 		this._changedCounter = 0;
-		this.trigger('ready-change', this);
+		this.__base();
 
 	},
 

@@ -8,9 +8,16 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 	},
 
-	_updateState : function(event, form) {
+	_reinit : function() {
 
-		this[form.isReady()? 'enable' : 'disable']();
+		this.__base();
+		this._updateState();
+
+	},
+
+	_updateState : function() {
+
+		this[this._form.isReady()? 'enable' : 'disable']();
 
 	},
 
