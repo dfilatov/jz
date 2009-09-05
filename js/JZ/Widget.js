@@ -10,6 +10,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._isRequired = false;
 		this._isValid = true;
 		this._isEnabled = !this._element.attr('disabled');
+		this._isInited = false;
 		this._value = null;
 		this._initialValue = null;
 		this._dependencies = {};
@@ -77,7 +78,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	init : function() {
 
 		// TODO
-		this._init();
+		this._isInited?
+			this._reinit() :
+			this._init();
 
 	},
 
@@ -193,7 +196,17 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._bindEvents();
 
 		this._hasValue() && this._initValue();
+		this._isInited = true;
 		this._params.focusOnInit && this.focus();
+
+	},
+
+	_reinit : function() {
+
+		if(this._hasValue()) {
+			this._isInitialValueChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
+			this._initialValue = this._value;
+		}
 
 	},
 

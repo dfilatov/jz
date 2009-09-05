@@ -103,6 +103,7 @@
             <div>
                 <input type="submit" class="jz" value="Отправить" onclick="return {jz:{sdisableOnNoReady:false}}"/>
             </div>
+			<span id="test">test</span>
         </form>
 		<script type="text/javascript">
 
@@ -116,6 +117,9 @@
 				//$('#input-number').data('jz').disable();
 				//$('form').data('jz')._destruct();
 				//console.log($('form').data('jz').serialize());
+				$('#test').click(function() {
+					form.reinit();
+				});
 			});
 		});
 
