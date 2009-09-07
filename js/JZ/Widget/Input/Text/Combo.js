@@ -346,6 +346,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
+	_destruct : function() {
+
+		this.__base();
+		this._getListContainer(true).remove();
+
+	},
+
 	_unbindAll : function() {
 
 		this.__base();

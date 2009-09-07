@@ -33,13 +33,6 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_reinit : function() {
-
-		this._changedCounter = 0;
-		this.__base();
-
-	},
-
 	destruct : function() {
 
 		this._destruct();
@@ -54,6 +47,13 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
 		this._unreadyCounter == 0 && this.trigger('ready-change', this); // инициирующее событие
 		this._element.trigger('init.jz', this);
+
+	},
+
+	_reinit : function() {
+
+		this._changedCounter = 0;
+		this.__base();
 
 	},
 
