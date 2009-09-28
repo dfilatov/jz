@@ -20,6 +20,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 		this.addCSSClass(this.__self.CSS_CLASS_FOCUSED);
 		this._isFocused = true;
+		this.trigger('focus');
 
 	},
 
@@ -27,6 +28,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 		this.removeCSSClass(this.__self.CSS_CLASS_FOCUSED);
 		this._isFocused = false;
+		this.trigger('blur');
 
 	},
 
@@ -34,7 +36,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 		return true;
 
-	},	
+	},
 
 	_enableElements : function() {
 

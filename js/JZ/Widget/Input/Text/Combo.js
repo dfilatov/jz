@@ -286,6 +286,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					.setValue(this._lastSearchVal = $(event.target).closest('li').text())
 					.focus()
 					._hideList();
+				return false;
 			}, this));
 		$('body').append(result);
 		return (this._getListContainer = function() {

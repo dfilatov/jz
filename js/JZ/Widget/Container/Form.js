@@ -33,6 +33,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	submit : function() {
+
+		this._element.submit();
+
+	},
+
 	destruct : function() {
 
 		this._destruct();
@@ -45,6 +51,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._setForm(this);
 		this._checkDependencies();
 		this.addCSSClass(this.__self.CSS_CLASS_INITED);
+		this.__self._addInstance(this);
 		this._unreadyCounter == 0 && this.trigger('ready-change', this); // инициирующее событие
 		this._element.trigger('init.jz', this);
 
@@ -109,6 +116,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		!!widget.getName() && (this._widgetsByName[widget.getName()] = widget);
 
+		widget.bind('focus', $.bindContext(function() {
+			this.__self._currentInstance = this;
+		}, this));
+
 		if(this._params.heedChanges && widget._hasValue()) {
 			widget.bind('initial-value-change', $.bindContext(this._onWidgetInitialValueChange, this));
 		}
@@ -136,6 +147,34 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		if(counter + this._changedCounter == 1) {
 			this.trigger('ready-change', this);
 		}
+
+	},
+
+	_destruct : function() {
+
+		this.__base();
+		this.__self._removeInstance(this);
+
+	}
+
+}, {
+
+	_currentInstance : null,
+	_instanceCounter : 0,
+
+	_addInstance : function(instance) {
+
+		this._currentInstance = instance;
+		++this._instanceCounter == 1 && $(document).bind('keyup.jz', $.bindContext(function(event) {
+			this._currentInstance && event.keyCode == 13 && event.ctrlKey && this._currentInstance.submit();
+		}, this));
+
+	},
+
+	_removeInstance : function(instance) {
+
+		this._currentInstance == instance && (this._currentInstance = null);
+		--this._instanceCounter == 0 && $(document).unbind('keyup.jz');
 
 	}
 
