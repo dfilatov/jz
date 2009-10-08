@@ -10,7 +10,7 @@
     </head>
     <body>
         <form class="jz" action="." onclick="return {jz:{heedChanges:false,preventSubmit:false}}">
-			<!--dl>
+			<dl>
 				<dt><label for="input-number">number</label></dt>
 				<dd><input value="s23" class="jz jz-number" id="input-number" name="number" onclick="return {jz:{placeholder:'number',focusOnInit:true,allowNegative:true,allowFloat:true,required:{fn:function(widget) { return widget.getValue() > 10 }}}}"/></dd>
 			</dl>
@@ -18,7 +18,7 @@
                 <dt><label for="input-name">name</label></dt>
                 <dd><input value="" class="jz" name="name" id="input-name" onclick="return {jz:{placeholder:'name',required:{min:2},valid:['not',{pattern:/^123$/,invalidCSSClass:'test'}]}}"/></dd>
             </dl>
-			<dl>
+			<!--dl>
                 <dt><label for="input-date">date</label></dt>
                 <dd>
 					<input value="2009-02-31" class="jz jz-date" name="date" id="input-date" onclick="return {jz:{onlyMonths:false,required:{}}}"/>
@@ -29,7 +29,7 @@
                 <dd>
 					<input value="2009-02-31 23:59:77" class="jz jz-datetime" name="datetime" id="input-datetime" onclick="return {jz:{required:{}}}"/>
 				</dd>
-            </dl-->
+            </dl>
 			<dl>
                 <dt><label for="input-combo">combo</label></dt>
                 <dd>
@@ -40,7 +40,7 @@
 			<dl>
                 <dt><label for="input-combo2">suggest</label></dt>
                 <dd><input value="" class="jz jz-combo" name="suggest" id="input-combo2" onclick="return {jz:{placeholder:'test',storage:{source:'remote',ajax:{url:'/suggest.php',type:'POST'},values:'name,combo'}}}"/></dd>
-            </dl>
+            </dl-->
 			<!--dl>
 				<dt><label for="input-select">select</label></dt>
 				<dd>
@@ -75,7 +75,7 @@
 						<input type="radio" name="rb" class="jz" id="rb-3" value="3"><label for="rb-3">rb-3</label>
 					</div>
 				</dd>
-			</dl>
+			</dl-->
 			<dl>
 				<dt><label>checkboxgroup</label></dt>
 				<dd class="jz jz-cbgroup" onclick="return {'jz':{required:{min:2}}}">
@@ -93,7 +93,7 @@
             <dl>
                 <dt><label for="input-number2">number</label></dt>
                 <dd><input class="jz jz-number" name="number2" id="input-number2" onclick="return {jz:{enabled:[{name:'name',pattern:/.{2}/,focusOnEnable:true,hideOnDisable:true},'and',{name:'name',pattern:/.+/,focusOnEnable:true,hideOnDisable:true}]}}"/></dd>
-            </dl-->
+            </dl>
 			<!--fieldset class="jz" onclick="return {jz:{enabled:{name:'name',pattern:/3/}}}">
 				<dl>
 					<dt><label for="input-last">last</label></dt>
@@ -104,6 +104,7 @@
                 <input type="submit" class="jz" value="Отправить" onclick="return {jz:{sdisableOnNoReady:false}}"/>
             </div>
         </form>
+		<input id="test" value="223"/>
 		<script type="text/javascript">
 
 		$(function() {
@@ -117,6 +118,7 @@
 				//$('form').data('jz')._destruct();
 				//console.log($('form').data('jz').serialize());
 			});
+			$('#test')[0].focus();
 		});
 
 		</script>

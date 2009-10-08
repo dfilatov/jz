@@ -34,3 +34,9 @@ var JZ = {
 	})()
 
 };
+
+$.fn.jz = function() {
+	return this.each(function() {
+		JZ.build($(this));
+	});
+};
