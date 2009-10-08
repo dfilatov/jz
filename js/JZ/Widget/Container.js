@@ -25,23 +25,35 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	enable : function(byParent) {
 
 		this.__base(byParent);
-		this._applyFnToChildren('enable', [true]);
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child.enable(true);
+		}
+		//this._applyFnToChildren('enable', [true]);
 
 	},
 
 	disable : function() {
 
 		this.__base();
-		this._applyFnToChildren('disable');
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child.disable();
+		}
+		//this._applyFnToChildren('disable');
 
 	},
 
 	_init : function() {
 
-		this._applyFnToChildren('_init');
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child._init();
+		}
+		//this._applyFnToChildren('_init');
 		this.__base();
 
-		var children = this._children, i = 0, child;
+		i = 0;
 		while(child = children[i++]) {
 			this._bindChildEvents(child);
 		}
@@ -50,7 +62,11 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_reinit : function() {
 
-		this._applyFnToChildren('_reinit');
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child._reinit();
+		}
+		//this._applyFnToChildren('_reinit');
 		this.__base();
 
 	},
@@ -69,14 +85,22 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_setForm : function(form) {
 
-		this._applyFnToChildren('_setForm', arguments);
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child._setForm(form);
+		}
+		//this._applyFnToChildren('_setForm', arguments);
 		this.__base(form);
 
 	},
 
 	_beforeSubmit : function() {
 
-		this._applyFnToChildren('_beforeSubmit');
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child._beforeSubmit();
+		}
+		//this._applyFnToChildren('_beforeSubmit');
 		this.__base();
 
 	},
@@ -105,12 +129,16 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_destruct : function() {
 
-		this._applyFnToChildren('_destruct');
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			child._destruct();
+		}
+		//this._applyFnToChildren('_destruct');
 		this.__base();
 
 		delete this._children;
 
-	},
+	}/*,
 
 	_applyFnToChildren : function(name, args) {
 
@@ -119,6 +147,6 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 			child[name].apply(child, args || []);
 		}
 
-	}
+	}*/
 
 });

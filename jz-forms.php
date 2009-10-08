@@ -46,7 +46,7 @@ $files = array(
 
 $result = "var JZ = (function($) {\n";
 foreach($files as $file) {
-    $result .= file_get_contents($file);
+    $result .= file_get_contents($file) . "\n\n";
 }
 $result .= "\nreturn JZ;})(jQuery);";
 print($result);

@@ -94,7 +94,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		if(this._focusOnBlur) {
 			this._focusOnBlur = false;
-			setTimeout($.bindContext(this.focus, this), 0);
+			setTimeout($.bindContext(function() {
+				this
+					.focus()
+					._refocus();
+			}, this), 0);
 		}
 
 	},
@@ -135,6 +139,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			this._preventUpdate = true;
 			this
 				.focus()
+				._refocus()
 				._updateList('');
 			this._preventOnBlur = false;
 		}
@@ -286,6 +291,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					.setValue(this._lastSearchVal = $(event.target).closest('li').text())
 					.focus()
 					._hideList();
+				setTimeout($.bindContext(function() {
+					this._focusOnBlur = false;
+				}, this), 50);
 				return false;
 			}, this));
 		$('body').append(result);
@@ -317,6 +325,19 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		return (this._getStorage = function() {
 			return result;
 		})();
+
+	},
+
+	_refocus : function() {
+
+		if(document.selection) {
+			var range = this._element[0].createTextRange();
+			range.collapse(true);
+			range.moveStart('character', 1000);
+			range.moveEnd('character', 1000);
+			range.select();
+		}
+		return this;
 
 	},
 
