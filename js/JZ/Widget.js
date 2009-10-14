@@ -14,6 +14,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._value = null;
 		this._initialValue = null;
 		this._dependencies = {};
+		this._dependFromIds = {};
 
 	},
 
@@ -174,12 +175,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._dependencies[type] = dependence;
 
-		var ids = {}, _this = this;
+		var _this = this;
 		$.each(dependence.getFrom(), function() {
-			if(ids[this.getId()]) {
+			if(_this._dependFromIds[this.getId()]) {
 				return;
 			}
-			ids[this.getId()] = true;
+			_this._dependFromIds[this.getId()] = true;
 			this.bind('value-change enable disable', $.bindContext(function() {
 				this._checkDependencies();
 			}, _this));
@@ -311,9 +312,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				length = order.length, isReady = this.isReady();
 			while(i < length) {
 				type = order[i++];
-				if(this._dependencies[type]) {
+				this._dependencies[type] &&
 					this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
-				}
 			}
 			isReady != this.isReady() && this.trigger('ready-change', this);
 		};
