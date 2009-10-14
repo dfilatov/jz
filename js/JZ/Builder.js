@@ -95,8 +95,6 @@ JZ.Builder = $.inherit({
 
 	_buildValidDependence : function(widget, data) {
 
-		data.type == 'email' && (data.pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.\-\_\~]*\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,4}$/);
-
 		return new JZ.Dependence.Valid($.extend(data, { widget : this._getFromWidget(data, widget) }));
 
 	},

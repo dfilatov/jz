@@ -1,5 +1,12 @@
 JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
+	_preprocessParams : function(params) {
+
+		params.type == 'email' && (params.pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.\-\_\~]*\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,4}$/);
+		return params;
+
+	},
+
 	_precheck : function() {
 
 		return this.__base() && !(this._params.bCheckEmpty && this._params.widget._getValue().isEmpty());
@@ -19,9 +26,9 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	_getDefaultParams : function() {
 
-		return {
+		return $.extend(this.__base(), {
 			bCheckEmpty : false
-		};
+		});
 
 	}
 

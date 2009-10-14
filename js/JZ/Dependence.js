@@ -2,7 +2,7 @@ JZ.Dependence = $.inherit({
 
 	__constructor : function(params) {
 
-		this._params = $.extend(this._getDefaultParams(), params);
+		this._params = $.extend(this._getDefaultParams(), this._preprocessParams(params));
 
 	},
 
@@ -21,6 +21,12 @@ JZ.Dependence = $.inherit({
 			result : result,
 			params : this._processParams(result)
 		};
+
+	},
+
+	_preprocessParams : function(params) {
+
+		return params;
 
 	},
 
