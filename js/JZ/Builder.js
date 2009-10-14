@@ -134,13 +134,11 @@ JZ.Builder = $.inherit({
 			case 'button':
 			case 'submit':
 				return element;
-			break;
 
 			case 'rbgroup':
 			case 'cbgroup':
 			case 'state':
 				return element.parent();
-			break;
 
 			default:
 				return element.parent().parent();
@@ -174,12 +172,10 @@ JZ.Builder = $.inherit({
 				case 'radio':
 				case 'checkbox':
 					return 'state';
-				break;
 
 				case 'image':
 				case 'submit':
 					return 'submit';
-				break;
 			}
 		}
 
