@@ -72,7 +72,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	replaceCSSClass : function(nameFrom, nameTo) {
 
 		this.hasCSSClass(nameFrom) && this.removeCSSClass(nameFrom);
-		this.addCSSClass(nameTo);
+		return this.addCSSClass(nameTo);
 
 	},
 
@@ -362,7 +362,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED_OK, this.__self.CSS_CLASS_REQUIRED);
 		}
 		else {
-			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK);
+			this
+				.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK)
+				.removeCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
 		}
 
 		this._isRequired = isRequired;
@@ -378,12 +380,20 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			else {
 				this.replaceCSSClass(this.__self.CSS_CLASS_INVALID, this.__self.CSS_CLASS_INVALID_OK);
 			}
+			this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
 		}
 		else {
 			this.replaceCSSClass(this.__self.CSS_CLASS_INVALID_OK, this.__self.CSS_CLASS_INVALID);
 		}
 
 		this._isValid = isValid;
+
+	},
+
+	_setNoReady : function() {
+
+		this.isRequired() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
+		!this.isValid() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
 
 	},
 
@@ -407,17 +417,19 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 }, {
 
-	CSS_CLASS_HIDDEN      : JZ.CSS_CLASS_WIDGET + '-hidden',
-	CSS_CLASS_INVISIBLE   : JZ.CSS_CLASS_WIDGET + '-invisible',
-	CSS_CLASS_INITED      : JZ.CSS_CLASS_WIDGET + '-inited',
-	CSS_CLASS_CHANGED     : JZ.CSS_CLASS_WIDGET + '-changed',
-	CSS_CLASS_FOCUSED     : JZ.CSS_CLASS_WIDGET + '-focused',
-	CSS_CLASS_SELECTED    : JZ.CSS_CLASS_WIDGET + '-selected',
-	CSS_CLASS_DISABLED    : JZ.CSS_CLASS_WIDGET + '-disabled',
-	CSS_CLASS_REQUIRED    : JZ.CSS_CLASS_WIDGET + '-required',
-	CSS_CLASS_REQUIRED_OK : JZ.CSS_CLASS_WIDGET + '-required-ok',
-	CSS_CLASS_INVALID     : JZ.CSS_CLASS_WIDGET + '-invalid',
-	CSS_CLASS_INVALID_OK  : JZ.CSS_CLASS_WIDGET + '-invalid-ok',
+	CSS_CLASS_HIDDEN           : JZ.CSS_CLASS_WIDGET + '-hidden',
+	CSS_CLASS_INVISIBLE        : JZ.CSS_CLASS_WIDGET + '-invisible',
+	CSS_CLASS_INITED           : JZ.CSS_CLASS_WIDGET + '-inited',
+	CSS_CLASS_CHANGED          : JZ.CSS_CLASS_WIDGET + '-changed',
+	CSS_CLASS_FOCUSED          : JZ.CSS_CLASS_WIDGET + '-focused',
+	CSS_CLASS_SELECTED         : JZ.CSS_CLASS_WIDGET + '-selected',
+	CSS_CLASS_DISABLED         : JZ.CSS_CLASS_WIDGET + '-disabled',
+	CSS_CLASS_REQUIRED         : JZ.CSS_CLASS_WIDGET + '-required',
+	CSS_CLASS_REQUIRED_OK      : JZ.CSS_CLASS_WIDGET + '-required-ok',
+	CSS_CLASS_INVALID          : JZ.CSS_CLASS_WIDGET + '-invalid',
+	CSS_CLASS_INVALID_OK       : JZ.CSS_CLASS_WIDGET + '-invalid-ok',
+	CSS_CLASS_NOREADY_REQUIRED : JZ.CSS_CLASS_WIDGET + '-noready-required',
+	CSS_CLASS_NOREADY_INVALID  : JZ.CSS_CLASS_WIDGET + '-noready-invalid',
 
 	_dependenceTypeToFn : (function() {
 

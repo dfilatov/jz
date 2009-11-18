@@ -6,6 +6,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		this._widgetsByName = {};
 		this._widgetsDataById = {};
+		this._unreadyWidgetIds = {};
 		this._unreadyCounter = 0;
 		this._changedCounter = 0;
 
@@ -80,7 +81,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			this.trigger('before-submit');
 			return !preventSubmit;
 		}
-		this.addCSSClass(this.__self.CSS_CLASS_NOREADY);
+		var _this = this;
+		this._unreadyCounter > 0 && $.each(this._unreadyWidgetIds, function(id) {
+			_this._widgetsDataById[id].widget._setNoReady();
+		});
 		return false;
 
 	},
@@ -132,9 +136,9 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		if(widgetData.isReady == isReady) {
 			return;
 		}
-
 		this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
 		widgetData.isReady = isReady;
+		isReady? delete this._unreadyWidgetIds[widget.getId()] : this._unreadyWidgetIds[widget.getId()] = true;
 		this.trigger('ready-change', this);
 
 	},
@@ -158,8 +162,6 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	}
 
 }, {
-
-	CSS_CLASS_NOREADY : JZ.CSS_CLASS_WIDGET + '-noready',
 
 	_currentInstance : null,
 	_instanceCounter : 0,
