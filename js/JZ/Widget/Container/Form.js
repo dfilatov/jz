@@ -80,7 +80,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			this.trigger('before-submit');
 			return !preventSubmit;
 		}
-
+		this.addCSSClass(this.__self.CSS_CLASS_NOREADY);
 		return false;
 
 	},
@@ -158,6 +158,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	}
 
 }, {
+
+	CSS_CLASS_NOREADY : JZ.CSS_CLASS_WIDGET + '-noready',
 
 	_currentInstance : null,
 	_instanceCounter : 0,
