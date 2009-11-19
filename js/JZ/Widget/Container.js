@@ -25,35 +25,23 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	enable : function(byParent) {
 
 		this.__base(byParent);
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child.enable(true);
-		}
-		//this._applyFnToChildren('enable', [true]);
+		this._applyFnToChildren('enable', [true]);
 
 	},
 
 	disable : function() {
 
 		this.__base();
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child.disable();
-		}
-		//this._applyFnToChildren('disable');
+		this._applyFnToChildren('disable');
 
 	},
 
 	_init : function() {
 
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child._init();
-		}
-		//this._applyFnToChildren('_init');
+		this._applyFnToChildren('_init');
 		this.__base();
 
-		i = 0;
+		var children = this._children, i = 0, child;
 		while(child = children[i++]) {
 			this._bindChildEvents(child);
 		}
@@ -62,11 +50,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_reinit : function() {
 
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child._reinit();
-		}
-		//this._applyFnToChildren('_reinit');
+		this._applyFnToChildren('_reinit');
 		this.__base();
 
 	},
@@ -85,22 +69,14 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_setForm : function(form) {
 
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child._setForm(form);
-		}
-		//this._applyFnToChildren('_setForm', arguments);
+		this._applyFnToChildren('_setForm', arguments);
 		this.__base(form);
 
 	},
 
 	_beforeSubmit : function() {
 
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child._beforeSubmit();
-		}
-		//this._applyFnToChildren('_beforeSubmit');
+		this._applyFnToChildren('_beforeSubmit');
 		this.__base();
 
 	},
@@ -127,18 +103,29 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	_processFirstUnreadyWidget : function() {
+
+		if(this._hasValue()) {
+			return this.__base();
+		}
+
+		var children = this._children, i = 0, child, unreadyWidget;
+		while(child = children[i++]) {
+			if(unreadyWidget = child._processFirstUnreadyWidget()) {
+				return unreadyWidget;
+			}
+		}
+
+	},
+
 	_destruct : function() {
 
-		var children = this._children, i = 0, child;
-		while(child = children[i++]) {
-			child._destruct();
-		}
-		//this._applyFnToChildren('_destruct');
+		this._applyFnToChildren('_destruct');
 		this.__base();
 
 		delete this._children;
 
-	}/*,
+	},
 
 	_applyFnToChildren : function(name, args) {
 
@@ -147,6 +134,6 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 			child[name].apply(child, args || []);
 		}
 
-	}*/
+	}
 
 });

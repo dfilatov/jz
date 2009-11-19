@@ -81,10 +81,14 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			this.trigger('before-submit');
 			return !preventSubmit;
 		}
+
 		var _this = this;
 		this._unreadyCounter > 0 && $.each(this._unreadyWidgetIds, function(id) {
 			_this._widgetsDataById[id].widget._setNoReady();
 		});
+
+		this._params.focusOnNoReady && this._processFirstUnreadyWidget().focus();
+
 		return false;
 
 	},
@@ -93,9 +97,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var _this = this;
 		$.each(this._widgetsDataById, function() {
-			if(_this !== this.widget) {
-				this.widget._checkDependencies();
-			}
+			_this !== this.widget && this.widget._checkDependencies();
 		});
 
 	},
@@ -103,8 +105,9 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_getDefaultParams : function() {
 
 		return {
-			heedChanges   : false,
-			preventSubmit : false
+			heedChanges    : false,
+			preventSubmit  : false,
+			focusOnNoReady : true
 		};
 
 	},

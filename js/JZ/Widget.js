@@ -397,6 +397,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_processFirstUnreadyWidget : function() {
+
+		if(!this.isReady()) {
+			return this;
+		}
+
+	},
+
 	_extractValueFromElement : function() {
 
 		return this._element.val();
