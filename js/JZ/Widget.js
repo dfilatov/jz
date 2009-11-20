@@ -167,7 +167,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	setValue : function(value) {
 
-		return this._setValue(this._createValue(value));
+		return this._setValue(this._processValue(this._createValue(value)));
 
 	},
 
@@ -218,6 +218,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_createValue : function(value) {
 
 		return new JZ.Value(value);
+
+	},
+
+	_processValue : function(value) {
+
+		return value;
 
 	},
 
