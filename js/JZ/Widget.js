@@ -2,7 +2,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	__constructor : function(element, classElement, params) {
 
-		this._element = element;
+		this._element = element.data('jz', this);
 		this._classElement = classElement || element;
 		this._params = $.extend(this._getDefaultParams(), params);
 		this._parent = null;
@@ -192,8 +192,6 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_init : function() {
 
-		this._element.data('jz', this);
-
 		this._bindEvents();
 
 		this._hasValue() && this._initValue();
@@ -264,6 +262,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_destruct : function() {
 
 		this._unbindAll();
+
+		this._element.removeData('jz');
 
 		delete this._element;
 		delete this._classElement;

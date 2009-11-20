@@ -63,9 +63,7 @@ JZ.Builder = $.inherit({
 
 		var params = widget._params, _this = this;
 		$.each(['enabled', 'valid', 'required'], function() {
-			if(this in params) {
-				widget.addDependence(this, _this._buildDependence(this, widget, params[this]));
-			}
+			this in params && widget.addDependence(this, _this._buildDependence(this, widget, params[this]));
 		});
 
 	},
@@ -207,10 +205,10 @@ JZ.Builder = $.inherit({
 		var classes = {
 			'text'	   : JZ.Widget.Input.Text,
 			'number'   : JZ.Widget.Input.Text.Number,
-			'combo'    : JZ.Widget.Input.Text.Combo,
+//			'combo'    : JZ.Widget.Input.Text.Combo,
 			'select'   : JZ.Widget.Input.Select,
-			'date'     : JZ.Widget.Container.Date,
-			'datetime' : JZ.Widget.Container.Date.Time,
+//			'date'     : JZ.Widget.Container.Date,
+//			'datetime' : JZ.Widget.Container.Date.Time,
 			'state'    : JZ.Widget.Input.State,
 			'submit'   : JZ.Widget.Button.Submit,
 			'fieldset' : JZ.Widget.Container,

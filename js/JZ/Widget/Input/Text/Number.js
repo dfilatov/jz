@@ -34,7 +34,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	},
 
 	_bindEvents : function() {
-		
+
 		this.__base();
 		this._element
 			.keydown($.bindContext(this._onKeyDown, this))
@@ -57,9 +57,10 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyDown : function(event) {
 
-		return this._keyDownAllowed = (event.ctrlKey || event.metaKey ||
-			$.inArray(event.keyCode, [190, 189, 188, 109, 46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1 ||
-			(event.keyCode >= 48 && event.keyCode <= 57));
+		return this._keyDownAllowed = event.ctrlKey || event.metaKey ||
+			(event.keyCode > 47 && event.keyCode < 58) ||
+			(event.keyCode > 95 && event.keyCode < 106) ||
+			$.inArray(event.keyCode, [190, 189, 188, 109, 46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1;
 
 	},
 
@@ -75,7 +76,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 		var keyCode = event.keyCode || event.charCode;
 
-		if($.inArray(keyCode, [44,45,46]) == -1) {
+		if($.inArray(keyCode, [44, 45, 46]) == -1) {
 			return true;
 		}
 

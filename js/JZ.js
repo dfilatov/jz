@@ -36,7 +36,14 @@ var JZ = {
 };
 
 $.fn.jz = function() {
-	return this.each(function() {
-		JZ.build($(this));
+	var result;
+	this.each(function(i) {
+		var elem = $(this);
+		if(!elem.data('jz')) {
+			var form = elem.closest('form');
+			form[0] && JZ.build(form);
+		}
+		i == 0 && (result = elem.data('jz'));
 	});
+	return result;
 };
