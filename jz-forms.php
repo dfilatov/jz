@@ -4,6 +4,7 @@ $files = array(
     "js/jquery/jquery.context.js",
     "js/jquery/jquery.inherit.js",
     "js/jquery/jquery.debounce.js",
+    "js/jquery/jquery.memoize.js",
 	"js/jquery/jquery.fieldselection.js",
     "js/JZ.js",
     "js/JZ/Observable.js",

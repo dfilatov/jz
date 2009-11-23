@@ -189,16 +189,10 @@ JZ.Builder = $.inherit({
 
 	_cssClassToType : (function() {
 
-		var cache = {}, typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|rbgroup|cbgroup|submit)');
-		return function(cssClass) {
-			if(cache[cssClass]) {
-				return cache[cssClass];
-			}
-			var result = cssClass.match(typeRE);
-			if(result) {
-				return cache[cssClass] = result[1];
-			}
-		};
+		var typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|rbgroup|cbgroup|submit)');
+		return $.memoize(function(cssClass) {
+			return (cssClass.match(typeRE) || [])[1];
+		});
 
 	})(),
 
@@ -225,14 +219,10 @@ JZ.Builder = $.inherit({
 
 	})(),
 
-	_dependenceTypeToFn : (function() {
+	_dependenceTypeToFn : $.memoize(function(type) {
 
-		var fns = {};
+		return '_build' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'Dependence';
 
-		return function(type) {
-			return fns[type] || (fns[type] = '_build' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'Dependence');
-		};
-
-	})()
+	})
 
 });
