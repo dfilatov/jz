@@ -1,20 +1,20 @@
 JZ.Builder = $.inherit({
 
-	__constructor : function(element) {
+	__constructor : function() {
 
-		this._element = element;
 		this._widgets = [];
 		this._widgetsByName = {};
 		this._widgetsById = {};
 
 	},
 
-	build : function() {
+	build : function(element) {
 
-		var _this = this, widget;
-		$.each(this._element.add(this._element.find('.' + JZ.CSS_CLASS_WIDGET)), function() {
+		var _this = this, widget, initWidget;
+		$.each(element.add(element.find('.' + JZ.CSS_CLASS_WIDGET)), function(i) {
 			widget = _this._makeWidgetByElement($(this));
 			_this._widgets.push(_this._widgetsById[widget.getId()] = widget);
+			i == 0 && (initWidget = widget);
 		});
 
 		// Строим хэш по именам после создании дерева виджетов, потому что имена некоторых виджетов зависят от детей
@@ -29,16 +29,18 @@ JZ.Builder = $.inherit({
 			this._buildDependencies(widget);
 		}
 
-		var result = this._widgets[0];
+		if(element[0].tagName.toLowerCase() == 'form') {
+			element.data('jz-builder', this);
+			initWidget.init();
+		}
+		else {
+			initWidget
+				._setForm(this._widgets[0])
+				.init()
+				._checkDependencies();
+		}
 
-		delete this._element;
-		delete this._widgets;
-		delete this._widgetsByName;
-		delete this._widgetsById;
-
-		result.init();
-
-		return result;
+		return initWidget;
 
 	},
 

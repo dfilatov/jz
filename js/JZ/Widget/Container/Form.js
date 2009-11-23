@@ -150,10 +150,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var counter = this._changedCounter;
 		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);
-
-		if(counter + this._changedCounter == 1) {
-			this.trigger('ready-change', this);
-		}
+		counter + this._changedCounter == 1 && this.trigger('ready-change', this);
 
 	},
 

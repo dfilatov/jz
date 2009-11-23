@@ -82,6 +82,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._isInited?
 			this._reinit() :
 			this._init();
+		return this;
 
 	},
 
@@ -254,6 +255,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._form = form;
 		form._addWidget(this);
+		return this;
 
 	},
 

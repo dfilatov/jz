@@ -2,12 +2,6 @@ var JZ = {
 
 	CSS_CLASS_WIDGET : 'jz',
 
-	build : function(element) {
-
-		return new this.Builder(element).build();
-
-	},
-
 	onInit : function(element, fn) {
 
 		element
@@ -41,7 +35,10 @@ $.fn.jz = function() {
 		var elem = $(this);
 		if(!elem.data('jz')) {
 			var form = elem.closest('form');
-			form[0] && JZ.build(form);
+			if(form[0]) {
+				var builder = form.data('jz-builder');
+				(builder || new JZ.Builder()).build(builder? elem : form);
+			}
 		}
 		i == 0 && (result = elem.data('jz'));
 	});
