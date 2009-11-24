@@ -117,7 +117,9 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._widgetsDataById[widget.getId()] = {
 			widget  : widget === this?
 				widget :
-				widget.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this)),
+				widget
+					.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this))
+					.bind('remove', $.bindContext(this._onWidgetRemove, this)),
 			isReady : true
 		};
 
@@ -135,13 +137,13 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_onWidgetReadyChange : function(event, widget) {
 
-		var widgetData = this._widgetsDataById[widget.getId()], isReady = widget.isReady();
+		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId], isReady = widget.isReady();
 		if(widgetData.isReady == isReady) {
 			return;
 		}
 		this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
 		widgetData.isReady = isReady;
-		isReady? delete this._unreadyWidgetIds[widget.getId()] : this._unreadyWidgetIds[widget.getId()] = true;
+		isReady? delete this._unreadyWidgetIds[widgetId] : this._unreadyWidgetIds[widgetId] = true;
 		this.trigger('ready-change', this);
 
 	},
@@ -151,6 +153,20 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		var counter = this._changedCounter;
 		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);
 		counter + this._changedCounter == 1 && this.trigger('ready-change', this);
+
+	},
+
+	_onWidgetRemove : function(event, widget) {
+
+		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId];
+		delete this._widgetsDataById[widgetId];
+		!!widget.getName() && delete this._widgetsByName[widget.getName()];
+		if(!widgetData.isReady) {
+			this._unreadyCounter--;
+			delete this._unreadyWidgetIds[widgetId];
+		}
+		this._changedCounter++;
+		this.trigger('ready-change', this);
 
 	},
 

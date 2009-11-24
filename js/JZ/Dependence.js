@@ -12,6 +12,12 @@ JZ.Dependence = $.inherit({
 
 	},
 
+	removeFrom : function(widget) {
+
+		return this._params.widget === widget? null : this;
+
+	},
+
 	check : function() {
 
 		var result = this._precheck() &&

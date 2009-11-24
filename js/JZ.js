@@ -29,11 +29,14 @@ var JZ = {
 
 };
 
-$.fn.jz = function() {
+$.fn.jz = function(add) {
 	var result;
 	this.each(function(i) {
-		var elem = $(this);
-		if(!elem.data('jz')) {
+		var elem = $(this), jz = elem.data('jz');
+		if(add === false) {
+			jz && jz.remove();
+		}
+		else if(!jz) {
 			var form = elem.closest('form');
 			if(form[0]) {
 				var builder = form.data('jz-builder');

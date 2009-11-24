@@ -36,6 +36,19 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	_removeChild : function(widget) {
+
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			if(child === widget) {
+				children.splice(i - 1, 1);
+				return true;
+			}
+		}
+		return false;
+
+	},
+
 	_init : function() {
 
 		this._applyFnToChildren('_init');
@@ -124,6 +137,13 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 		this.__base();
 
 		delete this._children;
+
+	},
+
+	_triggerRemove : function() {
+
+		this._applyFnToChildren('_triggerRemove');
+		return this.__base();
 
 	},
 

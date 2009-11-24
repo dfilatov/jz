@@ -182,10 +182,21 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				return;
 			}
 			_this._dependFromIds[this.getId()] = true;
-			this.bind('value-change enable disable', $.bindContext(function() {
-				this._checkDependencies();
-			}, _this));
+			this
+				.bind('value-change enable disable', $.bindContext(function() {
+					this._checkDependencies();
+				}, _this))
+				.bind('remove', this._onRemoveDependFromWidget, _this);
 		});
+
+	},
+
+	remove : function() {
+
+		this._triggerRemove();
+		this._parent && this._parent._removeChild(this);
+		this._classElement.remove();
+		this._destruct();
 
 	},
 
@@ -277,6 +288,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		delete this._classElement;
 		delete this._params;
 		delete this._parent;
+		delete this._value;
+		delete this._initialValue;
+		delete this._dependencies;
+		delete this._dependFromIds;
 
 	},
 
@@ -425,6 +440,23 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_triggerRemove : function() {
+
+		return this.trigger('remove', this);
+
+	},
+
+	_onRemoveDependFromWidget : function(event, widget) {
+
+		var _this = this;
+		$.each(this._dependencies, function(type) {
+			var dependence = this.removeFrom(widget);
+			dependence? _this._dependencies[type] = dependence : delete _this._dependencies[type];
+		});
+		delete this._dependFromIds[widget.getId()];
+		this._checkDependencies();
+
+	},
 
 	_bindEvents : function() {},
 	_enableElements : function() {},
