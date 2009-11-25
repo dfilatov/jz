@@ -1,5 +1,5 @@
 /**
- * Identify plugin 1.0.0
+ * Identify plugin
  *
  * Copyright (c) 2009 Filatov Dmitry (alpha@zforms.ru)
  * Dual licensed under the MIT and GPL licenses:
