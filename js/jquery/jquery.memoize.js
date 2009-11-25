@@ -10,9 +10,8 @@
 
 (function($) {
 
-var idCounter = 1;
-	getFnHash = function(fn, ctx, args) {
-		var result = [fn.__id || (fn.__id = idCounter++), ctx.__id || (ctx.__id = idCounter++)];
+var getFnHash = function(fn, ctx, args) {
+		var result = [$.identify(fn), $.identify(ctx)];
 		$.each(args, function() {
 			result.push(typeof this, this);
 		});

@@ -18,14 +18,11 @@ var JZ = {
 
 	},
 
-	_identifyElement : (function() {
+	_identifyElement : function(element) {
 
-		var counter = 1;
-		return function(element) {
-			return element.attr('id') || element.data('__id') || (element.data('__id', '__id-' + counter++).data('__id'));
-		};
+		return element.attr('id') || ('__id-' + $.identify(element[0]));
 
-	})()
+	}
 
 };
 

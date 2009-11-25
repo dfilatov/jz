@@ -24,23 +24,17 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	getId : function() {
+	getId : $.memoize(function() {
 
-		var result = JZ._identifyElement(this._element);
-		return (this.getId = function() {
-			return result;
-		})();
+		return JZ._identifyElement(this._element);
 
-	},
+	}),
 
-	getName : function() {
+	getName : $.memoize(function() {
 
-		var result = this._extractName();
-		return (this.getName = function() {
-			return result;
-		})();
+		return this._extractName();
 
-	},
+	}),
 
 	focus : function() {
 
