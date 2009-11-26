@@ -189,6 +189,16 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	reset : function() {
+
+		if(this._hasValue()) {
+			this._unsetNoReady();
+			this._setValue(this._initialValue);
+		}
+		return this;
+
+	},
+
 	addChild : function(widget) {},
 
 	_bindTo : function(observable, type, data, fn) {
@@ -222,6 +232,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_reinit : function() {
 
 		if(this._hasValue()) {
+			this._unsetNoReady();
 			this._isInitialValueChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
 			this._initialValue = this._value;
 		}
@@ -424,6 +435,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this.isRequired() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
 		!this.isValid() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
+
+	},
+
+	_unsetNoReady : function() {
+
+		this.isRequired() && this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
+		!this.isValid() && this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
 
 	},
 

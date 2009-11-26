@@ -19,6 +19,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	focus : function() {
 
 		this._children[0] && this._children[0].focus();
+		return this;
 
 	},
 
@@ -26,6 +27,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this.__base(byParent);
 		this._applyFnToChildren('enable', [true]);
+		return this;
 
 	},
 
@@ -33,6 +35,15 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		this.__base();
 		this._applyFnToChildren('disable');
+		return this;
+
+	},
+
+	reset : function() {
+
+		this.__base();
+		this._applyFnToChildren('reset');
+		return this;
 
 	},
 
@@ -64,7 +75,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	_reinit : function() {
 
 		this._applyFnToChildren('_reinit');
-		this.__base();
+		return this.__base();
 
 	},
 
