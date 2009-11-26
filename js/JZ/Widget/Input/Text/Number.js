@@ -36,9 +36,9 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_bindEvents : function() {
 
 		this.__base();
-		this._element
-			.keydown($.bindContext(this._onKeyDown, this))
-			.keypress($.bindContext(this._onKeyPress, this));
+		this
+			._bindToElement('keydown', this._onKeyDown)
+			._bindToElement('keypress', this._onKeyPress);
 
 	},
 

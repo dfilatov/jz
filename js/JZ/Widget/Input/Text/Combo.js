@@ -49,13 +49,16 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_bindEvents : function() {
 
 		this.__base();
-		this._element
-			.keydown($.bindContext(this._onKeyDown, this))
-			.keyup($.bindContext(this._onKeyUp, this));
-		this._params.arrow && this._params.arrow
-			.mousedown($.bindContext(this._onArrowMouseDown, this))
-			.mouseup($.bindContext(this._onArrowMouseUp, this))
-			.click($.bindContext(this._onArrowClick, this));
+
+		this
+			._bindToElement('keydown', this._onKeyDown)
+			._bindToElement('keyup', this._onKeyUp);
+
+		var arrow = this._params.arrow;
+		arrow && this
+			._bindTo(arrow, 'mousedown', this._onArrowMouseDown)
+			._bindTo(arrow, 'mouseup', this._onArrowMouseUp)
+			._bindTo(arrow, 'click', this._onArrowMouseClick);
 
 	},
 
@@ -277,44 +280,42 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_getListContainer : function(onlyForDestruct) {
+	_getListContainer : $.memoize(function(onlyForDestruct) {
 
 		if(onlyForDestruct) {
 			return $('<div/>');
 		}
 
 		var result = $('<div class="' + this.__self.CSS_CLASS_LIST + ' ' + this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"></iframe><ul/></div>')
-			.mousedown($.bindContext(function(event) {
-				this._preventUpdate = this._focusOnBlur = true;
-				this
-					.setValue(this._lastSearchVal = $(event.target).closest('li').text())
-					.focus()
-					._hideList();
-				setTimeout($.bindContext(function() {
-					this._focusOnBlur = false;
-				}, this), 50);
-				return false;
-			}, this));
+		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"></iframe><ul/></div>');
+
+		this._bindTo(result, 'mousedown', function(event) {
+			this._preventUpdate = this._focusOnBlur = true;
+			this
+				.setValue(this._lastSearchVal = $(event.target).closest('li').text())
+				.focus()
+				._hideList();
+			setTimeout($.bindContext(function() {
+				this._focusOnBlur = false;
+			}, this), 50);
+			return false;
+		});
+
 		$('body').append(result);
-		return (this._getListContainer = function() {
-			return result;
-		})();
+		return result;
 
-	},
+	}),
 
-	_getList : function() {
+	_getList : $.memoize(function() {
 
-		var result = this._getListContainer().find('ul');
-		return (this._getList = function() {
-			return result;
-		})();
+		return this._getListContainer().find('ul');
 
-	},
+	}),
 
-	_getStorage : function() {
+	_getStorage : $.memoize(function() {
 
-		var _this = this, result = this._params.storage.source == 'remote'?
+		var _this = this;
+		return this._params.storage.source == 'remote'?
 			new JZ.Storage.Remote($.extend({
 					name : this.getName(),
 					widgets : $.map((this._params.storage.values || '').split(','), function(name) {
@@ -322,11 +323,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					})
 				}, this._params.storage)) :
 			new JZ.Storage.Local(this._params.storage);
-		return (this._getStorage = function() {
-			return result;
-		})();
 
-	},
+	}),
 
 	_refocus : function() {
 

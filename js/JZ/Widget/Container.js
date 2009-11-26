@@ -70,7 +70,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_bindChildEvents : function(widget) {
 
-		!this._hasValue() && widget.bind('value-change enable disable', $.bindContext(this._onChildChange, this));
+		!this._hasValue() && this._bindTo(widget, 'value-change enable disable', this._onChildChange);
 
 	},
 

@@ -54,8 +54,9 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_bindChildEvents : function(widget) {
 
-		widget.bind('value-change enable disable', $.bindContext(this._onChildChange, this));
-		widget._element.blur($.bindContext(this._onChildBlur, this));
+		this
+			._bindTo(widget, 'value-change', this._onChildChange)
+			._bindTo(widget, 'blur', this._onChildBlur);
 
 	},
 

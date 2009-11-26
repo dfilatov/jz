@@ -7,8 +7,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._widgetsByName = {};
 		this._widgetsDataById = {};
 		this._unreadyWidgetIds = {};
-		this._unreadyCounter = 0;
-		this._changedCounter = 0;
+		this._unreadyCounter = this._changedCounter = 0;
 
 	},
 
@@ -70,7 +69,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_bindEvents : function() {
 
-		this._element.submit($.bindContext(this._onSubmit, this));
+		this._bindToElement('submit', this._onSubmit);
 
 	},
 
@@ -116,23 +115,20 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_addWidget : function(widget) {
 
 		this._widgetsDataById[widget.getId()] = {
-			widget  : widget === this?
-				widget :
-				widget
-					.bind('ready-change', $.bindContext(this._onWidgetReadyChange, this))
-					.bind('remove', $.bindContext(this._onWidgetRemove, this)),
+			widget  : widget,
 			isReady : true
 		};
 
 		!!widget.getName() && (this._widgetsByName[widget.getName()] = widget);
 
-		widget.bind('focus', $.bindContext(function() {
+		widget !== this._bindTo(widget, 'focus', function() {
 			this.__self._currentInstance = this;
-		}, this));
+		}) && this
+			._bindTo(widget, 'ready-change', this._onWidgetReadyChange)
+			._bindTo(widget, 'remove', this._onWidgetRemove);
 
-		if(this._params.heedChanges && widget._hasValue()) {
-			widget.bind('initial-value-change', $.bindContext(this._onWidgetInitialValueChange, this));
-		}
+		this._params.heedChanges && widget._hasValue() &&
+			this._bindTo(widget, 'initial-value-change', this._onWidgetInitialValueChange);
 
 	},
 

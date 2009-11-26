@@ -3,7 +3,7 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 	_bindEvents : function() {
 
 		this.__base();
-		this._element.click($.bindContext(this._onChange, this));
+		this._bindToElement('click', this._onChange);
 
 	},
 

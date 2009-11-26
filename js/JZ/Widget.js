@@ -5,14 +5,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._element = element.data('jz', this);
 		this._classElement = classElement || element;
 		this._params = $.extend(this._getDefaultParams(), params);
-		this._parent = null;
-		this._form = null;
-		this._isRequired = false;
+		this._parent = this._form = null;
+		this._isInited = this._isRequired = false;
 		this._isValid = true;
 		this._isEnabled = !this._element.attr('disabled');
-		this._isInited = false;
-		this._value = null;
-		this._initialValue = null;
+		this._value = this._initialValue = null;
 		this._dependencies = {};
 		this._dependFromIds = {};
 
@@ -175,12 +172,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			if(_this._dependFromIds[this.getId()]) {
 				return;
 			}
-			_this._dependFromIds[this.getId()] = true;
-			this
-				.bind('value-change enable disable', $.bindContext(function() {
-					this._checkDependencies();
-				}, _this))
-				.bind('remove', this._onRemoveDependFromWidget, _this);
+			_this
+				._bindTo(this, 'value-change enable disable', this._onChangeDependFromWidget)
+				._bindTo(this, 'remove', this._onRemoveDependFromWidget)
+				._dependFromIds[this.getId()] = true;
 		});
 
 	},
@@ -195,6 +190,24 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	},
 
 	addChild : function(widget) {},
+
+	_bindTo : function(observable, type, data, fn) {
+
+		if($.isFunction(data)) {
+			fn = data;
+			data = null;
+		}
+
+		observable.bind(type, data, $.bindContext(fn, this));
+		return this;
+
+	},
+
+	_bindToElement : function(type, data, fn) {
+
+		return this._bindTo(this._element, type, data, fn);
+
+	},
 
 	_init : function() {
 
@@ -437,6 +450,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_triggerRemove : function() {
 
 		return this.trigger('remove', this);
+
+	},
+
+	_onChangeDependFromWidget : function() {
+
+		this._checkDependencies();
 
 	},
 
