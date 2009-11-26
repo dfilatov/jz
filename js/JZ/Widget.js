@@ -192,7 +192,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	reset : function() {
 
 		if(this._hasValue()) {
-			this._unsetNoReady();
+			this._setNoReady(false);
 			this._setValue(this._initialValue);
 		}
 		return this;
@@ -232,7 +232,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_reinit : function() {
 
 		if(this._hasValue()) {
-			this._unsetNoReady();
+			this._setNoReady(false);
 			this._isInitialValueChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
 			this._initialValue = this._value;
 		}
@@ -431,17 +431,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_setNoReady : function() {
+	_setNoReady : function(noReady) {
 
-		this.isRequired() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
-		!this.isValid() && this.addCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
-
-	},
-
-	_unsetNoReady : function() {
-
-		this.isRequired() && this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
-		!this.isValid() && this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
+		var methodName = (noReady? 'add' : 'remove') + 'CSSClass';
+		this.isRequired() && this[methodName](this.__self.CSS_CLASS_NOREADY_REQUIRED);
+		!this.isValid() && this[methodName](this.__self.CSS_CLASS_NOREADY_INVALID);
 
 	},
 

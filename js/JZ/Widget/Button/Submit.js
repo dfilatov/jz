@@ -12,7 +12,7 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 	_reinit : function() {
 
 		this.__base();
-		this._updateState();
+		this._params.disableOnNoReady && this._updateState();
 
 	},
 

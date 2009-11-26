@@ -84,7 +84,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var _this = this;
 		this._unreadyCounter > 0 && $.each(this._unreadyWidgetIds, function(id) {
-			_this._widgetsDataById[id].widget._setNoReady();
+			_this._widgetsDataById[id].widget._setNoReady(true);
 		});
 
 		this._params.focusOnNoReady && this._processFirstUnreadyWidget().focus();
