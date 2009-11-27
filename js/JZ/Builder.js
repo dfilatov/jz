@@ -31,7 +31,9 @@ JZ.Builder = $.inherit({
 
 		if(element[0].tagName.toLowerCase() == 'form') {
 			element.data('jz-builder', this);
-			initWidget.init();
+			initWidget
+				.bind('remove', $.bindContext(this._onFormRemove, this))
+				.init();
 		}
 		else {
 			initWidget._setForm(this._widgets[0]);
@@ -113,6 +115,14 @@ JZ.Builder = $.inherit({
 		!result && JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
 
 		return result;
+
+	},
+
+	_onFormRemove : function() {
+
+		delete this._widgets;
+		delete this._widgetsByName;
+		delete this._widgetsById;
 
 	}
 
