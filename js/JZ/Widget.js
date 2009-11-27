@@ -178,11 +178,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	remove : function() {
+	remove : function(fromDOM) {
 
 		this._triggerRemove()._parent && this._parent._removeChild(this);
-		this._classElement.remove();
+		var classElement = this._classElement;
 		this._destruct();
+		fromDOM && classElement.remove();
 
 	},
 

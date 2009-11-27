@@ -31,7 +31,7 @@ $.fn.jz = function(add) {
 	this.each(function(i) {
 		var elem = $(this), jz = elem.data('jz');
 		if(add === false) {
-			jz && jz.remove();
+			jz && jz.remove(true);
 		}
 		else if(!jz) {
 			var form = elem.closest('form');

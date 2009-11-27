@@ -39,13 +39,6 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	destruct : function(remove) {
-
-		this._destruct();
-		remove && this._classElement.remove();
-
-	},
-
 	_init : function() {
 
 		this
