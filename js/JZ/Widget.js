@@ -70,10 +70,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	init : function() {
 
 		// TODO
-		this._isInited?
+		return this._isInited?
 			this._reinit() :
 			this._init();
-		return this;
 
 	},
 
@@ -116,7 +115,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	enable : function(byParent) {
 
 		if(this.isEnabled() || !this._parent.isEnabled()) {
-			return;
+			return this;
 		}
 
 		if(byParent && this._dependencies['enabled']) {
@@ -124,20 +123,19 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		}
 
 		this._enableElements();
-		this.removeCSSClass(this.__self.CSS_CLASS_DISABLED);
-		var isReady = this.isReady();
+		var isReady = this.removeCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 		this._isEnabled = true;
 		if(isReady != this.isReady()) {
 			this.trigger('ready-change', this);
 		}
-		this.trigger('enable', this);
+		return this.trigger('enable', this);
 
 	},
 
 	disable : function() {
 
 		if(!this.isEnabled()) {
-			return;
+			return this;
 		}
 
 		this._disableElements();
@@ -147,7 +145,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		if(isReady != this.isReady()) {
 			this.trigger('ready-change', this);
 		}
-		this.trigger('disable', this);
+		return this.trigger('disable', this);
 
 	},
 
@@ -182,8 +180,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	remove : function() {
 
-		this._triggerRemove();
-		this._parent && this._parent._removeChild(this);
+		this._triggerRemove()._parent && this._parent._removeChild(this);
 		this._classElement.remove();
 		this._destruct();
 
@@ -226,6 +223,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._hasValue() && this._initValue();
 		this._isInited = true;
 		this._params.focusOnInit && this.focus();
+		return this;
 
 	},
 
@@ -236,6 +234,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			this._isInitialValueChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
 			this._initialValue = this._value;
 		}
+		return this;
 
 	},
 
@@ -273,8 +272,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		!prevent && this._setValueToElement(value);
 		this.trigger('value-change', this);
 		if(isInitialValueChanged != this._isInitialValueChanged()) {
-			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED);
-			this.trigger('initial-value-change', !isInitialValueChanged);
+			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
+				.trigger('initial-value-change', !isInitialValueChanged);
 		}
 		return this;
 
@@ -284,6 +283,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._form = form;
 		form._addWidget(this);
+		form._isInited && this
+			._init()
+			._checkDependencies();
 		return this;
 
 	},
@@ -357,6 +359,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 					this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
 			}
 			isReady != this.isReady() && this.trigger('ready-change', this);
+			return this;
 		};
 
 	})(),
@@ -370,8 +373,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_processEnabledDependenceCheck : function(check) {
 
 		if(check.result) {
-			this.enable();
-			this.show();
+			this
+				.enable()
+				.show();
 			check.params.focusOnEnable && this.focus();
 		}
 		else {
@@ -415,12 +419,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_updateValid : function(isValid) {
 
 		if(isValid) {
-			if(this._getValue().isEmpty()) {
-				this.removeCSSClass(this.__self.CSS_CLASS_INVALID + ' ' + this.__self.CSS_CLASS_INVALID_OK);
-			}
-			else {
+			this._getValue().isEmpty()?
+				this.removeCSSClass(this.__self.CSS_CLASS_INVALID + ' ' + this.__self.CSS_CLASS_INVALID_OK) :
 				this.replaceCSSClass(this.__self.CSS_CLASS_INVALID, this.__self.CSS_CLASS_INVALID_OK);
-			}
 			this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
 		}
 		else {
@@ -483,7 +484,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_bindEvents : function() {},
+	_bindEvents : function() {
+
+		return this;
+
+	},
+
 	_enableElements : function() {},
 	_disableElements : function() {},
 	_beforeSubmit : function() {}
@@ -504,14 +510,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	CSS_CLASS_NOREADY_REQUIRED : JZ.CSS_CLASS_WIDGET + '-noready-required',
 	CSS_CLASS_NOREADY_INVALID  : JZ.CSS_CLASS_WIDGET + '-noready-invalid',
 
-	_dependenceTypeToFn : (function() {
+	_dependenceTypeToFn : $.memoize(function(type) {
 
-		var fns = {};
+		return '_process' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'DependenceCheck';
 
-		return function(type) {
-			return fns[type] || (fns[type] = '_process' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'DependenceCheck');
-		};
-
-	})()
+	})
 
 });

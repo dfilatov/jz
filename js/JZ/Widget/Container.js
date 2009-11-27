@@ -69,6 +69,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 		while(child = children[i++]) {
 			this._bindChildEvents(child);
 		}
+		return this;
 
 	},
 
@@ -94,7 +95,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	_setForm : function(form) {
 
 		this._applyFnToChildren('_setForm', arguments);
-		this.__base(form);
+		return this.__base(form);
 
 	},
 

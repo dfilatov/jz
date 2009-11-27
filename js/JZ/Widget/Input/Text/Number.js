@@ -24,6 +24,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 			this._element.removeAttr('name');
 		}
 		this._checkElementValue();
+		return this;
 
 	},
 
@@ -35,8 +36,8 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_bindEvents : function() {
 
-		this.__base();
-		this
+		return this
+			.__base()
 			._bindToElement('keydown', this._onKeyDown)
 			._bindToElement('keypress', this._onKeyPress);
 

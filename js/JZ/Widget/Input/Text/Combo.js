@@ -14,9 +14,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_init : function() {
 
-		this.__base();
-
-		this._element.attr('autocomplete', 'off');
+		this.__base()._element.attr('autocomplete', 'off');
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
 		this._updateList = $.debounce(function(val) {
 
@@ -44,13 +42,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		}, 50);
 
+		return this;
+
 	},
 
 	_bindEvents : function() {
 
-		this.__base();
-
 		this
+			.__base()
 			._bindToElement('keydown', this._onKeyDown)
 			._bindToElement('keyup', this._onKeyUp);
 
@@ -58,7 +57,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		arrow && this
 			._bindTo(arrow, 'mousedown', this._onArrowMouseDown)
 			._bindTo(arrow, 'mouseup', this._onArrowMouseUp)
-			._bindTo(arrow, 'click', this._onArrowMouseClick);
+			._bindTo(arrow, 'click', this._onArrowClick);
+
+		return this;
 
 	},
 

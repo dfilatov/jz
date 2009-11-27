@@ -2,15 +2,16 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_init : function() {
 
-		this.__base();
-		!this._isFocused && this._enablePlaceholder();
+		!this.__base()._isFocused && this._enablePlaceholder();
+		return this;
 
 	},
 
 	_bindEvents : function() {
 
-		this.__base();
-		this._bindToElement('input change keyup blur', this._onChange);
+		return this
+			.__base()
+			._bindToElement('input change keyup blur', this._onChange);
 
 	},
 

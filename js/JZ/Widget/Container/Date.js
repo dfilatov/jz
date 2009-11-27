@@ -20,7 +20,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		this._element.replaceWith(element);
 		this._element = element;
 		this._addChildInputs();
-		this.__base();
+		return this.__base();
 
 	},
 

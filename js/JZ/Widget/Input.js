@@ -10,7 +10,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	_bindEvents : function() {
 
-		this
+		return this
 			._bindToElement('focus', this._onFocus)
 			._bindToElement('blur', this._onBlur);
 
@@ -18,16 +18,18 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	_onFocus : function() {
 
-		this.addCSSClass(this.__self.CSS_CLASS_FOCUSED);
-		this._isFocused = true;
+		this
+			.addCSSClass(this.__self.CSS_CLASS_FOCUSED)
+			._isFocused = true;
 		this.trigger('focus');
 
 	},
 
 	_onBlur : function() {
 
-		this.removeCSSClass(this.__self.CSS_CLASS_FOCUSED);
-		this._isFocused = false;
+		this
+			.removeCSSClass(this.__self.CSS_CLASS_FOCUSED)
+			._isFocused = false;
 		this.trigger('blur');
 
 	},

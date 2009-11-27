@@ -11,8 +11,8 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 	_reinit : function() {
 
-		this.__base();
-		this._params.disableOnNoReady && this._updateState();
+		this.__base()._params.disableOnNoReady && this._updateState();
+		return this;
 
 	},
 
@@ -37,6 +37,10 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 	},
 
-	_checkDependencies : function() {}
+	_checkDependencies : function() {
+
+		return this;
+
+	}
 
 });
