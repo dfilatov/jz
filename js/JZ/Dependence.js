@@ -65,11 +65,9 @@ JZ.Dependence = $.inherit({
 		switch(type) {
 			case 'enabled':
 				return this.Enabled;
-			return;
 
 			case 'required':
 				return this.Required;
-			return;
 		}
 
 	},
