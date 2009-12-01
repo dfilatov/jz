@@ -60,18 +60,6 @@ JZ.Dependence = $.inherit({
 
 }, {
 
-	getClassByType : function(type) {
-
-		switch(type) {
-			case 'enabled':
-				return this.Enabled;
-
-			case 'required':
-				return this.Required;
-		}
-
-	},
-
 	_onOr : function() {},
 	_onAnd : function() {}
 
