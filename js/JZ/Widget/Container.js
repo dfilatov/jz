@@ -99,6 +99,14 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	_checkDependencies : function(onlyType, recursively) {
+
+		this.__base(onlyType, recursively);
+		recursively && this._applyFnToChildren('_checkDependencies', arguments);
+		return this;
+
+	},
+
 	_beforeSubmit : function() {
 
 		this._applyFnToChildren('_beforeSubmit');

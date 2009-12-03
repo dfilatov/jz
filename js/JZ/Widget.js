@@ -282,11 +282,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_setForm : function(form) {
 
-		this._form = form;
-		form._addWidget(this);
-		form._isInited && this
-			._init()
-			._checkDependencies();
+		(this._form = form)._addWidget(this);
 		return this;
 
 	},
@@ -351,7 +347,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_checkDependencies : (function() {
 
 		var fullOrder = ['enabled', 'valid', 'required'];
-		return function(onlyType) {
+		return function(onlyType, recursively) {
 			var i = 0, type, order = !!onlyType? [onlyType] : fullOrder,
 				length = order.length, isReady = this.isReady();
 			while(i < length) {

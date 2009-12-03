@@ -40,7 +40,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				}
 			}, this));
 
-		}, 50);
+		}, this._params.debounceInterval);
 
 		return this;
 
@@ -184,13 +184,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return;
 		}
 
-		switch(event.keyCode) {
-			case 9:
-				return;
-
-			default:
-				this._keyDownValue != this._element.val() && this._updateList();
-		}
+		event.keyCode != 9 && this._keyDownValue != this._element.val() && this._updateList();
 
 	},
 
@@ -361,8 +355,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getDefaultParams : function() {
 
 		return $.extend(this.__base(), {
-			showAllOnFocus : false,
-			reposList      : false
+			showAllOnFocus   : false,
+			reposList        : false,
+			debounceInterval : 200
 		});
 
 	},

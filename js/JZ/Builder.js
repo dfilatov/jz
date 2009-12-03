@@ -36,7 +36,7 @@ JZ.Builder = $.inherit({
 				.init();
 		}
 		else {
-			initWidget._setForm(this._widgets[0]);
+			this._widgets[0].init(initWidget);
 		}
 
 		return initWidget;
