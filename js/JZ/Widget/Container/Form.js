@@ -178,7 +178,9 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_destruct : function() {
 
-		this.__base();
+		this
+			.removeCSSClass(this.__self.CSS_CLASS_INITED)
+			.__base();
 		this.__self._removeInstance(this);
 
 		delete this._widgetsByName;
