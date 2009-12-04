@@ -24,10 +24,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}
 			this._lastSearchVal = searchVal;
 			this._getStorage().filter(searchVal, $.bindContext(function(list) {
+				var elementVal = this._element.val();
+				if(searchVal != elementVal) {
+					return;
+				}
 				this._itemsCount = list.length;
 				this._hilightedIndex = -1;
 				if(!!list.length) {
-					var elementVal = this._element.val();
 					this._getList().html($.map(list, function(val, i) {
 						elementVal == val && (_this._hilightedIndex = i);
 						return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
