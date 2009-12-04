@@ -3,7 +3,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	__constructor : function() {
 
 		this.__base.apply(this, arguments);
-		this._yearInput = this._monthInput = this._dayInput = null;
+		this._yearInput = this._monthInput = this._dayInput = this._oldElement = null;
 
 	},
 
@@ -18,6 +18,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		var element = $('<input type="hidden" name="' + this.getName() + '" value="' + this._element.val() + '"/>')
 			.data('jz', this);
 		this._element.replaceWith(element);
+		this._oldElement = this._element;
 		this._element = element;
 		this._addChildInputs();
 		return this.__base();
@@ -121,6 +122,17 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		return $.extend(this.__base(), {
 			onlyMonths : false
 		});
+
+	},
+
+	_destruct : function() {
+
+		this._yearInput.remove(true);
+		this._monthInput.remove(true);
+		this._dayInput.remove(true);
+		this._element.replaceWith(this._oldElement);
+		this._element = this._oldElement.val(this._element.val());
+		JZ.Widget.prototype._destruct.call(this);
 
 	}
 

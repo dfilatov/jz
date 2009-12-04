@@ -121,6 +121,16 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 			allowFloat    : false
 		});
 
+	},
+
+	_destruct : function() {
+
+		this._hiddenElement.attr('name') && this._element.attr('name', this._hiddenElement.attr('name'));
+		this._hiddenElement.remove();
+		this._hiddenElement = null;
+
+		this.__base();
+
 	}
 
 });
