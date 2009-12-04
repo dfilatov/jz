@@ -3,10 +3,12 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 	filter : function(value, callback) {
 
 		var params = this._params;
-		$.ajax($.extend(params.ajax, {
-			success  : callback,
+		$.ajax($.extend({
+			success  : function(data) {
+				callback(value, data);
+			},
 			error    : function() {
-				callback([]);
+				callback(value, []);
 			},
 			dataType : params.ajax.dataType || 'json',
 			data     : (function() {
@@ -17,7 +19,7 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 				});
 				return result;
 			})()
-		}));
+		}, params.ajax));
 
 	}
 
