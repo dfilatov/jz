@@ -1,4 +1,3 @@
-
 JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	__constructor : function() {
