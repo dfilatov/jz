@@ -49,7 +49,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
 					'') + '>' + val + '</li>';
 		}).join(''));
-		this._showList();
+		if(list.length > 1 || this._hilightedIndex < 0) {
+            this._showList();
+        }
+        else {
+            this._hideList();
+        }
 
 	},
 
