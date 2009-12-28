@@ -49,12 +49,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
 					'') + '>' + val + '</li>';
 		}).join(''));
-		if(list.length > 1 || this._hilightedIndex < 0) {
-            this._showList();
-        }
-        else {
-            this._hideList();
-        }
+		this._showList();
 
 	},
 
@@ -174,7 +169,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		switch(event.keyCode) {
 			case 13:
 				if(this._isListShowed) {
-					this._hideList();
+					this._itemsCount = 0;
+		            this._hilightedIndex = -1;
+					this
+                        .setValue(this._lastSearchVal = this._keyDownValue)
+                        ._hideList();
 					return false;
 				}
 			break;
@@ -245,7 +244,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_showList : function() {
 
-		if(this._isListShowed || !this._isFocused || !this._itemsCount) {
+		if(this._isListShowed || !this._isFocused || !this._itemsCount ||
+			(this._itemsCount == 1 && this._hilightedIndex == 0)) {
 			return;
 		}
 
