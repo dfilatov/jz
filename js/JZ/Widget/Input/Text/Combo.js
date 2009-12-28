@@ -364,12 +364,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_getDefaultParams : function() {
+	_getDefaultParams : function(params) {
 
 		return $.extend(this.__base(), {
 			showAllOnFocus   : false,
 			reposList        : false,
-			debounceInterval : 200
+			debounceInterval : (params || {}).storage.source == 'remote'? 200 : 50
 		});
 
 	},

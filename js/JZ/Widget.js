@@ -4,7 +4,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._element = element.data('jz', this);
 		this._classElement = classElement || element;
-		this._params = $.extend(this._getDefaultParams(), params);
+		this._params = $.extend(this._getDefaultParams(params), params);
 		this._parent = this._form = null;
 		this._isInited = this._isRequired = false;
 		this._isValid = true;
@@ -287,7 +287,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_getDefaultParams : function() {
+	_getDefaultParams : function(params) {
 
 		return {
 			focusOnInit : false
