@@ -43,7 +43,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return this._hideList();
 		}
 
-		var elementVal = this._element.val();
+		var elementVal = this._element.val(), _this = this;
 		this._getList().html($.map(list, function(val, i) {
 			elementVal == val && (_this._hilightedIndex = i);
 			return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
@@ -73,7 +73,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onFocus : function() {
 
 		if(!this._preventOnFocus) {
-			this.__base();
+			this.__base.apply(this, arguments);
 			if(!this._preventUpdate) {
 				if(this._params.showAllOnFocus) {
 					this._updateList('');
@@ -319,7 +319,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var _this = this;
 		return this._params.storage.source == 'remote'?
 			new JZ.Storage.Remote($.extend({
-					name : this.getName(),
+					name : this._params.storage.name || this.getName(),
 					widgets : $.map((this._params.storage.values || '').split(','), function(name) {
 						return _this._form.getWidgetByName($.trim(name));
 					})

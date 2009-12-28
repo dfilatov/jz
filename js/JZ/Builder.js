@@ -198,7 +198,7 @@ JZ.Builder = $.inherit({
 
 	_cssClassToType : (function() {
 
-		var typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|rbgroup|cbgroup|submit)');
+		var typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|fieldset|rbgroup|cbgroup|submit)');
 		return $.memoize(function(cssClass) {
 			return (cssClass.match(typeRE) || [])[1];
 		});
