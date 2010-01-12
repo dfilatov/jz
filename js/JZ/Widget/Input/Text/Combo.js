@@ -44,10 +44,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		var elementVal = this._element.val(), _this = this;
-		this._getList().html($.map(list, function(val, i) {
-			elementVal == val && (_this._hilightedIndex = i);
-			return '<li' + (elementVal == val? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
-					'') + '>' + val + '</li>';
+		this._getList().html($.map(list, function(itemVal, i) {
+			elementVal == itemVal && (_this._hilightedIndex = i);
+			return '<li' + (elementVal == itemVal? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
+					'') + '>' + itemVal.replace(val, '<strong>' + val + '</strong>') + '</li>';
 		}).join(''));
 		this._showList();
 
