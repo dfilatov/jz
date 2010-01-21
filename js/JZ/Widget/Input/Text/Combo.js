@@ -46,8 +46,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var elementVal = this._element.val(), _this = this;
 		this._getList().html($.map(list, function(itemVal, i) {
 			elementVal == itemVal && (_this._hilightedIndex = i);
-			return '<li' + (elementVal == itemVal? ' class="' + _this.__self.CSS_CLASS_SELECTED + '"' :
-					'') + '>' + itemVal.replace(val, '<strong>' + val + '</strong>') + '</li>';
+			var startIndex = itemVal.toLowerCase().indexOf(val.toLowerCase());
+			return '<li' + (elementVal == itemVal?
+				' class="' + _this.__self.CSS_CLASS_SELECTED + '"' : '') +
+				'>' + (startIndex > -1?
+					itemVal.substr(0, startIndex) +
+						'<strong>' + itemVal.substr(startIndex, val.length) + '</strong>' +
+					itemVal.substr(startIndex + val.length) :
+					itemVal) +
+				'</li>';
 		}).join(''));
 		this._showList();
 
