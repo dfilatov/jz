@@ -20,8 +20,7 @@ JZ.Dependence = $.inherit({
 
 	check : function() {
 
-		var result = this._precheck() &&
-					 (this._params.fn? this._params.fn(this._params.widget) : this._processResult());
+		var result = this._precheck() && this._processResult();
 
 		return {
 			result : result,
@@ -44,7 +43,9 @@ JZ.Dependence = $.inherit({
 
 	_processResult : function() {
 
-		return this._params.widget._getValue().match(this._params.pattern);
+		return this._params.fn?
+			this._params.fn(this._params.widget) :
+			this._params.widget._getValue().match(this._params.pattern);
 
 	},
 

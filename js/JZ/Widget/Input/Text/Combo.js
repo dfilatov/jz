@@ -301,7 +301,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		var result = $('<div class="' + this.__self.CSS_CLASS_LIST + ' ' + this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"></iframe><ul/></div>');
+		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
 
 		this._bindTo(result, 'mousedown', function(event) {
 			this._preventUpdate = this._focusOnBlur = true;
