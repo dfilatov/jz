@@ -77,7 +77,11 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_bindEvents : function() {
 
-		this._bindToElement('submit', this._onSubmit);
+		this
+            ._bindToElement('submit', this._onSubmit)
+            ._bindToElement('keydown', function(event) {
+                event.keyCode == 27 && event.preventDefault(); // IE пытается возвращать форму в исходное значение
+            });
 
 	},
 
