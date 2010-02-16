@@ -1,5 +1,13 @@
 JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
+	reset : function() {
+
+		return this
+			.__base()
+			._updateState();
+
+	},
+
 	_setForm : function(form) {
 
 		this.__base(form);
@@ -11,14 +19,15 @@ JZ.Widget.Button.Submit = $.inherit(JZ.Widget.Button, {
 
 	_reinit : function() {
 
-		this.__base()._params.disableOnNoReady && this._updateState();
-		return this;
+		return this
+			.__base()
+			._updateState();
 
 	},
 
 	_updateState : function() {
 
-		this[this._form.isReady()? 'enable' : 'disable']();
+		return this[this._form.isReady() || !this._params.disableOnNoReady? 'enable' : 'disable']();
 
 	},
 
