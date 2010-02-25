@@ -46,7 +46,7 @@ JZ.Builder = $.inherit({
 	_makeWidgetByElement : function(element) {
 
 		var params = this.__self._extractParamsFromElement(element),
-			result = new (this.__self._typeToWidgetClass(params.type))(element, this.__self._getClassElement(element, params), params);
+			result = new (this.__self._getWidgetClassByType(params.type))(element, this.__self._getClassElement(element, params), params);
 
 		params.type != 'form' && this._getParentWidget(element).addChild(result);
 
@@ -131,6 +131,13 @@ JZ.Builder = $.inherit({
 },
 {
 
+	registerWidget : function(type, parentType, props, staticProps) {
+
+		this._types.push(type);
+		this._typeToWidgetClass[type] = $.inherit(this._getWidgetClassByType(parentType), props, staticProps);
+
+	},
+
 	_getClassElement : function(element, params) {
 
 		if(params.container) {
@@ -196,37 +203,41 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_cssClassToType : (function() {
+	_types : ['number', 'combo', 'datetime', 'date', 'fieldset', 'rbgroup', 'cbgroup', 'submit'],
+	_typeRE : null,
 
-		var typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(number|combo|datetime|date|fieldset|rbgroup|cbgroup|submit)');
-		return $.memoize(function(cssClass) {
-			return (cssClass.match(typeRE) || [])[1];
-		});
+	_rebuildTypeRE : function() {
 
-	})(),
+		return this._typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(' + this._types.join('|') +')');
 
-	_typeToWidgetClass : (function() {
+	},
 
-		var classes = {
-			'text'	   : JZ.Widget.Input.Text,
-			'number'   : JZ.Widget.Input.Text.Number,
-			'combo'    : JZ.Widget.Input.Text.Combo,
-			'select'   : JZ.Widget.Input.Select,
-			'date'     : JZ.Widget.Container.Date,
-			'datetime' : JZ.Widget.Container.Date.Time,
-			'state'    : JZ.Widget.Input.State,
-			'submit'   : JZ.Widget.Button.Submit,
-			'fieldset' : JZ.Widget.Container,
-			'rbgroup'  : JZ.Widget.Container.StateGroup.RadioButtons,
-			'cbgroup'  : JZ.Widget.Container.StateGroup.CheckBoxes,
-			'form'	   : JZ.Widget.Container.Form
-		};
+	_cssClassToType : $.memoize(function(cssClass) {
 
-		return function(type) {
-			return classes[type] || JZ._throwException('undefined type "' + type + '"');
-		};
+		return (cssClass.match(this._typeRE || this._rebuildTypeRE()) || [])[1];
 
-	})(),
+	}),
+
+	_typeToWidgetClass : {
+		'text'	   : JZ.Widget.Input.Text,
+		'number'   : JZ.Widget.Input.Text.Number,
+		'combo'    : JZ.Widget.Input.Text.Combo,
+		'select'   : JZ.Widget.Input.Select,
+		'date'     : JZ.Widget.Container.Date,
+		'datetime' : JZ.Widget.Container.Date.Time,
+		'state'    : JZ.Widget.Input.State,
+		'submit'   : JZ.Widget.Button.Submit,
+		'fieldset' : JZ.Widget.Container,
+		'rbgroup'  : JZ.Widget.Container.StateGroup.RadioButtons,
+		'cbgroup'  : JZ.Widget.Container.StateGroup.CheckBoxes,
+		'form'	   : JZ.Widget.Container.Form
+	},
+
+	_getWidgetClassByType : function(type) {
+
+		return this._typeToWidgetClass[type] || JZ._throwException('undefined type "' + type + '"');
+
+	},
 
 	_dependenceTypeToFn : $.memoize(function(type) {
 

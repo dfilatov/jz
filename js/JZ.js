@@ -12,6 +12,13 @@ var JZ = {
 
 	},
 
+	registerWidget : function(name, parentName, props, staticProps) {
+
+		this.Builder.registerWidget(name, parentName, props, staticProps);
+		return this;
+
+	},
+
 	_throwException : function(text) {
 
 		throw 'JZException: ' + text;
