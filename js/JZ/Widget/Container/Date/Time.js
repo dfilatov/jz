@@ -27,7 +27,7 @@ JZ.Widget.Container.Date.Time = $.inherit(JZ.Widget.Container.Date, {
 
 	_updateChildValues : function(value) {
 
-		var value = this.__base(value);
+		value = this.__base(value);
 		value.getHour() != this._hourInput.getValue() && this._hourInput.setValue(value.getHour());
 		value.getMinute() != this._minuteInput.getValue() && this._minuteInput.setValue(value.getMinute());
 		value.getSecond() != this._secondInput.getValue() && this._secondInput.setValue(value.getSecond());

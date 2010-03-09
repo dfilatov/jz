@@ -17,6 +17,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
 		this._updateList = $.debounce(function(val) {
 
+			if(!this._params.showListOnEmpty && this._element.val() === '') {
+				return this._hideList();
+			}
+
 			var searchVal = typeof val == 'undefined'? this._element.val() : val;
 			if(this._lastSearchVal === this._element.val() && typeof val == 'undefined') {
 				return this._showList();
@@ -375,6 +379,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		return $.extend(this.__base(), {
 			showAllOnFocus   : false,
+			showListOnEmpty  : true,
 			reposList        : false,
 			debounceInterval : (params || {}).storage.source == 'remote'? 200 : 50
 		});

@@ -7,9 +7,10 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	},
 
-	_precheck : function() {
+	_processResult : function() {
 
-		return this.__base() && !(this._params.bCheckEmpty && this._params.widget._getValue().isEmpty());
+		return (!this._params.checkEmpty && this._params.widget._getValue().isEmpty()) ||
+			   this.__base();
 
 	},
 
@@ -27,7 +28,7 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 	_getDefaultParams : function() {
 
 		return $.extend(this.__base(), {
-			bCheckEmpty : false
+			checkEmpty : false
 		});
 
 	}
