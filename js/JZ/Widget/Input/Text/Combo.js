@@ -17,6 +17,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
 		this._updateList = $.debounce(function(val) {
 
+			if(!this._element) { // widget was destructed
+				return;
+			}
+
 			if(!this._params.showListOnEmpty && this._element.val() === '') {
 				return this._hideList();
 			}
