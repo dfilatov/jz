@@ -125,9 +125,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._enableElements();
 		var isReady = this.removeCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 		this._isEnabled = true;
-		if(isReady != this.isReady()) {
-			this.trigger('ready-change', this);
-		}
+		isReady != this.isReady() && this.trigger('ready-change', this);
+		this._isInitialValueChanged() && this.trigger('initial-value-change', true);
 		return this.trigger('enable', this);
 
 	},
@@ -142,9 +141,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this.addCSSClass(this.__self.CSS_CLASS_DISABLED);
 		var isReady = this.isReady();
 		this._isEnabled = false;
-		if(isReady != this.isReady()) {
-			this.trigger('ready-change', this);
-		}
+		isReady != this.isReady() && this.trigger('ready-change', this);
+		this._isInitialValueChanged() && this.trigger('initial-value-change', false);
 		return this.trigger('disable', this);
 
 	},
@@ -333,6 +331,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	},
 
 	_isInitialValueChanged : function() {
+
+		if(!this._hasValue()) {
+			return false;
+		}
 
 		return !this._initialValue.isEqual(this._value);
 
