@@ -26,7 +26,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}
 
 			var searchVal = typeof val == 'undefined'? this._element.val() : val;
-			if(this._lastSearchVal === this._element.val() && typeof val == 'undefined') {
+			if(this._lastSearchVal === this._element.val() &&
+                typeof val == 'undefined' &&
+                this._params.storage.source != 'remote') {
 				return this._showList();
 			}
 			this._lastSearchVal = searchVal;
