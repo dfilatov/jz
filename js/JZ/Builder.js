@@ -10,7 +10,7 @@ JZ.Builder = $.inherit({
 
 	build : function(element) {
 
-		var _this = this, widget, initWidget;
+		var _this = this, fromIndex = this._widgets.length, widget, initWidget;
 		$.each(element.add(element.find('.' + JZ.CSS_CLASS_WIDGET)), function(i) {
 			widget = _this._makeWidgetByElement($(this));
 			_this._widgets.push(_this._widgetsById[widget.getId()] = widget);
@@ -18,13 +18,13 @@ JZ.Builder = $.inherit({
 		});
 
 		// Строим хэш по именам после создании дерева виджетов, потому что имена некоторых виджетов зависят от детей
-		var i = 0;
+		var i = fromIndex;
 		while(widget = _this._widgets[i++]) {
 			widget._hasValue() && (_this._widgetsByName[widget.getName()] = widget);
 		}
 
 		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
-		i = 0;
+		i = fromIndex;
 		while(widget = _this._widgets[i++]) {
 			this._buildDependencies(widget);
 		}
