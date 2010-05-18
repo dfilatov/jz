@@ -9,6 +9,8 @@ JZ.Observable = $.inherit({
 
 	unbind : function(type, fn) {
 
+		!(this.detachEvent || this.removeEventListener) &&
+		    (this.detachEvent = this.removeEventListener = function() {});
 		jQuery.event.remove(this, type, fn);
 		return this;
 
@@ -56,7 +58,7 @@ JZ.Observable = $.inherit({
 
 		if(handlers) {
 			for(i in handlers) {
-				handler = handlers[i];
+				handler = handlers[i].handler || handlers[i];
 
 				// Filter the functions by class
 				if(all || namespace.test(handler.type)) {
