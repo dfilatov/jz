@@ -304,11 +304,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_getListContainer : $.memoize(function(onlyForDestruct) {
-
-		if(onlyForDestruct) {
-			return $('<div/>');
-		}
+	_getListContainer : $.memoize(function() {
 
 		var result = $('<div class="' + this.__self.CSS_CLASS_LIST + ' ' + this.__self.CSS_CLASS_INVISIBLE + '">' +
 		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
@@ -395,7 +391,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_destruct : function() {
 
 		this.__base();
-		this._getListContainer(true).remove();
+		this._reposTimer && clearTimeout(this._reposTimer);
+		this._getListContainer().remove();
 
 	},
 
