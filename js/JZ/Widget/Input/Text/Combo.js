@@ -399,7 +399,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_unbindAll : function() {
 
 		this.__base();
-		this._getListContainer(true).unbind();
 		this._params.arrow && this._params.arrow.unbind();
 
 	}
