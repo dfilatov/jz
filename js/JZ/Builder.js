@@ -133,8 +133,17 @@ JZ.Builder = $.inherit({
 
 	registerWidget : function(type, parentType, props, staticProps) {
 
+		if(typeof parentType != 'string') {
+			staticProps = props;
+			props = parentType;
+			parentType = undefined;
+		}
+
 		this._types.push(type);
-		this._typeToWidgetClass[type] = $.inherit(this._getWidgetClassByType(parentType), props, staticProps);
+		this._typeToWidgetClass[type] = $.inherit(
+			parentType? this._getWidgetClassByType(parentType) : JZ.Widget,
+			props,
+			staticProps);
 
 	},
 

@@ -26,9 +26,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}
 
 			var searchVal = typeof val == 'undefined'? this._element.val() : val;
-			if(this._lastSearchVal === this._element.val() &&
-                typeof val == 'undefined' &&
-                this._params.storage.source != 'remote') {
+			if(this._lastSearchVal === this._element.val() && typeof val == 'undefined') {
 				return this._showList();
 			}
 			this._lastSearchVal = searchVal;
@@ -178,7 +176,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onKeyDown : function(event) {
 
 		this._keyDownValue = this._element.val();
-
 		if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
 			return;
 		}
@@ -237,6 +234,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._hilightedIndex = index;
 
 		this._selectItemByIndex(index);
+		this._keyDownValue = this.getValue();
 
 	},
 
