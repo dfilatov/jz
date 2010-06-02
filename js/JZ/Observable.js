@@ -1,101 +1,112 @@
 JZ.Observable = $.inherit({
 
-	bind : function(type, data, fn, context) {
+	bind : function(type, data, fn, ctx) {
 
-		jQuery.event.bindWithContext(this, type, data, fn, context);
+        this._observers || (this._observers = {});
+
+		if($.isFunction(data)) {
+			ctx = fn;
+			fn = data;
+		}
+
+		var i = 0, types = type.split(' '), typeNs;
+		while(typeNs = types[i++]) {
+			var hasNs = typeNs.indexOf('.') > -1;
+			typeNs = hasNs? typeNs.split('.') : typeNs;
+			type = hasNs? typeNs.shift() : typeNs;
+			(this._observers[type] || (this._observers[type] = [])).push({
+				ns   : hasNs? typeNs.sort().join('.') : null,
+				fn   : fn,
+				data : data,
+				ctx  : ctx
+			});
+		}
+
 		return this;
 
 	},
 
 	unbind : function(type, fn) {
 
-		!(this.detachEvent || this.removeEventListener) &&
-		    (this.detachEvent = this.removeEventListener = function() {});
-		jQuery.event.remove(this, type, fn);
-		return this;
-
-	},
-
-	trigger : function(event, data) {
-
-		var all, handler, handlers, i, namespace, namespaces, ret, type;
-
-		type = event.type || event;
-
-		event = typeof event === 'object' ?
-			// jQuery.Event object
-				event.preventDefault ? event :
-					// Object literal
-				jQuery.extend(jQuery.Event(type), event) :
-			// Just the event type (string)
-				jQuery.Event(type);
-
-		if(type.indexOf('!') >= 0) {
-			event.type = type = type.slice(0, -1);
-			event.exclusive = true;
-		}
-
-		// Clean up in case it is reused
-		event.result = undefined;
-		event.target = this;
-
-		// Clone the incoming data, if any
-		data = jQuery.makeArray(data);
-		data.unshift(event);
-
-		event.currentTarget = this;
-
-		// Namespaced event handlers
-		namespaces = event.type.split('.');
-		event.type = namespaces.shift();
-
-		// Cache this now, all = true means, any handler
-		all = !namespaces.length && !event.exclusive;
-
-		namespace = RegExp('(^|\\.)' + namespaces.slice().sort().join('.*\\.') + '(\\.|$)');
-
-		handlers = ( jQuery.data(this, 'events') || {} )[event.type];
-
-		if(handlers) {
-			for(i in handlers) {
-				handler = handlers[i].handler || handlers[i];
-
-				// Filter the functions by class
-				if(all || namespace.test(handler.type)) {
-					// Pass in a reference to the handler function itself
-					// So that we can later remove it
-					event.handler = handler;
-					event.data = handler.data;
-
-					ret = handler.apply(this, data);
-
-					if(ret !== undefined) {
-						event.result = ret;
-						if(ret === false) {
-							event.preventDefault();
-							event.stopPropagation();
-						}
-					}
-				}
-			}
-		}
+        if(this._observers) {
+            if(!arguments.length) {
+                delete this._observers;
+            }
+            else {
+                var i = 0, j, types = type.split(' '), observers, observer;
+                while(type = types[i++]) {
+                    var hasNs = type.indexOf('.') > -1,
+                        ns = hasNs? type.split('.').sort() : null;
+                    if(hasNs) {
+                        type = ns.shift();
+                        ns = new RegExp('(^|\\.)' + ns.sort().join('\\.(?:.*\\.)?') + '(\\.|$)');
+                    }
+                    if(type) {
+                        observers = this._observers[type];
+                        if(!observers) {
+                            continue;
+                        }
+                        j = 0;
+                        while(observer = observers[j++]) {
+                            if((!fn || fn === observer.fn) &&
+                               (!hasNs || (hasNs && observer.ns && ns.test(observer.ns)))) {
+                                observers.splice(--j, 1);
+                            }
+                        }
+                    }
+                    else {
+                        for(type in this._observers) {
+                            observers = this._observers[type];
+                            j = 0;
+                            while(observer = observers[j++]) {
+                                if((!fn || fn === observer.fn) && observer.ns && ns.test(observer.ns)) {
+                                    observers.splice(--j, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 		return this;
 
 	},
 
-	_delete : function() {
+	trigger : function(e, data) {
 
-		var i, name, object;
+        if(this._observers) {
+            typeof e === 'string' && (e = $.Event(e));
 
-		i = arguments.length;
+            var hasNs = e.type.indexOf('.') > -1,
+                ns = hasNs? e.type.split('.') : null;
 
-		while(i--) {
-			name = arguments[i];
-			object = this[name];
-			object && object.destroy && object.destroy();
-			delete this[name];
-		}
+            if(hasNs) {
+                e.type = ns.shift();
+                ns = new RegExp('(^|\\.)' + ns.sort().join('\\.(?:.*\\.)?') + '(\\.|$)');
+            }
+
+            var observers = this._observers[e.type];
+            if(observers) {
+                var i = 0, observer, ret;
+                while(observer = observers[i++]) {
+                    if(hasNs && (!observer.ns || !ns.test(observer.ns))) {
+                        continue;
+                    }
+                    e.data = observer.data;
+                    ret = observer.fn.call(observer.ctx || window, e, data);
+                    if(typeof ret !== 'undefined') {
+                        e.result = ret;
+                        if(ret === false) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    }
+                }
+            }
+        }
+
+		return this;
 
 	}
 
