@@ -11,9 +11,15 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	isChanged : function() {
+
+		return this._changedCounter > 0;
+
+	},
+
 	isReady : function() {
 
-		return this._unreadyCounter == 0 && (!this._params.heedChanges || this._changedCounter > 0);
+		return this._unreadyCounter == 0 && (!this._params.heedChanges || this.isChanged());
 
 	},
 
