@@ -29,6 +29,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	getWidgetById : function(id) {
+
+		return this._widgetsDataById[id].widget;
+
+	},
+
 	serialize : function() {
 
 		var result = {};

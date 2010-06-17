@@ -198,6 +198,9 @@ JZ.Builder = $.inherit({
 				case 'checkbox':
 					return 'state';
 
+				case 'button':
+					return 'button';
+
 				case 'image':
 				case 'submit':
 					return 'submit';
@@ -235,6 +238,7 @@ JZ.Builder = $.inherit({
 		'date'     : JZ.Widget.Container.Date,
 		'datetime' : JZ.Widget.Container.Date.Time,
 		'state'    : JZ.Widget.Input.State,
+		'button'   : JZ.Widget.Button,
 		'submit'   : JZ.Widget.Button.Submit,
 		'fieldset' : JZ.Widget.Container,
 		'rbgroup'  : JZ.Widget.Container.StateGroup.RadioButtons,
