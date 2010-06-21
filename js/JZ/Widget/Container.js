@@ -25,25 +25,25 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	enable : function(byParent) {
 
-		this.__base(byParent);
-		this._applyFnToChildren('enable', [true]);
-		return this;
+		return this
+			.__base(byParent)
+			._applyFnToChildren('enable', [true]);
 
 	},
 
 	disable : function() {
 
-		this.__base();
-		this._applyFnToChildren('disable');
-		return this;
+		return this
+			.__base()
+			._applyFnToChildren('disable');
 
 	},
 
 	reset : function() {
 
-		this.__base();
-		this._applyFnToChildren('reset');
-		return this;
+		return this
+			.__base()
+			._applyFnToChildren('reset');
 
 	},
 
@@ -62,8 +62,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_init : function() {
 
-		this._applyFnToChildren('_init');
-		this.__base();
+		this
+			._applyFnToChildren('_init')
+			.__base();
 
 		var children = this._children, i = 0, child;
 		while(child = children[i++]) {
@@ -75,8 +76,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_reinit : function() {
 
-		this._applyFnToChildren('_reinit');
-		return this.__base();
+		return this
+			._applyFnToChildren('_reinit')
+			.__base();
 
 	},
 
@@ -94,8 +96,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_setForm : function(form) {
 
-		this._applyFnToChildren('_setForm', arguments);
-		return this.__base(form);
+		return this
+			._applyFnToChildren('_setForm', arguments)
+			.__base(form);
 
 	},
 
@@ -109,8 +112,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_beforeSubmit : function() {
 
-		this._applyFnToChildren('_beforeSubmit');
-		this.__base();
+		this
+			._applyFnToChildren('_beforeSubmit')
+			.__base();
 
 	},
 
@@ -153,8 +157,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_destruct : function() {
 
-		this._applyFnToChildren('_destruct');
-		this.__base();
+		this
+			._applyFnToChildren('_destruct')
+			.__base();
 
 		delete this._children;
 
@@ -162,8 +167,9 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_triggerRemove : function() {
 
-		this._applyFnToChildren('_triggerRemove');
-		return this.__base();
+		return this
+			._applyFnToChildren('_triggerRemove')
+			.__base();
 
 	},
 
@@ -173,6 +179,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 		while(child = children[i++]) {
 			child[name].apply(child, args || []);
 		}
+		return this;
 
 	}
 
