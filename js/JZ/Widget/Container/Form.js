@@ -214,7 +214,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_addInstance : function(instance) {
 
 		this._currentInstance = instance;
-		++this._instanceCounter == 1 && $(document).bind('keyup.jz', $.bindContext(function(event) {
+		++this._instanceCounter == 1 && $(document).bind('keyup.jz', $.proxy(function(event) {
 			this._currentInstance && event.keyCode == 13 && event.ctrlKey && this._currentInstance.submit();
 		}, this));
 

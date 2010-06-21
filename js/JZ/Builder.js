@@ -32,7 +32,7 @@ JZ.Builder = $.inherit({
 		if(element[0].tagName.toLowerCase() == 'form') {
 			element.data('jz-builder', this);
 			initWidget
-				.bind('remove', $.bindContext(this._onFormRemove, this))
+				.bind('remove', $.proxy(this._onFormRemove, this))
 				.init();
 		}
 		else {

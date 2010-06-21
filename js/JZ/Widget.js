@@ -204,7 +204,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			data = null;
 		}
 
-		observable.bind(type, data, $.bindContext(fn, this));
+		observable.bind(type, data, $.proxy(fn, this));
 		return this;
 
 	},

@@ -30,7 +30,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				return this._showList();
 			}
 			this._lastSearchVal = searchVal;
-			this._getStorage().filter(searchVal, $.bindContext(this._onStorageFilter, this));
+			this._getStorage().filter(searchVal, $.proxy(this._onStorageFilter, this));
 
 		}, this._params.debounceInterval);
 
@@ -120,7 +120,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		if(this._focusOnBlur) {
 			this._focusOnBlur = false;
-			setTimeout($.bindContext(function() {
+			setTimeout($.proxy(function() {
 				this
 					.focus()
 					._refocus();
@@ -298,7 +298,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				});
 		}
 
-		this._params.reposList && (this._reposTimer = setTimeout($.bindContext(arguments.callee, this), 50));
+		this._params.reposList && (this._reposTimer = setTimeout($.proxy(arguments.callee, this), 50));
 
 	},
 
@@ -313,7 +313,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				.setValue(this._lastSearchVal = $(event.target).closest('li').text())
 				.focus()
 				._hideList();
-			setTimeout($.bindContext(function() {
+			setTimeout($.proxy(function() {
 				this._focusOnBlur = false;
 			}, this), 50);
 			return false;
