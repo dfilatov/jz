@@ -126,7 +126,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		var isReady = this.removeCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 		this._isEnabled = true;
 		isReady != this.isReady() && this.trigger('ready-change', this);
-		this._isInitialValueChanged() && this.trigger('initial-value-change', true);
+		this.isChanged() && this.trigger('initial-value-change', true);
 		return this.trigger('enable', this);
 
 	},
@@ -142,7 +142,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		var isReady = this.isReady();
 		this._isEnabled = false;
 		isReady != this.isReady() && this.trigger('ready-change', this);
-		this._isInitialValueChanged() && this.trigger('initial-value-change', false);
+		this.isChanged() && this.trigger('initial-value-change', false);
 		return this.trigger('disable', this);
 
 	},
@@ -230,7 +230,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		if(this._hasValue()) {
 			this._setNoReady(false);
-			this._isInitialValueChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
+			this.isChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
 			this._initialValue = this._value;
 		}
 		return this;
@@ -266,13 +266,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		if(this._value.isEqual(value)) {
 			return this;
 		}
-		var isInitialValueChanged = this._isInitialValueChanged();
+		var isChanged = this.isChanged();
 		this._value = value;
 		!prevent && this._setValueToElement(value);
 		this.trigger('value-change', this);
-		if(isInitialValueChanged != this._isInitialValueChanged()) {
-			this[(isInitialValueChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
-				.trigger('initial-value-change', !isInitialValueChanged);
+		if(isChanged != this.isChanged()) {
+			this[(isChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
+				.trigger('initial-value-change', !isChanged);
 		}
 		return this;
 
@@ -330,13 +330,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_isInitialValueChanged : function() {
+	isChanged : function() {
 
-		if(!this._hasValue()) {
-			return false;
-		}
-
-		return !this._initialValue.isEqual(this._value);
+		return this._hasValue()?
+			!this._initialValue.isEqual(this._value) :
+			false;
 
 	},
 

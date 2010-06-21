@@ -83,7 +83,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_updateChildValues : function(value) {
 
-		var value = value || this._getValue();
+		value = value || this._getValue();
 		value.getYear() != this._yearInput.getValue() && this._yearInput.setValue(value.getYear());
 		value.getMonth() != this._monthInput.getValue() && this._monthInput.setValue(value.getMonth());
 		value.getDay() != this._dayInput.getValue() && this._dayInput.setValue(value.getDay());
