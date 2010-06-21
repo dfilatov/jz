@@ -92,7 +92,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		$.each(widgets, function(i) {
 			this.getValue() != values[i] && this.setValue(values[i]);
 		});
-		
+
 		return value;
 
 	},
@@ -133,9 +133,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_destruct : function() {
 
-		this._yearInput.remove(true);
-		this._monthInput.remove(true);
-		this._dayInput.remove(true);
+		this._applyFnToChildren('remove', [true]);		
 		this._element.replaceWith(this._oldElement);
 		this._element = this._oldElement.val(this._element.val());
 		JZ.Widget.prototype._destruct.call(this);

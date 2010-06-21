@@ -41,15 +41,6 @@ JZ.Widget.Container.Date.Time = $.inherit(JZ.Widget.Container.Date, {
 
 		return new JZ.Value.Date.Time(value);
 
-	},
-
-	_destruct : function() {
-
-		this._hourInput.remove(true);
-		this._minuteInput.remove(true);
-		this._secondInput.remove(true);
-		this.__base();
-
 	}
 
 });
