@@ -8,11 +8,9 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	get : function() {
 
-		if(this.isEmpty()) {
-			return '';
-		}
-
-		return this.__base() + ' ' + this.getHour() + ':' + this.getMinute() + ':' + this.getSecond();
+		return this.isEmpty()?
+	    	'' :
+			this.__base() + ' ' + this.getHour() + ':' + this.getMinute() + ':' + this.getSecond();
 
 	},
 
@@ -34,7 +32,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 				parseInt(matches[6], 10)));
 		}
 
-		if(date) {
+		date?
 			this._value = {
 				second : date.getSeconds(),
 				minute : date.getMinutes(),
@@ -42,11 +40,8 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 				day    : date.getDate(),
 				month  : date.getMonth() + 1,
 				year   : date.getFullYear()
-			};
-		}
-		else {
+			} :
 			this.reset();
-		}
 
 	},
 

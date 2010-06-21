@@ -27,12 +27,9 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 				parseInt(matches[3], 10)));
 		}
 
-		if(date) {
-			this._value = { day : date.getDate(), month : date.getMonth() + 1, year : date.getFullYear() };
-		}
-		else {
+		date?
+			this._value = { day : date.getDate(), month : date.getMonth() + 1, year : date.getFullYear() } :
 			this.reset();
-		}
 
 	},
 
