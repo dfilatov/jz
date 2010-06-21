@@ -169,8 +169,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				return;
 			}
 			_this
-				._bindTo(this, 'value-change enable disable', this._onChangeDependFromWidget)
-				._bindTo(this, 'remove', this._onRemoveDependFromWidget)
+				._bindTo(this, {
+					'value-change enable disable' : this._onChangeDependFromWidget,
+					'remove'                      : this._onRemoveDependFromWidget
+				})
 				._dependFromIds[this.getId()] = true;
 		});
 
@@ -204,7 +206,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			data = null;
 		}
 
-		observable.bind(type, data, $.proxy(fn, this));
+		if(typeof type == 'string') {
+			observable.bind(type, data, $.proxy(fn, this));
+		} else {
+			var _this = this;
+			$.each(type, function(type) {
+				_this._bindTo(observable, type, data, this);
+			});
+		}
 		return this;
 
 	},

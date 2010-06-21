@@ -28,9 +28,12 @@ JZ.Widget.Container.Date.Time = $.inherit(JZ.Widget.Container.Date, {
 	_updateChildValues : function(value) {
 
 		value = this.__base(value);
-		value.getHour() != this._hourInput.getValue() && this._hourInput.setValue(value.getHour());
-		value.getMinute() != this._minuteInput.getValue() && this._minuteInput.setValue(value.getMinute());
-		value.getSecond() != this._secondInput.getValue() && this._secondInput.setValue(value.getSecond());
+
+		var widgets = [this._hourInput, this._minuteInput, this._secondInput],
+			values = [value.getHour(), value.getMinute(), value.getSecond()];
+		$.each(widgets, function(i) {
+			this.getValue() != values[i] && this.setValue(values[i]);
+		});
 
 	},
 

@@ -72,14 +72,18 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		this
 			.__base()
-			._bindToElement('keydown', this._onKeyDown)
-			._bindToElement('keyup', this._onKeyUp);
+			._bindToElement({
+				'keydown' : this._onKeyDown,
+				'keyup'   : this._onKeyUp
+			});
 
 		var arrow = this._params.arrow;
 		arrow && this
-			._bindTo(arrow, 'mousedown', this._onArrowMouseDown)
-			._bindTo(arrow, 'mouseup', this._onArrowMouseUp)
-			._bindTo(arrow, 'click', this._onArrowClick);
+			._bindTo(arrow, {
+				'mousedown' : this._onArrowMouseDown,
+				'mouseup'   : this._onArrowMouseUp,
+				'click'     : this._onArrowClick
+			});
 
 		return this;
 

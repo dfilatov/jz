@@ -63,8 +63,10 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_bindChildEvents : function(widget) {
 
 		this
-			._bindTo(widget, 'value-change', this._onChildChange)
-			._bindTo(widget, 'blur', this._onChildBlur);
+			._bindTo(widget, {
+				'value-change' : this._onChildChange,
+				'blur'         : this._onChildBlur
+			});
 
 	},
 
@@ -84,9 +86,13 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_updateChildValues : function(value) {
 
 		value = value || this._getValue();
-		value.getYear() != this._yearInput.getValue() && this._yearInput.setValue(value.getYear());
-		value.getMonth() != this._monthInput.getValue() && this._monthInput.setValue(value.getMonth());
-		value.getDay() != this._dayInput.getValue() && this._dayInput.setValue(value.getDay());
+
+		var widgets = [this._yearInput, this._monthInput, this._dayInput],
+			values = [value.getYear(), value.getMonth(), value.getDay()];
+		$.each(widgets, function(i) {
+			this.getValue() != values[i] && this.setValue(values[i]);
+		});
+		
 		return value;
 
 	},

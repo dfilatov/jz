@@ -11,8 +11,10 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 	_bindEvents : function() {
 
 		return this
-			._bindToElement('focus', this._onFocus)
-			._bindToElement('blur', this._onBlur);
+			._bindToElement({
+				'focus' : this._onFocus,
+				'blur'  : this._onBlur
+			});
 
 	},
 

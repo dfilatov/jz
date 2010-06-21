@@ -90,10 +90,11 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_bindEvents : function() {
 
 		this
-            ._bindToElement('submit', this._onSubmit)
-            ._bindToElement('keydown', function(event) {
-                event.keyCode == 27 && event.preventDefault(); // IE пытается возвращать форму в исходное значение
-            });
+            ._bindToElement({
+				'submit'  : this._onSubmit,
+            	'keydown' : function(event) {
+                	event.keyCode == 27 && event.preventDefault(); // IE пытается возвращать форму в исходное значение
+				}});
 
 	},
 
@@ -150,8 +151,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		widget !== this._bindTo(widget, 'focus', function() {
 			this.__self._currentInstance = this;
 		}) && this
-			._bindTo(widget, 'ready-change', this._onWidgetReadyChange)
-			._bindTo(widget, 'remove', this._onWidgetRemove);
+			._bindTo(widget, {
+				'ready-change' : this._onWidgetReadyChange,
+				'remove'       : this._onWidgetRemove
+			});
 
 		this._params.heedChanges && widget._hasValue() &&
 			this._bindTo(widget, 'initial-value-change', this._onWidgetInitialValueChange);
