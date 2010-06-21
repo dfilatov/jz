@@ -2,8 +2,7 @@ JZ.Widget.Container.StateGroup = $.inherit(JZ.Widget.Container, {
 
 	addChild : function(widget) {
 
-		this.__base.apply(this, arguments);
-		var index = this._children.length - 1;
+		var index = this.__base.apply(this, arguments)._children.length - 1;
 		this._bindTo(widget, 'value-change', function() {
 			this._onChildChange(widget, index);
 		});

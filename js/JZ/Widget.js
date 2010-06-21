@@ -302,20 +302,22 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_delete : function() {
+
+		var _this = this;
+		$.each(arguments, function(i, prop) {
+			delete _this[prop];
+		});
+
+	},
+
 	_destruct : function() {
 
 		this._unbindAll();
 
 		this._element.removeData('jz');
 
-		delete this._element;
-		delete this._classElement;
-		delete this._params;
-		delete this._parent;
-		delete this._value;
-		delete this._initialValue;
-		delete this._dependencies;
-		delete this._dependFromIds;
+		this._delete('_element', '_classElement', '_params', '_parent', '_value', '_initialValue', '_dependencies', '_dependFromIds');
 
 	},
 
