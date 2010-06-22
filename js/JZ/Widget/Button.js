@@ -4,7 +4,7 @@ JZ.Widget.Button = $.inherit(JZ.Widget, {
 
 		return this
 			.__base()
-			._bindToElement('click', this._onClick);
+			._bindToElem('click', this._onClick);
 
 
 	},
@@ -13,17 +13,17 @@ JZ.Widget.Button = $.inherit(JZ.Widget, {
 
 		this.trigger('click', { originalEvent : e });
 
-	},	
+	},
 
 	_enableElements : function() {
 
-		this._element.attr('disabled', false);
+		this._elem.attr('disabled', false);
 
 	},
 
 	_disableElements : function() {
 
-		this._element.attr('disabled', true);
+		this._elem.attr('disabled', true);
 
 	}
 

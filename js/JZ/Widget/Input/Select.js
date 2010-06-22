@@ -4,7 +4,7 @@ JZ.Widget.Input.Select = $.inherit(JZ.Widget.Input, {
 
 		return this
 			.__base()
-			._bindToElement('change', this._onChange);
+			._bindToElem('change', this._onChange);
 
 	},
 
@@ -16,7 +16,7 @@ JZ.Widget.Input.Select = $.inherit(JZ.Widget.Input, {
 
 	_processValue : function(value) {
 
-		var clone = this._element.clone();
+		var clone = this._elem.clone();
 		clone.val(value.get()) !== value.get() && value.set(clone.val());
 		return value;
 

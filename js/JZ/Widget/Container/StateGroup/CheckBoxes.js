@@ -17,7 +17,7 @@ JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateG
 
 		var result = [], child, i = 0;
 		while(child = this._children[i++]) {
-			child.isEnabled() && child._isChecked() && result.push(child._element.val());
+			child.isEnabled() && child._isChecked() && result.push(child._elem.val());
 		}
 		return result;
 
@@ -27,7 +27,7 @@ JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateG
 
 		var child, i = 0;
 		while(child = this._children[i++]) {
-			child.isEnabled() && child._setChecked(value.isContain(child._element.val()));
+			child.isEnabled() && child._setChecked(value.isContain(child._elem.val()));
 		};
 
 	},

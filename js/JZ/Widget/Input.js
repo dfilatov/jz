@@ -11,7 +11,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 	_bindEvents : function() {
 
 		return this
-			._bindToElement({
+			._bindToElem({
 				'focus' : this._onFocus,
 				'blur'  : this._onBlur
 			});
@@ -44,13 +44,13 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	_enableElements : function() {
 
-		this._element.attr('disabled', false);
+		this._elem.attr('disabled', false);
 
 	},
 
 	_disableElements : function() {
 
-		this._element.attr('disabled', true);
+		this._elem.attr('disabled', true);
 
 	}
 

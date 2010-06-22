@@ -11,7 +11,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 		return this
 			.__base()
-			._bindToElement('input change keyup blur', this._onChange);
+			._bindToElem('input change keyup blur', this._onChange);
 
 	},
 
@@ -53,7 +53,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 		var result = $('<label for="' + this.getId() + '" class="' + this.__self.CSS_CLASS_PLACEHOLDER + '">' +
 			this._params.placeholder + '</label>');
 
-		this._element
+		this._elem
 			.attr('id', this.getId())
 			.before(result);
 

@@ -1,14 +1,14 @@
 JZ.Widget = $.inherit(JZ.Observable, {
 
-	__constructor : function(element, classElement, params) {
+	__constructor : function(elem, classElem, params) {
 
-		this._element = element.data('jz', this);
-		this._classElement = classElement || element;
+		this._elem = elem.data('jz', this);
+		this._classElem = classElem || elem;
 		this._params = $.extend(this._getDefaultParams(params), params);
 		this._parent = this._form = null;
 		this._isInited = this._isRequired = false;
 		this._isValid = true;
-		this._isEnabled = !this._element.attr('disabled');
+		this._isEnabled = !this._elem.attr('disabled');
 		this._value = this._initialValue = null;
 		this._dependencies = {};
 		this._dependFromIds = {};
@@ -17,13 +17,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	getElement : function() {
 
-		return this._element;
+		return this._elem;
 
 	},
 
 	getId : $.memoize(function() {
 
-		return JZ._identifyElement(this._element);
+		return JZ._identifyElement(this._elem);
 
 	}),
 
@@ -35,27 +35,27 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	focus : function() {
 
-		this._element[0].focus();
+		this._elem[0].focus();
 		return this;
 
 	},
 
 	hasCSSClass : function(name) {
 
-		return this._classElement.hasClass(name);
+		return this._classElem.hasClass(name);
 
 	},
 
 	addCSSClass : function(name) {
 
-		this._classElement.addClass(name);
+		this._classElem.addClass(name);
 		return this;
 
 	},
 
 	removeCSSClass : function(name) {
 
-		this._classElement.removeClass(name);
+		this._classElem.removeClass(name);
 		return this;
 
 	},
@@ -179,7 +179,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	remove : function(fromDOM) {
 
 		this._triggerRemove()._parent && this._parent._removeChild(this);
-		var classElement = this._classElement;
+		var classElement = this._classElem;
 		this._destruct();
 		fromDOM && classElement.remove();
 
@@ -212,14 +212,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				_this._bindTo(observable, type, data, this);
 			});
 		}
-		
+
 		return this;
 
 	},
 
-	_bindToElement : function(type, data, fn) {
+	_bindToElem : function(type, data, fn) {
 
-		return this._bindTo(this._element, type, data, fn);
+		return this._bindTo(this._elem, type, data, fn);
 
 	},
 
@@ -247,7 +247,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_extractName : function() {
 
-		return this._element.attr('name');
+		return this._elem.attr('name');
 
 	},
 
@@ -314,16 +314,16 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._unbindAll();
 
-		this._element.removeData('jz');
+		this._elem.removeData('jz');
 
-		this._delete('_element', '_classElement', '_params', '_parent', '_value', '_initialValue', '_dependencies', '_dependFromIds');
+		this._delete('_elem', '_classElem', '_params', '_parent', '_value', '_initialValue', '_dependencies', '_dependFromIds');
 
 	},
 
 	_unbindAll : function() {
 
-		this._element.unbind();
-		this._classElement.unbind();
+		this._elem.unbind();
+		this._classElem.unbind();
 		this.unbind();
 
 	},
@@ -451,13 +451,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_extractValueFromElement : function() {
 
-		return this._element.val();
+		return this._elem.val();
 
 	},
 
 	_setValueToElement : function(value) {
 
-		this._element.val(value.toString());
+		this._elem.val(value.toString());
 
 	},
 

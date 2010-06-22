@@ -15,11 +15,11 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_init : function() {
 
-		var element = $('<input type="hidden" name="' + this.getName() + '" value="' + this._element.val() + '"/>')
+		var element = $('<input type="hidden" name="' + this.getName() + '" value="' + this._elem.val() + '"/>')
 			.data('jz', this);
-		this._element.replaceWith(element);
-		this._oldElement = this._element;
-		this._element = element;
+		this._elem.replaceWith(element);
+		this._oldElement = this._elem;
+		this._elem = element;
 		this._addChildInputs();
 		return this.__base();
 
@@ -41,7 +41,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
 			' size="' + params.maxLength + '"' +
 			' maxlength="' + params.maxLength + '"/>');
-		this._element.after(element);
+		this._elem.after(element);
 
 		return new JZ.Widget.Input.Text.Number(element, null, params);
 
@@ -55,7 +55,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 					return '<option value="' + (i + 1) + '">' + name +'</option>';
 				}).join('') +
 			'</select>');
-		this._element.after(element);
+		this._elem.after(element);
 
 		return new JZ.Widget.Input.Select(element, null, params);
 
@@ -135,8 +135,8 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_destruct : function() {
 
 		this._applyFnToChildren('remove', [true]);
-		this._element.replaceWith(this._oldElement);
-		this._element = this._oldElement.val(this._element.val());
+		this._elem.replaceWith(this._oldElement);
+		this._elem = this._oldElement.val(this._elem.val());
 		JZ.Widget.prototype._destruct.call(this);
 
 	}

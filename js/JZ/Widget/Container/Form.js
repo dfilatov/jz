@@ -47,7 +47,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	submit : function() {
 
-		this._element.submit();
+		this._elem.submit();
 
 	},
 
@@ -73,7 +73,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			.__self._addInstance(this);
 
 		this._unreadyCounter == 0 && this.trigger('ready-change', this); // инициирующее событие
-		this._element.trigger('init.jz', this);
+		this._elem.trigger('init.jz', this);
 		return this;
 
 	},
@@ -90,7 +90,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_bindEvents : function() {
 
 		return this
-            ._bindToElement({
+            ._bindToElem({
 				'submit'  : this._onSubmit,
             	'keydown' : function(event) {
                 	event.keyCode == 27 && event.preventDefault(); // IE пытается возвращать форму в исходное значение

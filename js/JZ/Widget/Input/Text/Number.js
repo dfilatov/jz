@@ -3,7 +3,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	__constructor : function() {
 
 		this.__base.apply(this, arguments);
-		this._hiddenElement = null; // тут будет храниться реальное значение
+		this._hiddenElem = null; // тут будет храниться реальное значение
 		this._keyDownAllowed = false;
 
 	},
@@ -17,11 +17,11 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_init : function() {
 
 		this.__base();
-		this._element.after(this._hiddenElement = $('<input type="hidden" value="' + this._element.val() + '"' +
-			(this._element.attr('id')? ' id="value-' + this._element.attr('id') + '"' : '') + '/>'));
-		if(this._element.attr('name')) {
-			this._hiddenElement.attr('name', this._element.attr('name'));
-			this._element.removeAttr('name');
+		this._elem.after(this._hiddenElem = $('<input type="hidden" value="' + this._elem.val() + '"' +
+			(this._elem.attr('id')? ' id="value-' + this._elem.attr('id') + '"' : '') + '/>'));
+		if(this._elem.attr('name')) {
+			this._hiddenElem.attr('name', this._elem.attr('name'));
+			this._elem.removeAttr('name');
 		}
 		this._checkElementValue();
 		return this;
@@ -30,7 +30,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_extractName : function() {
 
-		return (this._hiddenElement || this._element).attr('name');
+		return (this._hiddenElem || this._elem).attr('name');
 
 	},
 
@@ -38,7 +38,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 		return this
 			.__base()
-			._bindToElement({
+			._bindToElem({
 				'keydown'  : this._onKeyDown,
 				'keypress' : this._onKeyPress
 			});
@@ -54,22 +54,22 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_checkElementValue : function() {
 
-		this._element.val() != this._getValue().toString() && this._element.val(this._getValue().toString());
+		this._elem.val() != this._getValue().toString() && this._elem.val(this._getValue().toString());
 
 	},
 
-	_onKeyDown : function(event) {
+	_onKeyDown : function(e) {
 
-		return this._keyDownAllowed = event.ctrlKey || event.metaKey ||
-			(event.keyCode > 47 && event.keyCode < 58) ||
-			(event.keyCode > 95 && event.keyCode < 106) ||
-			$.inArray(event.keyCode, [190, 189, 188, 109, 46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1;
+		return this._keyDownAllowed = e.ctrlKey || e.metaKey ||
+			(e.keyCode > 47 && e.keyCode < 58) ||
+			(e.keyCode > 95 && e.keyCode < 106) ||
+			$.inArray(e.keyCode, [190, 189, 188, 109, 46, 45, 39, 37, 36, 35, 9, 8, 13]) > -1;
 
 	},
 
-	_onKeyPress : function(event) {
+	_onKeyPress : function(e) {
 
-		if(event.charCode === 0) {
+		if(e.charCode === 0) {
 			return true;
 		}
 
@@ -77,27 +77,27 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 			return false;
 		}
 
-		var keyCode = event.keyCode || event.charCode;
+		var keyCode = e.keyCode || e.charCode;
 
 		if($.inArray(keyCode, [44, 45, 46]) == -1) {
 			return true;
 		}
 
-		var selection = this._element.getSelection();
+		var selection = this._elem.getSelection();
 		if(this._params.allowNegative && keyCode == 45) {
-			return (this._element.val().charAt(0) != '-' && selection.start == 0) ||
+			return (this._elem.val().charAt(0) != '-' && selection.start == 0) ||
 				   selection.text.indexOf('-') > -1;
 		}
 
-		return this._params.allowFloat && ((!/\.|\,/.test(this._element.val()) &&
-			   (this._element.val().charAt(0) != '-' || selection.start > 0 || selection.text.indexOf('-') > -1)) ||
+		return this._params.allowFloat && ((!/\.|\,/.test(this._elem.val()) &&
+			   (this._elem.val().charAt(0) != '-' || selection.start > 0 || selection.text.indexOf('-') > -1)) ||
 			   selection.text.indexOf('.') > -1 || selection.text.indexOf(',') > -1);
 
 	},
 
 	_setValue : function(value, prevent) {
 
-		this._hiddenElement.val(value.get());
+		this._hiddenElem.val(value.get());
 		return this.__base(value, prevent);
 
 	},
@@ -105,14 +105,14 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	_enableElements : function() {
 
 		this.__base();
-		this._hiddenElement && this._hiddenElement.attr('disabled', false);
+		this._hiddenElem && this._hiddenElem.attr('disabled', false);
 
 	},
 
 	_disableElements : function() {
 
 		this.__base();
-		this._hiddenElement && this._hiddenElement.attr('disabled', true);
+		this._hiddenElem && this._hiddenElem.attr('disabled', true);
 
 	},
 
@@ -127,9 +127,9 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_destruct : function() {
 
-		this._hiddenElement.attr('name') && this._element.attr('name', this._hiddenElement.attr('name'));
-		this._hiddenElement.remove();
-		this._hiddenElement = null;
+		this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
+		this._hiddenElem.remove();
+		this._hiddenElem = null;
 
 		this.__base();
 

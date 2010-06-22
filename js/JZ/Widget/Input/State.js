@@ -4,7 +4,7 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 
 		return this
 			.__base()
-			._bindToElement('click', this._onChange);
+			._bindToElem('click', this._onChange);
 
 	},
 
@@ -22,14 +22,14 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 
 	_setChecked : function(checked) {
 
-		this._element.attr('checked', checked);
+		this._elem.attr('checked', checked);
 		this[(checked? 'add' : 'remove') + 'CSSClass'](this.__self.CSS_CLASS_CHECKED);
 
 	},
 
 	_isChecked : function() {
 
-		return this._element.attr('checked');
+		return this._elem.attr('checked');
 
 	},
 
