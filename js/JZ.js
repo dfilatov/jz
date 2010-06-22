@@ -2,9 +2,9 @@ var JZ = {
 
 	CSS_CLASS_WIDGET : 'jz',
 
-	onInit : function(element, fn) {
+	onInit : function(elem, fn) {
 
-		element
+		elem
 			.bind('init.jz', fn)
 			.each(function() {
 				$(this).data('jz') && fn.call(window, $.Event('init.jz'), $(this).data('jz'));
