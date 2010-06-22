@@ -89,7 +89,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_bindEvents : function() {
 
-		this
+		return this
             ._bindToElement({
 				'submit'  : this._onSubmit,
             	'keydown' : function(event) {
@@ -156,7 +156,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 				'remove'       : this._onWidgetRemove
 			});
 
-		this._params.heedChanges && widget._hasValue() &&
+		widget._hasValue() &&
 			this._bindTo(widget, 'initial-value-change', this._onWidgetInitialValueChange);
 
 	},
@@ -164,13 +164,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_onWidgetReadyChange : function(event, widget) {
 
 		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId], isReady = widget.isReady();
-		if(widgetData.isReady == isReady) {
-			return;
+		if(widgetData.isReady != isReady) {
+			this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
+			widgetData.isReady = isReady;
+			isReady? delete this._unreadyWidgetIds[widgetId] : this._unreadyWidgetIds[widgetId] = true;
+			this.trigger('ready-change', this);
 		}
-		this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
-		widgetData.isReady = isReady;
-		isReady? delete this._unreadyWidgetIds[widgetId] : this._unreadyWidgetIds[widgetId] = true;
-		this.trigger('ready-change', this);
 
 	},
 

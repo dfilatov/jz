@@ -165,15 +165,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var _this = this;
 		$.each(dependence.getFrom(), function() {
-			if(_this._dependFromIds[this.getId()]) {
-				return;
-			}
-			_this
-				._bindTo(this, {
-					'value-change enable disable' : this._onChangeDependFromWidget,
-					'remove'                      : this._onRemoveDependFromWidget
-				})
-				._dependFromIds[this.getId()] = true;
+			_this._dependFromIds[this.getId()] ||
+				(_this
+					._bindTo(this, {
+						'value-change enable disable' : this._onChangeDependFromWidget,
+						'remove'                      : this._onRemoveDependFromWidget
+					})
+					._dependFromIds[this.getId()] = true);
 		});
 
 	},
@@ -214,6 +212,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 				_this._bindTo(observable, type, data, this);
 			});
 		}
+		
 		return this;
 
 	},
@@ -226,9 +225,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_init : function() {
 
-		this._bindEvents();
-
-		this._hasValue() && this._initValue();
+		this
+			._bindEvents()
+			._hasValue() && this._initValue();
 		this._isInited = true;
 		this._params.focusOnInit && this.focus();
 		return this;
@@ -411,32 +410,26 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_updateRequired : function(isRequired) {
 
-		if(isRequired) {
-			this.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED_OK, this.__self.CSS_CLASS_REQUIRED);
-		}
-		else {
+		var _self = this.__self;
+		(isRequired?
+			this.replaceCSSClass(_self.CSS_CLASS_REQUIRED_OK, _self.CSS_CLASS_REQUIRED) :
 			this
-				.replaceCSSClass(this.__self.CSS_CLASS_REQUIRED, this.__self.CSS_CLASS_REQUIRED_OK)
-				.removeCSSClass(this.__self.CSS_CLASS_NOREADY_REQUIRED);
-		}
-
-		this._isRequired = isRequired;
+				.replaceCSSClass(_self.CSS_CLASS_REQUIRED, _self.CSS_CLASS_REQUIRED_OK)
+				.removeCSSClass(_self.CSS_CLASS_NOREADY_REQUIRED))
+			._isRequired = isRequired;
 
 	},
 
 	_updateValid : function(isValid) {
 
-		if(isValid) {
-			this._getValue().isEmpty()?
-				this.removeCSSClass(this.__self.CSS_CLASS_INVALID + ' ' + this.__self.CSS_CLASS_INVALID_OK) :
-				this.replaceCSSClass(this.__self.CSS_CLASS_INVALID, this.__self.CSS_CLASS_INVALID_OK);
-			this.removeCSSClass(this.__self.CSS_CLASS_NOREADY_INVALID);
-		}
-		else {
-			this.replaceCSSClass(this.__self.CSS_CLASS_INVALID_OK, this.__self.CSS_CLASS_INVALID);
-		}
-
-		this._isValid = isValid;
+		var _self = this.__self;
+		(isValid?
+			(this._getValue().isEmpty()?
+				this.removeCSSClass(_self.CSS_CLASS_INVALID + ' ' + _self.CSS_CLASS_INVALID_OK) :
+				this.replaceCSSClass(_self.CSS_CLASS_INVALID, _self.CSS_CLASS_INVALID_OK))
+				.removeCSSClass(_self.CSS_CLASS_NOREADY_INVALID) :
+			this.replaceCSSClass(_self.CSS_CLASS_INVALID_OK, _self.CSS_CLASS_INVALID))
+			._isValid = isValid;
 
 	},
 

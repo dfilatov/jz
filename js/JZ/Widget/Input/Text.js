@@ -37,7 +37,8 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_enablePlaceholder : function() {
 
-		!!this._params.placeholder && this._getValue().isEmpty() && this._getPlaceholder().removeClass(this.__self.CSS_CLASS_HIDDEN);
+		!!this._params.placeholder && this._getValue().isEmpty() &&
+			this._getPlaceholder().removeClass(this.__self.CSS_CLASS_HIDDEN);
 
 	},
 

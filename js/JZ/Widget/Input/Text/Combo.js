@@ -135,22 +135,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onArrowMouseDown : function() {
 
-		if(!this.isEnabled()) {
-			return;
+		if(this.isEnabled()) {
+			this._preventOnBlur = true;
+			this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 		}
-
-		this._preventOnBlur = true;
-		this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
 	_onArrowMouseUp : function() {
 
-		if(!this.isEnabled()) {
-			return;
-		}
-
-		this._params.arrow.removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
+		this.isEnabled() &&
+			this._params.arrow.removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
@@ -235,26 +230,22 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			.eq(this._hilightedIndex).removeClass(this.__self.CSS_CLASS_SELECTED).end()
 			.eq(index).addClass(this.__self.CSS_CLASS_SELECTED);
 
-		this._hilightedIndex = index;
-
-		this._selectItemByIndex(index);
+		this._selectItemByIndex(this._hilightedIndex = index);
 		this._keyDownValue = this.getValue();
 
 	},
 
 	_selectItemByIndex : function(index) {
 
-		if(!this._isListShowed) {
-			return this;
-		}
+		if(this._isListShowed) {
+			this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
 
-		this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
-
-		var element = this._element[0];
-		if(element.createTextRange && !element.selectionStart) {
-			var range = element.createTextRange();
-			range.move('character', this._element.val().length);
-        	range.select();
+			var element = this._element[0];
+			if(element.createTextRange && !element.selectionStart) {
+				var range = element.createTextRange();
+				range.move('character', this._element.val().length);
+				range.select();
+			}
 		}
 
 		return this;
@@ -276,13 +267,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_hideList : function() {
 
-		if(!this._isListShowed) {
-			return;
+		if(this._isListShowed) {
+			this._reposTimer && clearTimeout(this._reposTimer);
+			this._getListContainer().addClass(this.__self.CSS_CLASS_INVISIBLE);
+			this._isListShowed = false;
 		}
-
-		this._reposTimer && clearTimeout(this._reposTimer);
-		this._getListContainer().addClass(this.__self.CSS_CLASS_INVISIBLE);
-		this._isListShowed = false;
 
 	},
 
@@ -323,8 +312,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return false;
 		});
 
-		$('body').append(result);
-		return result;
+		return result.appendTo('body');
 
 	}),
 
