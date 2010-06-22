@@ -39,6 +39,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		var element = $('<input' +
 			(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
+			' size="' + params.maxLength + '"' +
 			' maxlength="' + params.maxLength + '"/>');
 		this._element.after(element);
 
@@ -133,7 +134,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_destruct : function() {
 
-		this._applyFnToChildren('remove', [true]);		
+		this._applyFnToChildren('remove', [true]);
 		this._element.replaceWith(this._oldElement);
 		this._element = this._oldElement.val(this._element.val());
 		JZ.Widget.prototype._destruct.call(this);
