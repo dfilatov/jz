@@ -8,11 +8,11 @@ JZ.Builder = $.inherit({
 
 	},
 
-	build : function(element) {
+	build : function(elem) {
 
 		var _this = this, fromIndex = this._widgets.length, widget, initWidget;
-		$.each(element.add(element.find('.' + JZ.CSS_CLASS_WIDGET)), function(i) {
-			widget = _this._makeWidgetByElement($(this));
+		$.each(elem.add(elem.find('.' + JZ.CSS_CLASS_WIDGET)), function(i) {
+			widget = _this._makeWidgetByElem($(this));
 			_this._widgets.push(_this._widgetsById[widget.getId()] = widget);
 			i == 0 && (initWidget = widget);
 		});
@@ -29,8 +29,8 @@ JZ.Builder = $.inherit({
 			this._buildDependencies(widget);
 		}
 
-		if(element[0].tagName.toLowerCase() == 'form') {
-			element.data('jz-builder', this);
+		if(elem[0].tagName.toLowerCase() == 'form') {
+			elem.data('jz-builder', this);
 			initWidget
 				.bind('remove', $.proxy(this._onFormRemove, this))
 				.init();
@@ -43,20 +43,20 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_makeWidgetByElement : function(element) {
+	_makeWidgetByElem : function(elem) {
 
-		var params = this.__self._extractParamsFromElement(element),
-			result = new (this.__self._getWidgetClassByType(params.type))(element, this.__self._getClassElement(element, params), params);
+		var params = this.__self._extractParamsFromElem(elem),
+			result = new (this.__self._getWidgetClassByType(params.type))(elem, this.__self._getClassElem(elem, params), params);
 
-		params.type != 'form' && this._getParentWidget(element).addChild(result);
+		params.type != 'form' && this._getParentWidget(elem).addChild(result);
 
 		return result;
 
 	},
 
-	_getParentWidget : function(element) {
+	_getParentWidget : function(elem) {
 
-		return this._widgetsById[JZ._identifyElement(element.parents('.' + JZ.CSS_CLASS_WIDGET + ':first'))];
+		return this._widgetsById[JZ._identifyElem(elem.parents('.' + JZ.CSS_CLASS_WIDGET + ':first'))];
 
 	},
 
@@ -120,7 +120,7 @@ JZ.Builder = $.inherit({
 
 	_onFormRemove : function(event, form) {
 
-		form.getElement().removeData('jz-builder');
+		form.getElem().removeData('jz-builder');
 
 		delete this._widgets;
 		delete this._widgetsByName;
@@ -147,10 +147,10 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_getClassElement : function(element, params) {
+	_getClassElem : function(elem, params) {
 
 		if(params.container) {
-			return element.closest(params.container);
+			return elem.closest(params.container);
 		}
 
 		switch(params.type) {
@@ -158,29 +158,29 @@ JZ.Builder = $.inherit({
 			case 'fieldset':
 			case 'button':
 			case 'submit':
-				return element;
+				return elem;
 
 			case 'rbgroup':
 			case 'cbgroup':
 			case 'state':
-				return element.parent();
+				return elem.parent();
 
 			default:
-				return element.parent().parent();
+				return elem.parent().parent();
 		}
 
 	},
 
-	_extractParamsFromElement : function(element) {
+	_extractParamsFromElem : function(elem) {
 
-		var result = $.isFunction(element[0].onclick) ? element[0].onclick().jz || {} : {};
+		var result = $.isFunction(elem[0].onclick) ? elem[0].onclick().jz || {} : {};
 
 		if(!result.type) {
-			result.type = this._extractTypeFromElement(element);
+			result.type = this._extractTypeFromElem(elem);
 		}
 
 		if(result.type == 'combo') {
-			var arrow = element.parent().find('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
+			var arrow = elem.parent().find('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
 			!!arrow.length && (result.arrow = arrow);
 		}
 
@@ -188,12 +188,12 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_extractTypeFromElement : function(element) {
+	_extractTypeFromElem : function(elem) {
 
-		var tagName = element[0].tagName.toLowerCase();
+		var tagName = elem[0].tagName.toLowerCase();
 
 		if(tagName == 'input') {
-			switch(element.attr('type')) {
+			switch(elem.attr('type')) {
 				case 'radio':
 				case 'checkbox':
 					return 'state';
@@ -211,7 +211,7 @@ JZ.Builder = $.inherit({
 			return tagName;
 		}
 
-		return this._cssClassToType(element.attr('class')) || 'text';
+		return this._cssClassToType(elem.attr('class')) || 'text';
 
 	},
 

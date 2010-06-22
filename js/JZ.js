@@ -25,9 +25,9 @@ var JZ = {
 
 	},
 
-	_identifyElement : function(element) {
+	_identifyElem : function(elem) {
 
-		return element.attr('id') || ('__id-' + $.identify(element[0]));
+		return elem.attr('id') || ('__id-' + $.identify(elem[0]));
 
 	}
 
