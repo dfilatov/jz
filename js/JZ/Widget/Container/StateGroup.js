@@ -17,10 +17,10 @@ JZ.Widget.Container.StateGroup = $.inherit(JZ.Widget.Container, {
 
 	_extractName : function() {
 
-		return !!this._children.length? this._children[0].getName() : null;
+		return this._children.length? this._children[0].getName() : null;
 
 	},
 
-	_onChildChange : function(widget, index) {}
+	_onChildChange : function() {}
 
 });

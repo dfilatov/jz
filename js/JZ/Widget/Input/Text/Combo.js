@@ -230,8 +230,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			.eq(this._hilightedIndex).removeClass(this.__self.CSS_CLASS_SELECTED).end()
 			.eq(index).addClass(this.__self.CSS_CLASS_SELECTED);
 
-		this._selectItemByIndex(this._hilightedIndex = index);
-		this._keyDownValue = this.getValue();
+		this
+			._selectItemByIndex(this._hilightedIndex = index)
+			._keyDownValue = this.getValue();
 
 	},
 
@@ -349,7 +350,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_enableElements : function() {
+	_enableElems : function() {
 
 		this.__base();
 		this._params.arrow &&
@@ -358,7 +359,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_disableElements : function() {
+	_disableElems : function() {
 
 		this.__base();
 		this._params.arrow &&

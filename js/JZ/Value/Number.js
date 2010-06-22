@@ -1,48 +1,48 @@
 JZ.Value.Number = $.inherit(JZ.Value, {
 
-	set : function(value) {
+	set : function(val) {
 
-		this._value = parseFloat(value.toString().replace(/[^0-9\.\,\-]/g, '').replace(/\,/g, '.'));
+		this._val = parseFloat(val.toString().replace(/[^0-9\.\,\-]/g, '').replace(/\,/g, '.'));
 
 	},
 
 	match : function(pattern) {
 
-		return pattern.test(isNaN(this._value)? '' : this._value.toString());
+		return pattern.test(isNaN(this._val)? '' : this._val.toString());
 
 	},
 
 	isEmpty : function() {
 
-		return isNaN(this._value);
+		return isNaN(this._val);
 
 	},
 
-	isGreater : function(value) {
+	isGreater : function(val) {
 
-		return this._checkForCompareTypes(value) &&
-			   this.get() > new this.__self((value instanceof JZ.Value)? value.get() : value).get();
+		return this._checkForCompareTypes(val) &&
+			   this.get() > new this.__self((val instanceof JZ.Value)? val.get() : val).get();
 
 	},
 
 	toString : function() {
 
-		return isNaN(this._value)? '' : this._value.toString().replace('.', JZ.Resources.getNumberSeparator());
+		return isNaN(this._val)? '' : this._val.toString().replace('.', JZ.Resources.getNumberSeparator());
 
 	},
 
-	_checkForCompareTypes : function(value) {
+	_checkForCompareTypes : function(val) {
 
-		if(value instanceof this.__self || typeof value == 'number') {
+		if(val instanceof this.__self || typeof val == 'number') {
 			return true;
 		}
 
-		if(value instanceof JZ.Value) {
-			return !isNaN(parseFloat(value.get()));
+		if(val instanceof JZ.Value) {
+			return !isNaN(parseFloat(val.get()));
 		}
 
-		if(typeof value == 'string') {
-			return !isNaN(parseFloat(value));
+		if(typeof val == 'string') {
+			return !isNaN(parseFloat(val));
 		}
 
 		return false;

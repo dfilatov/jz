@@ -2,7 +2,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	reset : function() {
 
-		this._value = { second : '', minute : '', hour : '', day : '', month : '', year : '' };
+		this._val = { second : '', minute : '', hour : '', day : '', month : '', year : '' };
 
 	},
 
@@ -14,15 +14,15 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	},
 
-	set : function(value) {
+	set : function(val) {
 
 		var date;
 
-		if(value instanceof Date) {
-			date = value;
+		if(val instanceof Date) {
+			date = val;
 		}
 		else {
-			var matches = value.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2}) (-?\d{1,2}):(-?\d{1,2}):(-?\d{1,2})/);
+			var matches = val.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2}) (-?\d{1,2}):(-?\d{1,2}):(-?\d{1,2})/);
 			matches && (date = new Date(
 				parseInt(matches[1], 10),
 				parseInt(matches[2], 10) - 1,
@@ -33,7 +33,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 		}
 
 		date?
-			this._value = {
+			this._val = {
 				second : date.getSeconds(),
 				minute : date.getMinutes(),
 				hour   : date.getHours(),
@@ -47,55 +47,55 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	isEmpty : function() {
 
-		return this.__base() || this._value.hour === '' || this._value.minute === '' || this._value.second === '';
+		return this.__base() || this._val.hour === '' || this._val.minute === '' || this._val.second === '';
 
 	},
 
-	isEqual : function(value) {
+	isEqual : function(val) {
 
-		if(value instanceof this.__self) {
-			return this.get() == value.get();
+		if(val instanceof this.__self) {
+			return this.get() == val.get();
 		}
 
-		if(value instanceof JZ.Value.Date) {
-			return this.get() == value.get() + ' 0:0:0';
+		if(val instanceof JZ.Value.Date) {
+			return this.get() == val.get() + ' 0:0:0';
 		}
 
-		if(value instanceof JZ.Value) {
-			return this.get() == value.get();
+		if(val instanceof JZ.Value) {
+			return this.get() == val.get();
 		}
 
-		if(value instanceof Date) {
-			return this.get() == new this.__self(value).get();
+		if(val instanceof Date) {
+			return this.get() == new this.__self(val).get();
 		}
 
-		return this.get() === value;
+		return this.get() === val;
 
 	},
 
-	isGreater : function(value) {
+	isGreater : function(val) {
 
-		if(this.__base(value)) {
+		if(this.__base(val)) {
 			return true;
 		}
 
-		var value = (value instanceof this.__self)?
-			value :
+		var val = (val instanceof this.__self)?
+			val :
 			new this.__self(
-				(value instanceof JZ.Value.Date?
-					value.get() + ' 0:0:0' :
-					(value instanceof JZ.Value? value.get() : value)));
+				(val instanceof JZ.Value.Date?
+					val.get() + ' 0:0:0' :
+					(val instanceof JZ.Value? val.get() : val)));
 
-		if(this.getDay() == value.getDay()) {
-			if(this.getHour() > value.getHour()) {
+		if(this.getDay() == val.getDay()) {
+			if(this.getHour() > val.getHour()) {
 				return true;
 			}
-			else if(this.getHour() == value.getHour()) {
-				if(this.getMinute() > value.getMinute()) {
+			else if(this.getHour() == val.getHour()) {
+				if(this.getMinute() > val.getMinute()) {
 					return true;
 				}
 				else {
-					return this.getMinute() == value.getMinute() && this.getSecond() > value.getSecond();
+					return this.getMinute() == val.getMinute() && this.getSecond() > val.getSecond();
 				}
 			}
 
@@ -107,19 +107,19 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	getHour : function() {
 
-		return this._value.hour;
+		return this._val.hour;
 
 	},
 
 	getMinute : function() {
 
-		return this._value.minute;
+		return this._val.minute;
 
 	},
 
 	getSecond : function() {
 
-		return this._value.second;
+		return this._val.second;
 
 	},
 

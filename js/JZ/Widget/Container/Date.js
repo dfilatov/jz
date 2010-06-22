@@ -73,42 +73,42 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_onChildChange : function() {
 
-		this._setValue(this._createValue(
+		this._setVal(this._createVal(
 			this._yearInput.getValue() + '-' + this._monthInput.getValue() + '-' + this._dayInput.getValue()), true);
 
 	},
 
 	_onChildBlur : function() {
 
-		!this._getValue().isEmpty() && this._updateChildValues();
+		!this._getVal().isEmpty() && this._updateChildValues();
 
 	},
 
-	_updateChildValues : function(value) {
+	_updateChildValues : function(val) {
 
-		value = value || this._getValue();
+		val = val || this._getVal();
 
 		var widgets = [this._yearInput, this._monthInput, this._dayInput],
-			values = [value.getYear(), value.getMonth(), value.getDay()];
+			vals = [val.getYear(), val.getMonth(), val.getDay()];
 		$.each(widgets, function(i) {
-			this.getValue() != values[i] && this.setValue(values[i]);
+			this.getValue() != vals[i] && this.setValue(vals[i]);
 		});
 
-		return value;
+		return val;
 
 	},
 
 	_initValue : function() {
 
 		this.__base();
-		this._setValueToElem(this._getValue());
+		this._setValToElem(this._getVal());
 
 	},
 
-	_setValueToElem : function(value) {
+	_setValToElem : function(val) {
 
-		this._updateChildValues(value);
-		return this.__base(value);
+		this._updateChildValues(val);
+		return this.__base(val);
 
 	},
 
@@ -118,9 +118,9 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_createValue : function(value) {
+	_createVal : function(val) {
 
-		return new JZ.Value.Date(value);
+		return new JZ.Value.Date(val);
 
 	},
 

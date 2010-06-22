@@ -2,7 +2,7 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	reset : function() {
 
-		this._value = { day : '', month : '', year : '' };
+		this._val = { day : '', month : '', year : '' };
 
 	},
 
@@ -12,15 +12,15 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	},
 
-	set : function(value) {
+	set : function(val) {
 
 		var date;
 
-		if(value instanceof Date) {
-			date = value;
+		if(val instanceof Date) {
+			date = val;
 		}
 		else {
-			var matches = value.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2})/);
+			var matches = val.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2})/);
 			matches && (date = new Date(
 				parseInt(matches[1], 10),
 				parseInt(matches[2], 10) - 1,
@@ -28,57 +28,57 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		}
 
 		date?
-			this._value = { day : date.getDate(), month : date.getMonth() + 1, year : date.getFullYear() } :
+			this._val = { day : date.getDate(), month : date.getMonth() + 1, year : date.getFullYear() } :
 			this.reset();
 
 	},
 
 	isEmpty : function() {
 
-		return !(this._value.year && this._value.month && this._value.day);
+		return !(this._val.year && this._val.month && this._val.day);
 
 	},
 
-	isEqual : function(value) {
+	isEqual : function(val) {
 
-		if(value instanceof this.__self.Time) {
-			return this.get() + ' 0:0:0' == value.get();
+		if(val instanceof this.__self.Time) {
+			return this.get() + ' 0:0:0' == val.get();
 		}
 
-		if(value instanceof this.__self) {
-			return this.get() == value.get();
+		if(val instanceof this.__self) {
+			return this.get() == val.get();
 		}
 
-		if(value instanceof JZ.Value) {
-			return this.get() == value.get();
+		if(val instanceof JZ.Value) {
+			return this.get() == val.get();
 		}
 
-		if(value instanceof Date) {
-			return this.get() == new this.__self(value).get();
+		if(val instanceof Date) {
+			return this.get() == new this.__self(val).get();
 		}
 
-		return this.get() === value;
+		return this.get() === val;
 
 	},
 
-	isGreater : function(value) {
+	isGreater : function(val) {
 
-		!(value instanceof JZ.Value.Date) &&
-			(value = new JZ.Value.Date((value instanceof JZ.Value)? value.get() : value));
+		!(val instanceof JZ.Value.Date) &&
+			(val = new JZ.Value.Date((val instanceof JZ.Value)? val.get() : val));
 
-		if(this.isEmpty() || value.isEmpty()) {
+		if(this.isEmpty() || val.isEmpty()) {
 			return false;
 		}
 
-		if(this.getYear() > value.getYear()) {
+		if(this.getYear() > val.getYear()) {
 			return true;
 		}
 
-		if(this.getYear() == value.getYear()) {
-			if(this.getMonth() > value.getMonth()) {
+		if(this.getYear() == val.getYear()) {
+			if(this.getMonth() > val.getMonth()) {
 				return true;
 			}
-			return this.getMonth() == value.getMonth() && this.getDay() > value.getDay();
+			return this.getMonth() == val.getMonth() && this.getDay() > val.getDay();
 		}
 
 		return false;
@@ -87,19 +87,19 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	getYear : function() {
 
-		return this._value.year;
+		return this._val.year;
 
 	},
 
 	getMonth : function() {
 
-		return this._value.month;
+		return this._val.month;
 
 	},
 
 	getDay : function() {
 
-		return this._value.day;
+		return this._val.day;
 
 	},
 
@@ -111,21 +111,21 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	},
 
-	_checkForCompareTypes : function(value) {
+	_checkForCompareTypes : function(val) {
 
-		if(value instanceof JZ.Value.Date || value instanceof JZ.Value.Date.Time) {
-			return !value.isEmpty();
+		if(val instanceof JZ.Value.Date || val instanceof JZ.Value.Date.Time) {
+			return !val.isEmpty();
 		}
 
-		if(value instanceof JZ.Value) {
-			return !(new JZ.Value.Date(value.get()).isEmpty());
+		if(val instanceof JZ.Value) {
+			return !(new JZ.Value.Date(val.get()).isEmpty());
 		}
 
-		if(typeof value == 'string') {
-			return !(new JZ.Value.Date(value).isEmpty());
+		if(typeof val == 'string') {
+			return !(new JZ.Value.Date(val).isEmpty());
 		}
 
-		return value instanceof Date;
+		return val instanceof Date;
 
 	}
 

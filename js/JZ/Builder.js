@@ -100,19 +100,13 @@ JZ.Builder = $.inherit({
 
 	_getFromWidget : function(params, widget) {
 
-		var result;
+		var result = params.id?
+			 this._widgetsById[params.id] :
+			 (params.name?
+				 this._widgetsByName[params.name] :
+				 widget);
 
-		if(params.id) {
-			result = this._widgetsById[params.id];
-		}
-		else if(params.name) {
-			result = this._widgetsByName[params.name];
-		}
-		else {
-			return widget;
-		}
-
-		!result && JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
+		result || JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
 
 		return result;
 
@@ -175,13 +169,11 @@ JZ.Builder = $.inherit({
 
 		var result = $.isFunction(elem[0].onclick) ? elem[0].onclick().jz || {} : {};
 
-		if(!result.type) {
-			result.type = this._extractTypeFromElem(elem);
-		}
+		result.type || (result.type = this._extractTypeFromElem(elem));
 
 		if(result.type == 'combo') {
 			var arrow = elem.parent().find('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
-			!!arrow.length && (result.arrow = arrow);
+			arrow.length && (result.arrow = arrow);
 		}
 
 		return result;

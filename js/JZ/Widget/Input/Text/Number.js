@@ -8,9 +8,9 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_createValue : function(value) {
+	_createVal : function(val) {
 
-		return new JZ.Value.Number(value);
+		return new JZ.Value.Number(val);
 
 	},
 
@@ -54,7 +54,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_checkElemValue : function() {
 
-		this._elem.val() != this._getValue().toString() && this._elem.val(this._getValue().toString());
+		this._elem.val() != this._getVal().toString() && this._elem.val(this._getVal().toString());
 
 	},
 
@@ -95,21 +95,21 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_setValue : function(value, prevent) {
+	_setVal : function(val, prevent) {
 
-		this._hiddenElem.val(value.get());
-		return this.__base(value, prevent);
+		this._hiddenElem.val(val.get());
+		return this.__base(val, prevent);
 
 	},
 
-	_enableElements : function() {
+	_enableElems : function() {
 
 		this.__base();
 		this._hiddenElem && this._hiddenElem.attr('disabled', false);
 
 	},
 
-	_disableElements : function() {
+	_disableElems : function() {
 
 		this.__base();
 		this._hiddenElem && this._hiddenElem.attr('disabled', true);

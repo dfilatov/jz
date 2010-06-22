@@ -1,11 +1,11 @@
 JZ.Value = $.inherit({
 
-	__constructor : function(value) {
+	__constructor : function(val) {
 
-		this._value = null;
+		this._val = null;
 		this.reset();
 
-		typeof value != 'undefined' && this.set(value);
+		typeof val != 'undefined' && this.set(val);
 
 	},
 
@@ -17,13 +17,13 @@ JZ.Value = $.inherit({
 
 	get : function() {
 
-		return this._value;
+		return this._val;
 
 	},
 
-	set : function(value) {
+	set : function(val) {
 
-		this._value = value.toString();
+		this._val = val.toString();
 
 	},
 
@@ -39,35 +39,35 @@ JZ.Value = $.inherit({
 
 	},
 
-	isEqual : function(value) {
+	isEqual : function(val) {
 
-		return this._checkForCompareTypes(value) &&
-			   this.get() === new this.__self((value instanceof JZ.Value)? value.get() : value).get();
-
-	},
-
-	isGreater : function(value) {
-
-		return this._checkForCompareTypes(value) &&
-			   this.get().length > new this.__self((value instanceof JZ.Value)? value.get() : value).get().length;
+		return this._checkForCompareTypes(val) &&
+			   this.get() === new this.__self((val instanceof JZ.Value)? val.get() : val).get();
 
 	},
 
-	isGreaterOrEqual : function(value) {
+	isGreater : function(val) {
 
-		return this.isGreater(value) || this.isEqual(value);
-
-	},
-
-	isLess : function(value) {
-
-		return this._checkForCompareTypes(value) && !this.isGreaterOrEqual(value);
+		return this._checkForCompareTypes(val) &&
+			   this.get().length > new this.__self((val instanceof JZ.Value)? val.get() : val).get().length;
 
 	},
 
-	isLessOrEqual : function(value) {
+	isGreaterOrEqual : function(val) {
 
-		return this._checkForCompareTypes(value) && !this.isGreater(value);
+		return this.isGreater(val) || this.isEqual(val);
+
+	},
+
+	isLess : function(val) {
+
+		return this._checkForCompareTypes(val) && !this.isGreaterOrEqual(val);
+
+	},
+
+	isLessOrEqual : function(val) {
+
+		return this._checkForCompareTypes(val) && !this.isGreater(val);
 
 	},
 
@@ -83,9 +83,9 @@ JZ.Value = $.inherit({
 
 	},
 
-	_checkForCompareTypes : function(value) {
+	_checkForCompareTypes : function(val) {
 
-		return value instanceof this.__self || typeof value == 'string';
+		return val instanceof this.__self || typeof val == 'string';
 
 	}
 

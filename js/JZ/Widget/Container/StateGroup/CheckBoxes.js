@@ -1,8 +1,8 @@
 JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateGroup, {
 
-	_createValue : function(value) {
+	_createVal : function(val) {
 
-		return new JZ.Value.Multiple(value);
+		return new JZ.Value.Multiple(val);
 
 	},
 
@@ -13,7 +13,7 @@ JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateG
 
 	},
 
-	_extractValueFromElem : function() {
+	_extractValFromElem : function() {
 
 		var result = [], child, i = 0;
 		while(child = this._children[i++]) {
@@ -23,7 +23,7 @@ JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateG
 
 	},
 
-	_setValueToElem : function(value) {
+	_setValToElem : function(value) {
 
 		var child, i = 0;
 		while(child = this._children[i++]) {

@@ -9,7 +9,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		this._isInited = this._isRequired = false;
 		this._isValid = true;
 		this._isEnabled = !this._elem.attr('disabled');
-		this._value = this._initialValue = null;
+		this._val = this._initialVal = null;
 		this._dependencies = {};
 		this._dependFromIds = {};
 
@@ -122,7 +122,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			return this._checkDependencies('enabled');
 		}
 
-		this._enableElements();
+		this._enableElems();
 		var isReady = this.removeCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 		this._isEnabled = true;
 		isReady != this.isReady() && this.trigger('ready-change', this);
@@ -137,7 +137,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			return this;
 		}
 
-		this._disableElements();
+		this._disableElems();
 		this.addCSSClass(this.__self.CSS_CLASS_DISABLED);
 		var isReady = this.isReady();
 		this._isEnabled = false;
@@ -149,13 +149,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	getValue : function() {
 
-		return this._value.get();
+		return this._val.get();
 
 	},
 
-	setValue : function(value) {
+	setValue : function(val) {
 
-		return this._setValue(this._processValue(this._createValue(value)));
+		return this._setVal(this._processVal(this._createVal(val)));
 
 	},
 
@@ -189,7 +189,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		if(this._hasValue()) {
 			this._setNoReady(false);
-			this._setValue(this._initialValue);
+			this._setVal(this._initialVal);
 		}
 		return this;
 
@@ -239,7 +239,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		if(this._hasValue()) {
 			this._setNoReady(false);
 			this.isChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
-			this._initialValue = this._value;
+			this._initialVal = this._val;
 		}
 		return this;
 
@@ -251,32 +251,32 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_createValue : function(value) {
+	_createVal : function(val) {
 
-		return new JZ.Value(value);
-
-	},
-
-	_processValue : function(value) {
-
-		return value;
+		return new JZ.Value(val);
 
 	},
 
-	_getValue : function() {
+	_processVal : function(val) {
 
-		return this._value;
+		return val;
 
 	},
 
-	_setValue : function(value, prevent) {
+	_getVal : function() {
 
-		if(this._value.isEqual(value)) {
+		return this._val;
+
+	},
+
+	_setVal : function(val, prevent) {
+
+		if(this._val.isEqual(val)) {
 			return this;
 		}
 		var isChanged = this.isChanged();
-		this._value = value;
-		!prevent && this._setValueToElem(value);
+		this._val = val;
+		!prevent && this._setValToElem(val);
 		this.trigger('value-change', this);
 		if(isChanged != this.isChanged()) {
 			this[(isChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
@@ -316,7 +316,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._elem.removeData('jz');
 
-		this._delete('_elem', '_classElem', '_params', '_parent', '_value', '_initialValue', '_dependencies', '_dependFromIds');
+		this._delete('_elem', '_classElem', '_params', '_parent', '_val', '_initialVal', '_dependencies', '_dependFromIds');
 
 	},
 
@@ -336,21 +336,21 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_initValue : function() {
 
-		this._initialValue = (this._value = this._createValue(this._extractValueFromElem())).clone();
+		this._initialVal = (this._val = this._createVal(this._extractValFromElem())).clone();
 
 	},
 
 	isChanged : function() {
 
 		return this._hasValue()?
-			!this._initialValue.isEqual(this._value) :
+			!this._initialVal.isEqual(this._val) :
 			false;
 
 	},
 
 	_updateValue : function() {
 
-		this._setValue(this._createValue(this._extractValueFromElem()), true);
+		this._setVal(this._createVal(this._extractValFromElem()), true);
 
 	},
 
@@ -373,7 +373,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_checkRequired : function(params) {
 
-	 	return this._getValue().match(params.pattern);
+	 	return this._getVal().match(params.pattern);
 
 	},
 
@@ -424,7 +424,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var _self = this.__self;
 		(isValid?
-			(this._getValue().isEmpty()?
+			(this._getVal().isEmpty()?
 				this.removeCSSClass(_self.CSS_CLASS_INVALID + ' ' + _self.CSS_CLASS_INVALID_OK) :
 				this.replaceCSSClass(_self.CSS_CLASS_INVALID, _self.CSS_CLASS_INVALID_OK))
 				.removeCSSClass(_self.CSS_CLASS_NOREADY_INVALID) :
@@ -449,15 +449,15 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_extractValueFromElem : function() {
+	_extractValFromElem : function() {
 
 		return this._elem.val();
 
 	},
 
-	_setValueToElem : function(value) {
+	_setValToElem : function(val) {
 
-		this._elem.val(value.toString());
+		this._elem.val(val.toString());
 
 	},
 
@@ -491,8 +491,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_enableElements : function() {},
-	_disableElements : function() {},
+	_enableElems : function() {},
+	_disableElems : function() {},
 	_beforeSubmit : function() {}
 
 }, {

@@ -6,9 +6,9 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	},
 
-	set : function(value) {
+	set : function(val) {
 
-		this._value = $.makeArray(value);
+		this._val = $.makeArray(val);
 
 	},
 
@@ -18,9 +18,9 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 			return pattern.test('');
 		}
 
-		var i = 0, length = this._value.length;
+		var i = 0, length = this._val.length;
 		while(i < length) {
-			if(pattern.test(this._value[i++])) {
+			if(pattern.test(this._val[i++])) {
 				return true;
 			}
 		}
@@ -37,15 +37,15 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	isEmpty : function() {
 
-		return this._value.length == 0;
+		return this._val.length == 0;
 
 	},
 
-	isContain : function(value) {
+	isContain : function(val) {
 
-		var i = 0, length = this._value.length;
+		var i = 0, length = this._val.length;
 		while(i < length) {
-			if(this._value[i++] == value) {
+			if(this._val[i++] == val) {
 				return true;
 			}
 		}
@@ -53,21 +53,21 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	},
 
-	isEqual : function(value) {
+	isEqual : function(val) {
 
-		if(!this._checkForCompareTypes(value)) {
+		if(!this._checkForCompareTypes(val)) {
 			return false;
 		}
 
-		var compareValue = value instanceof this.__self? value.get() : value;
+		var compareValue = val instanceof this.__self? val.get() : val;
 
-		if(this._value.length != compareValue.length) {
+		if(this._val.length != compareValue.length) {
 			return false;
 		}
 
-		var i = 0, length = this._value.length;
+		var i = 0, length = this._val.length;
 		while(i < length) {
-			if(this._value[i] != compareValue[i++]) {
+			if(this._val[i] != compareValue[i++]) {
 				return false;
 			}
 		}
@@ -76,16 +76,16 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	},
 
-	isGreater : function(value) {
+	isGreater : function(val) {
 
-		return this._checkForCompareTypes(value) &&
-			   this._value.length > (value instanceof this.__self? value.get() : value).length;
+		return this._checkForCompareTypes(val) &&
+			   this._val.length > (val instanceof this.__self? val.get() : val).length;
 
 	},
 
-	_checkForCompareTypes : function(value) {
+	_checkForCompareTypes : function(val) {
 
-		return value instanceof this.__self || $.isArray(value);
+		return val instanceof this.__self || $.isArray(val);
 
 	}
 

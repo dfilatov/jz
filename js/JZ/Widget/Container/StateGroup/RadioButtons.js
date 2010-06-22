@@ -22,13 +22,13 @@ JZ.Widget.Container.StateGroup.RadioButtons = $.inherit(JZ.Widget.Container.Stat
 
 	},
 
-	_extractValueFromElem : function() {
+	_extractValFromElem : function() {
 
 		return this._checkedIndex > -1? this._children[this._checkedIndex]._elem.val() : '';
 
 	},
 
-	_setValueToElem : function(value) {
+	_setValToElem : function(value) {
 
 		var child, i = 0;
 		while(child = this._children[i++]) {
