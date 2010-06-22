@@ -51,11 +51,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return this._hideList();
 		}
 
-		var elementVal = this._elem.val(), _this = this;
+		var elemVal = this._elem.val(), _this = this;
 		this._getList().html($.map(list, function(itemVal, i) {
-			elementVal == itemVal && (_this._hilightedIndex = i);
+			elemVal == itemVal && (_this._hilightedIndex = i);
 			var startIndex = itemVal.toLowerCase().indexOf(val.toLowerCase());
-			return '<li' + (elementVal == itemVal?
+			return '<li' + (elemVal == itemVal?
 				' class="' + _this.__self.CSS_CLASS_SELECTED + '"' : '') +
 				'>' + (startIndex > -1?
 					itemVal.substr(0, startIndex) +
@@ -240,9 +240,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		if(this._isListShowed) {
 			this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
 
-			var element = this._elem[0];
-			if(element.createTextRange && !element.selectionStart) {
-				var range = element.createTextRange();
+			var node = this._elem[0];
+			if(node.createTextRange && !node.selectionStart) {
+				var range = node.createTextRange();
 				range.move('character', this._elem.val().length);
 				range.select();
 			}

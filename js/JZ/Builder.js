@@ -118,9 +118,9 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_onFormRemove : function(event, form) {
+	_onFormRemove : function(e, form) {
 
-		form.getElem().removeData('jz-builder');
+		form.getElement().removeData('jz-builder');
 
 		delete this._widgets;
 		delete this._widgetsByName;

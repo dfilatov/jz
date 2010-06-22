@@ -3,7 +3,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	__constructor : function() {
 
 		this.__base.apply(this, arguments);
-		this._yearInput = this._monthInput = this._dayInput = this._oldElement = null;
+		this._yearInput = this._monthInput = this._dayInput = this._oldElem = null;
 
 	},
 
@@ -15,11 +15,11 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_init : function() {
 
-		var element = $('<input type="hidden" name="' + this.getName() + '" value="' + this._elem.val() + '"/>')
+		var elem = $('<input type="hidden" name="' + this.getName() + '" value="' + this._elem.val() + '"/>')
 			.data('jz', this);
-		this._elem.replaceWith(element);
-		this._oldElement = this._elem;
-		this._elem = element;
+		this._elem.replaceWith(elem);
+		this._oldElem = this._elem;
+		this._elem = elem;
 		this._addChildInputs();
 		return this.__base();
 
@@ -36,28 +36,28 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_createNumberInput : function(postfix, params) {
 
-		var element = $('<input' +
+		var elem = $('<input' +
 			(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
 			' size="' + params.maxLength + '"' +
 			' maxlength="' + params.maxLength + '"/>');
-		this._elem.after(element);
+		this._elem.after(elem);
 
-		return new JZ.Widget.Input.Text.Number(element, null, params);
+		return new JZ.Widget.Input.Text.Number(elem, null, params);
 
 	},
 
 	_createSelectInput : function(postfix, params) {
 
-		var element = $('<select' +
+		var elem = $('<select' +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '">' +
 				$.map(JZ.Resources.getMonthsByType(this._params.onlyMonths? 'normal' : 'genitive'), function(name, i) {
 					return '<option value="' + (i + 1) + '">' + name +'</option>';
 				}).join('') +
 			'</select>');
-		this._elem.after(element);
+		this._elem.after(elem);
 
-		return new JZ.Widget.Input.Select(element, null, params);
+		return new JZ.Widget.Input.Select(elem, null, params);
 
 	},
 
@@ -101,11 +101,11 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_initValue : function() {
 
 		this.__base();
-		this._setValueToElement(this._getValue());
+		this._setValueToElem(this._getValue());
 
 	},
 
-	_setValueToElement : function(value) {
+	_setValueToElem : function(value) {
 
 		this._updateChildValues(value);
 		return this.__base(value);
@@ -135,8 +135,8 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 	_destruct : function() {
 
 		this._applyFnToChildren('remove', [true]);
-		this._elem.replaceWith(this._oldElement);
-		this._elem = this._oldElement.val(this._elem.val());
+		this._elem.replaceWith(this._oldElem);
+		this._elem = this._oldElem.val(this._elem.val());
 		JZ.Widget.prototype._destruct.call(this);
 
 	}

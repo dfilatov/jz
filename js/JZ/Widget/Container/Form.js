@@ -92,8 +92,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		return this
             ._bindToElem({
 				'submit'  : this._onSubmit,
-            	'keydown' : function(event) {
-                	event.keyCode == 27 && event.preventDefault(); // IE пытается возвращать форму в исходное значение
+            	'keydown' : function(e) {
+                	e.keyCode == 27 && e.preventDefault(); // IE пытается возвращать форму в исходное значение
 				}});
 
 	},
@@ -161,7 +161,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_onWidgetReadyChange : function(event, widget) {
+	_onWidgetReadyChange : function(e, widget) {
 
 		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId], isReady = widget.isReady();
 		if(widgetData.isReady != isReady) {
@@ -173,7 +173,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_onWidgetInitialValueChange : function(event, isInitialValueChanged) {
+	_onWidgetInitialValueChange : function(e, isInitialValueChanged) {
 
 		var counter = this._changedCounter;
 		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);
@@ -181,7 +181,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_onWidgetRemove : function(event, widget) {
+	_onWidgetRemove : function(e, widget) {
 
 		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId];
 		delete this._widgetsDataById[widgetId];
@@ -214,8 +214,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_addInstance : function(instance) {
 
 		this._currentInstance = instance;
-		++this._instanceCounter == 1 && $(document).bind('keyup.jz', $.proxy(function(event) {
-			this._currentInstance && event.keyCode == 13 && event.ctrlKey && this._currentInstance.submit();
+		++this._instanceCounter == 1 && $(document).bind('keyup.jz', $.proxy(function(e) {
+			this._currentInstance && e.keyCode == 13 && e.ctrlKey && this._currentInstance.submit();
 		}, null, this));
 
 	},
