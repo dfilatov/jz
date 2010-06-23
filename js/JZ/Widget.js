@@ -270,16 +270,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_setVal : function(val, prevent) {
 
-		if(this._val.isEqual(val)) {
-			return this;
-		}
-		var isChanged = this.isChanged();
-		this._val = val;
-		!prevent && this._setValToElem(val);
-		this.trigger('value-change', this);
-		if(isChanged != this.isChanged()) {
-			this[(isChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
-				.trigger('initial-value-change', !isChanged);
+		if(!this._val.isEqual(val)) {
+			var isChanged = this.isChanged();
+			this._val = val;
+			!prevent && this._setValToElem(val);
+			isChanged == this.trigger('value-change', this).isChanged() &&
+				this[(isChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
+					.trigger('initial-value-change', !isChanged);
 		}
 		return this;
 
