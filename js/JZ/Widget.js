@@ -138,8 +138,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		}
 
 		this._disableElems();
-		this.addCSSClass(this.__self.CSS_CLASS_DISABLED);
-		var isReady = this.isReady();
+		var isReady = this.addCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 		this._isEnabled = false;
 		isReady != this.isReady() && this.trigger('ready-change', this);
 		this.isChanged() && this.trigger('initial-value-change', false);
@@ -187,7 +186,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	reset : function() {
 
-		if(this._hasValue()) {
+		if(this._hasVal()) {
 			this._setNoReady(false);
 			this._setVal(this._initialVal);
 		}
@@ -227,7 +226,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this
 			._bindEvents()
-			._hasValue() && this._initValue();
+			._hasVal() && this._initVal();
 		this._isInited = true;
 		this._params.focusOnInit && this.focus();
 		return this;
@@ -236,7 +235,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_reinit : function() {
 
-		if(this._hasValue()) {
+		if(this._hasVal()) {
 			this._setNoReady(false);
 			this.isChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
 			this._initialVal = this._val;
@@ -328,13 +327,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_hasValue : function() {
+	_hasVal : function() {
 
 		return false;
 
 	},
 
-	_initValue : function() {
+	_initVal : function() {
 
 		this._initialVal = (this._val = this._createVal(this._extractValFromElem())).clone();
 
@@ -342,7 +341,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	isChanged : function() {
 
-		return this._hasValue()?
+		return this._hasVal()?
 			!this._initialVal.isEqual(this._val) :
 			false;
 

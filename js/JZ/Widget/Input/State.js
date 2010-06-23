@@ -33,7 +33,7 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 
 	},
 
-	_hasValue : function() {
+	_hasVal : function() {
 
 		return false;
 

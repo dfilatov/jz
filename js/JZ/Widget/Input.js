@@ -36,7 +36,7 @@ JZ.Widget.Input = $.inherit(JZ.Widget, {
 
 	},
 
-	_hasValue : function() {
+	_hasVal : function() {
 
 		return true;
 

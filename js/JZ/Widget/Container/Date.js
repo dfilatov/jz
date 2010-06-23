@@ -98,7 +98,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_initValue : function() {
+	_initVal : function() {
 
 		this.__base();
 		this._setValToElem(this._getVal());
@@ -112,7 +112,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_hasValue : function() {
+	_hasVal : function() {
 
 		return true;
 

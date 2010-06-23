@@ -9,7 +9,7 @@ JZ.Widget.Container.StateGroup = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_hasValue : function() {
+	_hasVal : function() {
 
 		return true;
 

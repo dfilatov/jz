@@ -87,7 +87,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_bindChildEvents : function(widget) {
 
-		!this._hasValue() && this._bindTo(widget, 'value-change enable disable', this._onChildChange);
+		!this._hasVal() && this._bindTo(widget, 'value-change enable disable', this._onChildChange);
 
 	},
 
@@ -123,7 +123,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_checkRequired : function(params) {
 
-		if(this._hasValue()) {
+		if(this._hasVal()) {
 			return this.__base(params);
 		}
 
@@ -145,7 +145,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	_processFirstUnreadyWidget : function() {
 
-		if(this._hasValue()) {
+		if(this._hasVal()) {
 			return this.__base();
 		}
 

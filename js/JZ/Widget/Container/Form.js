@@ -39,7 +39,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var result = {};
 		$.each(this._widgetsByName, function(name) {
-			this._hasValue() && this.isEnabled() && (result[name] = this.getValue());
+			this._hasVal() && this.isEnabled() && (result[name] = this.getValue());
 		});
 		return result;
 
@@ -156,7 +156,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 				'remove'       : this._onWidgetRemove
 			});
 
-		widget._hasValue() &&
+		widget._hasVal() &&
 			this._bindTo(widget, 'initial-value-change', this._onWidgetInitialValueChange);
 
 	},

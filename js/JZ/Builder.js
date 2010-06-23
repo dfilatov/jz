@@ -20,7 +20,7 @@ JZ.Builder = $.inherit({
 		// Строим хэш по именам после создании дерева виджетов, потому что имена некоторых виджетов зависят от детей
 		var i = fromIndex;
 		while(widget = _this._widgets[i++]) {
-			widget._hasValue() && (_this._widgetsByName[widget.getName()] = widget);
+			widget._hasVal() && (_this._widgetsByName[widget.getName()] = widget);
 		}
 
 		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
