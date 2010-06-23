@@ -27,10 +27,10 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_addChildInputs : function() {
 
-		this
-			.addChild(this._yearInput = this._createNumberInput('year', { maxLength : 4 }))
-			.addChild(this._monthInput = this._createSelectInput('month'))
-			.addChild(this._dayInput = this._createNumberInput('day', { maxLength : 2 }));
+		this.addChild(
+			this._yearInput = this._createNumberInput('year', { size : 4 }),
+			this._monthInput = this._createSelectInput('month'),
+			this._dayInput = this._createNumberInput('day', { size : 2 }));
 
 	},
 
@@ -39,8 +39,8 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		var elem = $('<input' +
 			(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
 			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
-			' size="' + params.maxLength + '"' +
-			' maxlength="' + params.maxLength + '"/>');
+			' size="' + params.size + '"' +
+			' maxlength="' + params.size + '"/>');
 		this._elem.after(elem);
 
 		return new JZ.Widget.Input.Text.Number(elem, null, params);

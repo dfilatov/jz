@@ -195,7 +195,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	addChild : function(widget) {},
+	addChild : function() {},
 
 	_bindTo : function(observable, type, data, fn) {
 

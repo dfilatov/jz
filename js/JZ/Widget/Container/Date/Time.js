@@ -10,9 +10,10 @@ JZ.Widget.Container.Date.Time = $.inherit(JZ.Widget.Container.Date, {
 	_addChildInputs : function() {
 
 		this
-			.addChild(this._secondInput = this._createNumberInput('second', { maxLength : 2 }))
-			.addChild(this._minuteInput = this._createNumberInput('minute', { maxLength : 2 }))
-			.addChild(this._hourInput = this._createNumberInput('hour', { maxLength : 2 }))
+			.addChild(
+				this._secondInput = this._createNumberInput('second', { size : 2 }),
+				this._minuteInput = this._createNumberInput('minute', { size : 2 }),
+				this._hourInput = this._createNumberInput('hour', { size : 2 }))
 			.__base();
 
 	},
