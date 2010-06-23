@@ -56,7 +56,13 @@ JZ.Builder = $.inherit({
 
 	_getParentWidget : function(elem) {
 
-		return this._widgetsById[JZ._identifyElem(elem.parents('.' + JZ.CSS_CLASS_WIDGET + ':first'))];
+		var node = elem[0].parentNode,
+			className = ' ' + JZ.CSS_CLASS_WIDGET + ' ';
+		do {
+			if((' ' + node.className + ' ').indexOf(className) > -1) {
+				return this._widgetsById[JZ._identifyNode(node)];
+			}
+		} while(node = node.parentNode);
 
 	},
 

@@ -23,7 +23,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	getId : $.memoize(function() {
 
-		return JZ._identifyElem(this._elem);
+		return JZ._identifyNode(this._elem[0]);
 
 	}),
 
