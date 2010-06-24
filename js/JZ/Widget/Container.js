@@ -135,7 +135,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 			else {
 				var pattern = params.pattern;
 				params.pattern = params.patternChild;
-				!child._checkRequired(params) && ++countRequiredChild;
+				child._checkRequired(params) || ++countRequiredChild;
 				params.pattern = pattern;
 			}
 		}

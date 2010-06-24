@@ -21,14 +21,11 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		}
 		else {
 			var matches = val.match(this.__self.matchRE);
-			matches && (date = new Date(
-				parseInt(matches[1], 10),
-				parseInt(matches[2], 10) - 1,
-				parseInt(matches[3], 10)));
+			matches && (date = this._createDateFromArray(matches));
 		}
 
 		date?
-			this._val = { day : date.getDate(), month : date.getMonth() + 1, year : date.getFullYear() } :
+			this._val = this._createValFromDate(date) :
 			this.reset();
 
 	},
@@ -63,8 +60,8 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	isGreater : function(val) {
 
-		!(val instanceof JZ.Value.Date) &&
-			(val = new JZ.Value.Date((val instanceof JZ.Value)? val.get() : val));
+		(val instanceof JZ.Value.Date) ||
+			(val = new JZ.Value.Date(val instanceof JZ.Value? val.get() : val));
 
 		if(this.isEmpty() || val.isEmpty()) {
 			return false;
@@ -75,10 +72,9 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		}
 
 		if(this.getYear() == val.getYear()) {
-			if(this.getMonth() > val.getMonth()) {
-				return true;
-			}
-			return this.getMonth() == val.getMonth() && this.getDay() > val.getDay();
+			return this.getMonth() > val.getMonth()?
+				true :
+				this.getMonth() == val.getMonth() && this.getDay() > val.getDay();
 		}
 
 		return false;
@@ -106,8 +102,13 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 	toString : function() {
 
 		return this.isEmpty()? '' :
-			this.getYear() + '-' + (this.getMonth() < 10? '0' : '') + this.getMonth() + '-' +
-				(this.getDay() < 10? '0' : '') + this.getDay();
+			this.getYear() + '-' + this._padNumber(this.getMonth()) + '-' + this._padNumber(this.getDay());
+
+	},
+
+	_padNumber : function(val) {
+
+		return (val < 10? '0' : '') + val;
 
 	},
 
@@ -126,6 +127,25 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		}
 
 		return val instanceof Date;
+
+	},
+
+	_createDateFromArray : function(arr) {
+
+		return new Date(
+			parseInt(arr[1], 10),
+			parseInt(arr[2], 10) - 1,
+			parseInt(arr[3], 10));
+
+	},
+
+	_createValFromDate : function(date) {
+
+		return {
+			day   : date.getDate(),
+			month : date.getMonth() + 1,
+			year  : date.getFullYear()
+		};
 
 	}
 

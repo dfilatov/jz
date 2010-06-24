@@ -14,11 +14,11 @@ JZ.Widget.Input.Select = $.inherit(JZ.Widget.Input, {
 
 	},
 
-	_processVal : function(value) {
+	_processVal : function(val) {
 
 		var clone = this._elem.clone();
-		clone.val(value.get()) !== value.get() && value.set(clone.val());
-		return value;
+		clone.val(val.get()) !== val.get() && val.set(clone.val());
+		return val;
 
 	}
 

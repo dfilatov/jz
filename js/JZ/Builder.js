@@ -82,25 +82,8 @@ JZ.Builder = $.inherit({
 				new JZ.Dependence.Composition.NOT({ dependencies : [this._buildDependence(type, widget, data[1])] }) :
 				new JZ.Dependence.Composition[data[1].toUpperCase()]({ dependencies :
 					[this._buildDependence(type, widget, data[0]), this._buildDependence(type, widget, data[2])] })) :
-			this[this.__self._dependenceTypeToFn(type)](widget, data);
-
-	},
-
-	_buildEnabledDependence : function(widget, data) {
-
-		return new JZ.Dependence.Enabled($.extend(data, { widget : this._getFromWidget(data, widget) }));
-
-	},
-
-	_buildRequiredDependence : function(widget, data) {
-
-		return new JZ.Dependence.Required($.extend(data, { widget : this._getFromWidget(data, widget) }));
-
-	},
-
-	_buildValidDependence : function(widget, data) {
-
-		return new JZ.Dependence.Valid($.extend(data, { widget : this._getFromWidget(data, widget) }));
+			new JZ.Dependence[type.charAt(0).toUpperCase() + type.substr(1).toLowerCase()](
+				$.extend(data, { widget : this._getFromWidget(data, widget) }));
 
 	},
 
@@ -173,7 +156,7 @@ JZ.Builder = $.inherit({
 
 	_extractParamsFromElem : function(elem) {
 
-		var result = $.isFunction(elem[0].onclick) ? elem[0].onclick().jz || {} : {};
+		var result = elem[0].onclick? elem[0].onclick().jz || {} : {};
 
 		result.type || (result.type = this._extractTypeFromElem(elem));
 
@@ -205,11 +188,9 @@ JZ.Builder = $.inherit({
 			}
 		}
 
-		if(tagName == 'select' || tagName == 'fieldset' || tagName == 'form') {
-			return tagName;
-		}
-
-		return this._cssClassToType(elem.attr('class')) || 'text';
+		return tagName == 'select' || tagName == 'fieldset' || tagName == 'form'?
+			tagName :
+			(this._cssClassToType(elem.attr('class')) || 'text');
 
 	},
 
@@ -248,12 +229,6 @@ JZ.Builder = $.inherit({
 
 		return this._typeToWidgetClass[type] || JZ._throwException('undefined type "' + type + '"');
 
-	},
-
-	_dependenceTypeToFn : $.memoize(function(type) {
-
-		return '_build' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'Dependence';
-
-	})
+	}
 
 });

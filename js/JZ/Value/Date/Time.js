@@ -14,37 +14,6 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	},
 
-	set : function(val) {
-
-		var date;
-
-		if(val instanceof Date) {
-			date = val;
-		}
-		else {
-			var matches = val.match(this.__self.matchRE);
-			matches && (date = new Date(
-				parseInt(matches[1], 10),
-				parseInt(matches[2], 10) - 1,
-				parseInt(matches[3], 10),
-				parseInt(matches[4], 10),
-				parseInt(matches[5], 10),
-				parseInt(matches[6], 10)));
-		}
-
-		date?
-			this._val = {
-				second : date.getSeconds(),
-				minute : date.getMinutes(),
-				hour   : date.getHours(),
-				day    : date.getDate(),
-				month  : date.getMonth() + 1,
-				year   : date.getFullYear()
-			} :
-			this.reset();
-
-	},
-
 	isEmpty : function() {
 
 		return this.__base() || this._val.hour === '' || this._val.minute === '' || this._val.second === '';
@@ -79,7 +48,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 			return true;
 		}
 
-		val = (val instanceof this.__self)?
+		val = val instanceof this.__self?
 			val :
 			new this.__self(
 				(val instanceof JZ.Value.Date?
@@ -91,12 +60,9 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 				return true;
 			}
 			else if(this.getHour() == val.getHour()) {
-				if(this.getMinute() > val.getMinute()) {
-					return true;
-				}
-				else {
-					return this.getMinute() == val.getMinute() && this.getSecond() > val.getSecond();
-				}
+				return this.getMinute() > val.getMinute()?
+					true :
+					this.getMinute() == val.getMinute() && this.getSecond() > val.getSecond();
 			}
 
 		}
@@ -125,14 +91,32 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 
 	toString : function() {
 
-		if(this.isEmpty()) {
-			return '';
-		}
+		return this.isEmpty()?
+			'' :
+			(this.__base() +
+			   ' ' + this._padNumber(this.getHour()) +
+			   ':' + this._padNumber(this.getMinute()) +
+			   ':' + this._padNumber(this.getSecond()));
 
-		return this.__base() +
-			   ' ' + (this.getHour() < 10? '0' : '') + this.getHour() +
-			   ':' + (this.getMinute() < 10? '0' : '') + this.getMinute() +
-			   ':' + (this.getSecond() < 10? '0' : '') + this.getSecond();
+	},
+
+	_createDateFromArray : function(arr) {
+
+		var result = this.__base(arr);
+		result.setHours(parseInt(arr[4], 10));
+		result.setMinutes(parseInt(arr[5], 10));
+		result.setSeconds(parseInt(arr[6], 10));
+		return result;
+
+	},
+
+	_createValFromDate : function(date) {
+
+		return $.extend(this.__base(date), {
+			second : date.getSeconds(),
+			minute : date.getMinutes(),
+			hour   : date.getHours()
+		});
 
 	}
 
