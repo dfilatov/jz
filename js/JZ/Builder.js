@@ -222,11 +222,11 @@ JZ.Builder = $.inherit({
 
 	},
 
-	_cssClassToType : $.memoize(function(cssClass) {
+	_cssClassToType : function(cssClass) {
 
 		return (cssClass.match(this._typeRE || this._rebuildTypeRE()) || [])[1];
 
-	}),
+	},
 
 	_typeToWidgetClass : {
 		'text'	   : JZ.Widget.Input.Text,

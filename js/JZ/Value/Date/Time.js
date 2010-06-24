@@ -22,7 +22,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 			date = val;
 		}
 		else {
-			var matches = val.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2}) (-?\d{1,2}):(-?\d{1,2}):(-?\d{1,2})/);
+			var matches = val.match(this.__self.matchRE);
 			matches && (date = new Date(
 				parseInt(matches[1], 10),
 				parseInt(matches[2], 10) - 1,
@@ -79,7 +79,7 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 			return true;
 		}
 
-		var val = (val instanceof this.__self)?
+		val = (val instanceof this.__self)?
 			val :
 			new this.__self(
 				(val instanceof JZ.Value.Date?
@@ -135,5 +135,9 @@ JZ.Value.Date.Time = $.inherit(JZ.Value.Date, {
 			   ':' + (this.getSecond() < 10? '0' : '') + this.getSecond();
 
 	}
+
+}, {
+
+	matchRE : /^(\d{1,4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/
 
 });

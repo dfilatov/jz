@@ -185,7 +185,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					this._itemsCount = 0;
 		            this._hilightedIndex = -1;
 					this
-                        .setValue(this._lastSearchVal = this._keyDownValue)
+                        .val(this._lastSearchVal = this._keyDownValue)
                         ._hideList();
 					return false;
 				}
@@ -239,9 +239,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_selectItemByIndex : function(index) {
 
 		if(this._isListShowed) {
-			this.setValue(this._lastSearchVal = this._getList().find('li').eq(index).text());
-
-			var node = this._elem[0];
+			var node = this
+				.val(this._lastSearchVal = this._getList().find('li').eq(index).text())
+				._elem[0];
 			if(node.createTextRange && !node.selectionStart) {
 				var range = node.createTextRange();
 				range.move('character', this._elem.val().length);
@@ -304,7 +304,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._bindTo(result, 'mousedown', function(e) {
 			this._preventUpdate = this._focusOnBlur = true;
 			this
-				.setValue(this._lastSearchVal = $(e.target).closest('li').text())
+				.val(this._lastSearchVal = $(e.target).closest('li').text())
 				.focus()
 				._hideList();
 			setTimeout($.proxy(function() {

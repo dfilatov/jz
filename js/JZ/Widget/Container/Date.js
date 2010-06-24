@@ -36,28 +36,28 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_createNumberInput : function(postfix, params) {
 
-		var elem = $('<input' +
-			(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
-			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
-			' size="' + params.size + '"' +
-			' maxlength="' + params.size + '"/>');
-		this._elem.after(elem);
-
-		return new JZ.Widget.Input.Text.Number(elem, null, params);
+		return new JZ.Widget.Input.Text.Number(
+			$('<input' +
+				(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
+				' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '" ' +
+				' size="' + params.size + '"' +
+				' maxlength="' + params.size + '"/>').insertAfter(this._elem),
+			null,
+			params);
 
 	},
 
 	_createSelectInput : function(postfix, params) {
 
-		var elem = $('<select' +
-			' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '">' +
-				$.map(JZ.Resources.getMonthsByType(this._params.onlyMonths? 'normal' : 'genitive'), function(name, i) {
-					return '<option value="' + (i + 1) + '">' + name +'</option>';
-				}).join('') +
-			'</select>');
-		this._elem.after(elem);
-
-		return new JZ.Widget.Input.Select(elem, null, params);
+		return new JZ.Widget.Input.Select(
+			$('<select' +
+				' class="' + JZ.CSS_CLASS_WIDGET + '-' + postfix + '">' +
+					$.map(JZ.Resources.getMonthsByType(this._params.onlyMonths? 'normal' : 'genitive'), function(name, i) {
+						return '<option value="' + (i + 1) + '">' + name +'</option>';
+					}).join('') +
+				'</select>').insertAfter(this._elem),
+			null,
+			params);
 
 	},
 
@@ -91,7 +91,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 		var widgets = [this._yearInput, this._monthInput, this._dayInput],
 			vals = [val.getYear(), val.getMonth(), val.getDay()];
 		$.each(widgets, function(i) {
-			this.getValue() != vals[i] && this.setValue(vals[i]);
+			this.val() != vals[i] && this.val(vals[i]);
 		});
 
 		return val;

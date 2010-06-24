@@ -20,7 +20,7 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 			date = val;
 		}
 		else {
-			var matches = val.match(/^(-?\d{1,4})-(\d{1,2})-(-?\d{1,2})/);
+			var matches = val.match(this.__self.matchRE);
 			matches && (date = new Date(
 				parseInt(matches[1], 10),
 				parseInt(matches[2], 10) - 1,
@@ -128,5 +128,9 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		return val instanceof Date;
 
 	}
+
+}, {
+
+	matchRE : /^(\d{1,4})-(\d{1,2})-(\d{1,2})/
 
 });

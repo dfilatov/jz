@@ -2,7 +2,7 @@ JZ.Value.Number = $.inherit(JZ.Value, {
 
 	set : function(val) {
 
-		this._val = parseFloat(val.toString().replace(/[^0-9\.\,\-]/g, '').replace(/\,/g, '.'));
+		this._val = parseFloat(val.toString().replace(this.__self.replaceRE, '').replace(',', '.'));
 
 	},
 
@@ -48,5 +48,9 @@ JZ.Value.Number = $.inherit(JZ.Value, {
 		return false;
 
 	}
+
+}, {
+
+	replaceRE : /[^0-9\.\,\-]/g
 
 });

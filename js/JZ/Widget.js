@@ -133,28 +133,43 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	disable : function() {
 
-		if(!this.isEnabled()) {
-			return this;
+		if(this.isEnabled()) {
+			this._disableElems();
+			var isReady = this.addCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
+			this._isEnabled = false;
+			isReady != this.isReady() && this.trigger('ready-change', this);
+			this.isChanged() && this.trigger('initial-value-change', false);
+			this.trigger('disable', this);
 		}
-
-		this._disableElems();
-		var isReady = this.addCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
-		this._isEnabled = false;
-		isReady != this.isReady() && this.trigger('ready-change', this);
-		this.isChanged() && this.trigger('initial-value-change', false);
-		return this.trigger('disable', this);
+		return this;
 
 	},
 
+	val : function(val) {
+
+		return typeof val == 'undefined'?
+	   		this._val.get() :
+			this._setVal(this._processVal(this._createVal(val)));
+
+
+	},
+
+	/**
+	 * @deprecated use val() instead
+	 */
 	getValue : function() {
 
-		return this._val.get();
+		return this.val();
 
 	},
 
+	/**
+	 * @deprecated use val() instead
+	 * @param val
+	 */
 	setValue : function(val) {
 
-		return this._setVal(this._processVal(this._createVal(val)));
+		return this.val(val);
 
 	},
 
