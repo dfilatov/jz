@@ -2,7 +2,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_init : function() {
 
-		!this.__base()._isFocused && this._enablePlaceholder();
+		this.__base()._isFocused || this._enablePlaceholder();
 		return this;
 
 	},
@@ -37,14 +37,14 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_enablePlaceholder : function() {
 
-		!!this._params.placeholder && this._getVal().isEmpty() &&
+		this._params.placeholder && this._getVal().isEmpty() &&
 			this._getPlaceholder().removeClass(this.__self.CSS_CLASS_HIDDEN);
 
 	},
 
 	_disablePlaceholder : function() {
 
-		!!this._params.placeholder && this._getPlaceholder().addClass(this.__self.CSS_CLASS_HIDDEN);
+		this._params.placeholder && this._getPlaceholder().addClass(this.__self.CSS_CLASS_HIDDEN);
 
 	},
 

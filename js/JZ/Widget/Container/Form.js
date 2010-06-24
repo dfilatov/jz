@@ -125,7 +125,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		$.each(this._widgetsDataById, function() {
 			_this !== this.widget && this.widget._checkDependencies();
 		});
-		return this;
+		return _this;
 
 	},
 

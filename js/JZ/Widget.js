@@ -151,7 +151,6 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	   		this._val.get() :
 			this._setVal(this._processVal(this._createVal(val)));
 
-
 	},
 
 	/**
@@ -448,7 +447,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var methodName = (noReady? 'add' : 'remove') + 'CSSClass';
 		this.isRequired() && this[methodName](this.__self.CSS_CLASS_NOREADY_REQUIRED);
-		!this.isValid() && this[methodName](this.__self.CSS_CLASS_NOREADY_INVALID);
+		this.isValid() || this[methodName](this.__self.CSS_CLASS_NOREADY_INVALID);
 
 	},
 
