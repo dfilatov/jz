@@ -21,8 +21,8 @@ JZ.Widget.Container.Date.Time = $.inherit(JZ.Widget.Container.Date, {
 	_onChildChange : function() {
 
 		this._setVal(this._createVal(
-			this._yearInput.getValue() + '-' + this._monthInput.getValue() + '-' + this._dayInput.getValue() + ' ' +
-			this._hourInput.getValue() + ':' + this._minuteInput.getValue() + ':' + this._secondInput.getValue()), true);
+			this._yearInput.val() + '-' + this._monthInput.val() + '-' + this._dayInput.val() + ' ' +
+			this._hourInput.val() + ':' + this._minuteInput.val() + ':' + this._secondInput.val()), true);
 
 	},
 

@@ -38,9 +38,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_onStorageFilter : function(val, list) {
+	_onStorageFilter : function(searchVal, list) {
 
-		if(this._lastSearchVal != val) {
+		if(this._lastSearchVal != searchVal) {
 			return;
 		}
 
@@ -54,15 +54,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var elemVal = this._elem.val(), _this = this;
 		this._getList().html($.map(list, function(itemVal, i) {
 			elemVal == itemVal && (_this._hilightedIndex = i);
-			var startIndex = itemVal.toLowerCase().indexOf(val.toLowerCase());
-			return '<li' + (elemVal == itemVal?
-				' class="' + _this.__self.CSS_CLASS_SELECTED + '"' : '') +
-				'>' + (startIndex > -1?
-					itemVal.substr(0, startIndex) +
-						'<strong>' + itemVal.substr(startIndex, val.length) + '</strong>' +
-					itemVal.substr(startIndex + val.length) :
-					itemVal) +
-				'</li>';
+			return _this._params.listItemRenderFn(itemVal, elemVal, searchVal);
 		}).join(''));
 		this._showList();
 
@@ -326,14 +318,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getStorage : $.memoize(function() {
 
 		var _this = this;
-		return this._params.storage.source == 'remote'?
+		return _this._params.storage.source == 'remote'?
 			new JZ.Storage.Remote($.extend({
-					name : this._params.storage.name || this.getName(),
-					widgets : $.map((this._params.storage.values || '').split(','), function(name) {
+					name : _this._params.storage.name || this.getName(),
+					widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
 						return _this._form.getWidgetByName($.trim(name));
 					})
-				}, this._params.storage)) :
-			new JZ.Storage.Local(this._params.storage);
+				}, _this._params.storage)) :
+			new JZ.Storage.Local(_this._params.storage);
 
 	}),
 
@@ -353,18 +345,22 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_enableElems : function() {
 
 		this.__base();
-		this._params.arrow &&
-			(this._params.arrow.removeClass(this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
-			this._params.arrow.attr('disabled', false);
-
+		this._enableArrow(true);
 	},
 
 	_disableElems : function() {
 
 		this.__base();
-		this._params.arrow &&
-			(this._params.arrow.addClass(this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
-			this._params.arrow.attr('disabled', true);
+		this._enableArrow(false);
+
+	},
+
+	_enableArrow : function(enable) {
+
+		var arrowElem = this._params.arrow;
+		arrowElem &&
+			(arrowElem[(enable? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
+			arrowElem.attr('disabled', !enable);
 
 	},
 
@@ -374,7 +370,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			showAllOnFocus   : false,
 			showListOnEmpty  : true,
 			reposList        : false,
-			debounceInterval : (params || {}).storage.source == 'remote'? 200 : 50
+			debounceInterval : (params || {}).storage.source == 'remote'? 200 : 50,
+			listItemRenderFn : this.__self._listItemRender
 		});
 
 	},
@@ -397,6 +394,20 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 }, {
 
 	CSS_CLASS_LIST          : JZ.CSS_CLASS_WIDGET + '-list',
-	CSS_CLASS_ARROW_PRESSED : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed'
+	CSS_CLASS_ARROW_PRESSED : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
+
+	_listItemRender : function(itemVal, elemVal, searchVal) {
+
+		var startIndex = itemVal.toLowerCase().indexOf(searchVal.toLowerCase());
+		return '<li' + (elemVal == itemVal?
+			' class="' + this.CSS_CLASS_SELECTED + '"' : '') +
+			'>' + (startIndex > -1?
+				itemVal.substr(0, startIndex) +
+					'<strong>' + itemVal.substr(startIndex, searchVal.length) + '</strong>' +
+				itemVal.substr(startIndex + searchVal.length) :
+				itemVal) +
+			'</li>';
+
+	}
 
 });

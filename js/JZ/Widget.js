@@ -217,16 +217,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			data = null;
 		}
 
-		if(typeof type == 'string') {
-			observable.bind(type, data, $.proxy(fn, this));
-		} else {
-			var _this = this;
+		var _this = this;
+		typeof type == 'string'?
+			observable.bind(type, data, $.proxy(fn, _this)) :
 			$.each(type, function(type) {
 				_this._bindTo(observable, type, data, this);
 			});
-		}
 
-		return this;
+		return _this;
 
 	},
 

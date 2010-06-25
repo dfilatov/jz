@@ -39,7 +39,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var result = {};
 		$.each(this._widgetsByName, function(name) {
-			this._hasVal() && this.isEnabled() && (result[name] = this.getValue());
+			this._hasVal() && this.isEnabled() && (result[name] = this.val());
 		});
 		return result;
 
