@@ -1,8 +1,15 @@
 JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
+	_constructor : function() {
+
+		this.__base.apply(this, arguments);
+		this._hintShowed = false;
+
+	},
+
 	_init : function() {
 
-		this.__base()._isFocused || this._enablePlaceholder();
+		this.__base()._isFocused || this._updatePlaceholder();
 		return this;
 
 	},
@@ -17,15 +24,15 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_onFocus : function() {
 
-		this._disablePlaceholder();
 		this.__base.apply(this, arguments);
+		this._updatePlaceholder();
 
 	},
 
 	_onBlur : function() {
 
-		this._enablePlaceholder();
 		this.__base.apply(this, arguments);
+		this._updatePlaceholder();
 
 	},
 
@@ -35,16 +42,26 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	},
 
-	_enablePlaceholder : function() {
+	_updatePlaceholder : function() {
 
-		this._params.placeholder && this._getVal().isEmpty() &&
-			this._getPlaceholder().removeClass(this.__self.CSS_CLASS_HIDDEN);
+		if(this._params.placeholder) {
+			var showHint = this._hintShowed,
+				isValEmpty = this._getVal().isEmpty();
+			this._hintShowed?
+				(this._isFocused || !isValEmpty) && (showHint = false) :
+				(!this._isFocused && isValEmpty) && (showHint = true);
+			if(showHint != this._hintShowed) {
+				this._getPlaceholder()[(showHint? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
+				this._hintShowed = showHint;
+			}
+		}
 
 	},
 
-	_disablePlaceholder : function() {
+	_setValToElem : function() {
 
-		this._params.placeholder && this._getPlaceholder().addClass(this.__self.CSS_CLASS_HIDDEN);
+		this._updatePlaceholder();
+		this.__base.apply(this, arguments);
 
 	},
 
