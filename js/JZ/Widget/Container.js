@@ -12,8 +12,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 		var i = 0, child;
 		while(child = arguments[i++]) {
-			child._parent = this;
-			this._children.push(child);
+			(child._parent = this)._children.push(child);
 		}
 		return this;
 

@@ -38,11 +38,13 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	isEqual : function(val) {
 
-		if(val instanceof this.__self.Time) {
+		var _self = this.__self;
+
+		if(val instanceof _self.Time) {
 			return this.get() + ' 0:0:0' == val.get();
 		}
 
-		if(val instanceof this.__self) {
+		if(val instanceof _self) {
 			return this.get() == val.get();
 		}
 
@@ -51,7 +53,7 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 		}
 
 		if(val instanceof Date) {
-			return this.get() == new this.__self(val).get();
+			return this.get() == new _self(val).get();
 		}
 
 		return this.get() === val;

@@ -28,12 +28,13 @@ JZ.Dependence.Composition.AND = $.inherit(JZ.Dependence.Composition, {
 
 	_processParams : function(result) {
 
-		return this._params.dependencies[0].__self._onAND({
+		var dependencies = this._params.dependencies;
+		return dependencies[0].__self._onAND({
 				result : this._resultLeft,
-				params : this._params.dependencies[0]._processParams(this._resultLeft)
+				params : dependencies[0]._processParams(this._resultLeft)
 			}, {
 				result : this._resultRight,
-				params : this._params.dependencies[1]._processParams(this._resultRight)
+				params : dependencies[1]._processParams(this._resultRight)
 			});
 
 	}

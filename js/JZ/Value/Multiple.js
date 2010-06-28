@@ -31,7 +31,7 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	clone : function() {
 
-		return new this.__self(this.get().concat([]));
+		return new this.__self(this.get().slice(0));
 
 	},
 
