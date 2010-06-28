@@ -224,7 +224,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		this
 			._selectItemByIndex(this._hilightedIndex = index)
-			._keyDownValue = this.getValue();
+			._keyDownValue = this.val();
 
 	},
 
@@ -370,7 +370,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			showAllOnFocus   : false,
 			showListOnEmpty  : true,
 			reposList        : false,
-			debounceInterval : (params || {}).storage.source == 'remote'? 200 : 50,
+			debounceInterval : params.storage.source == 'remote'? 200 : 50,
 			listItemRenderFn : this.__self._listItemRender
 		});
 
@@ -378,8 +378,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_destruct : function() {
 
+		this._hideList();
 		this.__base();
-		this._reposTimer && clearTimeout(this._reposTimer);
 		this._getListContainer().remove();
 
 	},
