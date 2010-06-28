@@ -1,6 +1,6 @@
 JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
-	_constructor : function() {
+	__constructor : function() {
 
 		this.__base.apply(this, arguments);
 		this._hintShowed = false;
@@ -51,7 +51,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 				(this._isFocused || !isValEmpty) && (showHint = false) :
 				(!this._isFocused && isValEmpty) && (showHint = true);
 			showHint != this._hintShowed &&
-				this._getPlaceholder()[(this._hintShowed = showHint? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
+				this._getPlaceholder()[((this._hintShowed = showHint)? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
 		}
 
 	},

@@ -165,7 +165,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId], isReady = widget.isReady();
 		if(widgetData.isReady != isReady) {
-			this._unreadyCounter = this._unreadyCounter + (isReady ? -1 : 1);
+			this._unreadyCounter = this._unreadyCounter + (isReady? -1 : 1);
 			widgetData.isReady = isReady;
 			isReady? delete this._unreadyWidgetIds[widgetId] : this._unreadyWidgetIds[widgetId] = true;
 			this.trigger('ready-change', this);

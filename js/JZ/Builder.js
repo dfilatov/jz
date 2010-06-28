@@ -89,15 +89,12 @@ JZ.Builder = $.inherit({
 
 	_getFromWidget : function(params, widget) {
 
-		var result = params.id?
+		return params.id?
 			 this._widgetsById[params.id] :
 			 (params.name?
 				 this._widgetsByName[params.name] :
-				 widget);
-
-		result || JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
-
-		return result;
+				 widget) ||
+			JZ._throwException('widget with name/id = "' + (params.id || params.name) + '" not found"');
 
 	},
 
