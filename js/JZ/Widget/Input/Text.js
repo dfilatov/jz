@@ -50,14 +50,9 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_getPlaceholder : $.memoize(function() {
 
-		var result = $('<label for="' + this.getId() + '" class="' + this.__self.CSS_CLASS_PLACEHOLDER + '">' +
-			this._params.placeholder + '</label>');
-
-		this._elem
-			.attr('id', this.getId())
-			.before(result);
-
-		return result;
+		return $('<label for="' + this.getId() + '" class="' + this.__self.CSS_CLASS_PLACEHOLDER + '">' +
+			this._params.placeholder + '</label>')
+			.insertBefore(this._elem.attr('id', this.getId()));
 
 	}),
 

@@ -36,7 +36,7 @@ JZ.Widget.Container.Date = $.inherit(JZ.Widget.Container, {
 
 	_createNumberInput : function(postfix, size) {
 
-		size = size || 2;				
+		size = size || 2;
 		return new JZ.Widget.Input.Text.Number(
 			$('<input' +
 				(this._params.onlyMonths && postfix == 'day'? ' type="hidden"' : '') +
