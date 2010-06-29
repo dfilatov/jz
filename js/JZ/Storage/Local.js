@@ -9,10 +9,10 @@ JZ.Storage.Local = $.inherit(JZ.Storage, {
 
 	},
 
-	filter : function(value, callback) {
+	filter : function(val, callback) {
 
-		var searchVal = value.toLowerCase(), searchList = this._searchList;
-		callback(value, searchVal == ''? this._params.list : $.grep(this._params.list, function(val, i) {
+		var searchVal = val.toLowerCase(), searchList = this._searchList;
+		callback(val, searchVal == ''? this._params.list : $.grep(this._params.list, function(val, i) {
 			return searchList[i].indexOf(searchVal) > -1;
 		}));
 
