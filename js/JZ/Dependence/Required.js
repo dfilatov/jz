@@ -4,8 +4,9 @@ JZ.Dependence.Required = $.inherit(JZ.Dependence, {
 
 		this.__base(params);
 
-		this._params.pattern = this._params.min > 1?
-	    	new RegExp('\\S.{' + (this._params.min - 2) + ',}\\S') :
+		var min = this._params.min;
+		this._params.pattern = min > 1?
+	    	new RegExp('\\S.{' + (min - 2) + ',}\\S') :
 			/\S+/;
 		this._params.patternChild = /\S+/;
 

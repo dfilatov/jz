@@ -17,20 +17,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
 		this._updateList = $.debounce(function(val) {
 
-			if(!this._elem) { // widget was destructed
-				return;
-			}
+			if(this._elem) { // widget not destructed
+				if(!this._params.showListOnEmpty && this._elem.val() === '') {
+					return this._hideList();
+				}
 
-			if(!this._params.showListOnEmpty && this._elem.val() === '') {
-				return this._hideList();
+				var searchVal = typeof val == 'undefined'? this._elem.val() : val;
+				if(this._lastSearchVal === this._elem.val() && typeof val == 'undefined') {
+					return this._showList();
+				}
+				this._getStorage().filter(this._lastSearchVal = searchVal, $.proxy(this._onStorageFilter, this));
 			}
-
-			var searchVal = typeof val == 'undefined'? this._elem.val() : val;
-			if(this._lastSearchVal === this._elem.val() && typeof val == 'undefined') {
-				return this._showList();
-			}
-			this._lastSearchVal = searchVal;
-			this._getStorage().filter(searchVal, $.proxy(this._onStorageFilter, this));
 
 		}, this._params.debounceInterval);
 
@@ -40,23 +37,23 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onStorageFilter : function(searchVal, list) {
 
-		if(this._lastSearchVal != searchVal) {
-			return;
+		if(this._lastSearchVal == searchVal) {
+
+			this._itemsCount = list.length;
+			this._hilightedIndex = -1;
+
+			if(!list.length) {
+				return this._hideList();
+			}
+
+			var elemVal = this._elem.val(), _this = this;
+			this._getList().html($.map(list, function(itemVal, i) {
+				elemVal == itemVal && (_this._hilightedIndex = i);
+				return _this._params.listItemRenderFn(itemVal, elemVal, searchVal);
+			}).join(''));
+			this._showList();
+			
 		}
-
-		this._itemsCount = list.length;
-		this._hilightedIndex = -1;
-
-		if(!list.length) {
-			return this._hideList();
-		}
-
-		var elemVal = this._elem.val(), _this = this;
-		this._getList().html($.map(list, function(itemVal, i) {
-			elemVal == itemVal && (_this._hilightedIndex = i);
-			return _this._params.listItemRenderFn(itemVal, elemVal, searchVal);
-		}).join(''));
-		this._showList();
 
 	},
 
