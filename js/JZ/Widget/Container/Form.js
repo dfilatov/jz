@@ -122,7 +122,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_checkDependencies : function() {
 
 		var _this = this;
-		$.each(this._widgetsDataById, function() {
+		$.each(_this._widgetsDataById, function() {
 			_this !== this.widget && this.widget._checkDependencies();
 		});
 		return _this;
@@ -176,7 +176,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_onWidgetInitialValueChange : function(e, isInitialValueChanged) {
 
 		var counter = this._changedCounter;
-		this._changedCounter = this._changedCounter + (isInitialValueChanged ? 1 : -1);
+		this._changedCounter = counter + (isInitialValueChanged? 1 : -1);
 		counter + this._changedCounter == 1 && this.trigger('ready-change', this);
 
 	},

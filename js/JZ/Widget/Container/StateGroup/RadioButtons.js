@@ -16,23 +16,27 @@ JZ.Widget.Container.StateGroup.RadioButtons = $.inherit(JZ.Widget.Container.Stat
 
 	_onChildChange : function(widget, index) {
 
-		this._checkedIndex > -1 && this._children[this._checkedIndex]._setChecked(false);
-		this._children[this._checkedIndex = index]._setChecked(true);
+		var children = this._children;
+		this._checkedIndex > -1 && children[this._checkedIndex]._setChecked(false);
+		children[this._checkedIndex = index]._setChecked(true);
 		this._updateValue();
 
 	},
 
 	_extractValFromElem : function() {
 
-		return this._checkedIndex > -1? this._children[this._checkedIndex]._elem.val() : '';
+		var checkedIndex = this._checkedIndex;
+		return checkedIndex > -1? this._children[checkedIndex]._elem.val() : '';
 
 	},
 
-	_setValToElem : function(value) {
+	_setValToElem : function(val) {
 
-		var child, i = 0;
-		while(child = this._children[i++]) {
-			if(value.get() === child._elem.val()) {
+		val = val.get();
+
+		var children = this._children, child, i = 0;
+		while(child = children[i++]) {
+			if(val === child._elem.val()) {
 				this._checkedIndex = i - 1;
 				return child._setChecked(true);
 			}

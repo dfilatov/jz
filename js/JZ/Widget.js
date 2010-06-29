@@ -364,12 +364,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var fullOrder = ['enabled', 'valid', 'required'];
 		return function(onlyType, recursively) {
-			var i = 0, type, order = !!onlyType? [onlyType] : fullOrder,
+			var i = 0, type, dependenciesByType, order = !!onlyType? [onlyType] : fullOrder,
 				length = order.length, isReady = this.isReady();
 			while(i < length) {
-				type = order[i++];
-				this._dependencies[type] &&
-					this[this.__self._dependenceTypeToFn(type)](this._dependencies[type].check());
+				(dependenciesByType = this._dependencies[type = order[i++]]) &&
+					this[this.__self._dependenceTypeToFn(type)](dependenciesByType.check());
 			}
 			isReady != this.isReady() && this.trigger('ready-change', this);
 			return this;

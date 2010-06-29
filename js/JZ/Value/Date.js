@@ -116,16 +116,17 @@ JZ.Value.Date = $.inherit(JZ.Value, {
 
 	_checkForCompareTypes : function(val) {
 
-		if(val instanceof JZ.Value.Date || val instanceof JZ.Value.Date.Time) {
+		var dateType = JZ.Value.Date;
+		if(val instanceof dateType || val instanceof dateType.Time) {
 			return !val.isEmpty();
 		}
 
 		if(val instanceof JZ.Value) {
-			return !(new JZ.Value.Date(val.get()).isEmpty());
+			return !(new dateType(val.get()).isEmpty());
 		}
 
 		if(typeof val == 'string') {
-			return !(new JZ.Value.Date(val).isEmpty());
+			return !(new dateType(val).isEmpty());
 		}
 
 		return val instanceof Date;

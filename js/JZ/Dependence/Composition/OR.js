@@ -10,8 +10,9 @@ JZ.Dependence.Composition.OR = $.inherit(JZ.Dependence.Composition, {
 
 	_precheck : function() {
 
-		this._resultLeft = this._params.dependencies[0]._precheck();
-		this._resultRight = this._params.dependencies[1]._precheck();
+		var dependencies = this._params.dependencies;
+		this._resultLeft = dependencies[0]._precheck();
+		this._resultRight = dependencies[1]._precheck();
 
 		return this._resultLeft || this._resultRight;
 
@@ -19,8 +20,9 @@ JZ.Dependence.Composition.OR = $.inherit(JZ.Dependence.Composition, {
 
 	_processResult : function() {
 
-		this._resultLeft = this._resultLeft && this._params.dependencies[0]._processResult();
-		this._resultRight = this._resultRight && this._params.dependencies[1]._processResult();
+		var dependencies = this._params.dependencies;
+		this._resultLeft = this._resultLeft && dependencies[0]._processResult();
+		this._resultRight = this._resultRight && dependencies[1]._processResult();
 
 		return this._resultLeft || this._resultRight;
 

@@ -20,7 +20,8 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	focus : function() {
 
-		this._children[0] && this._children[0].focus();
+		var firstChild = this._children[0];
+		firstChild && firstChild.focus();
 		return this;
 
 	},

@@ -84,7 +84,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onFocus : function() {
 
 		if(!this._preventOnFocus) {
-			this.__base.apply(this, arguments);
+			this.__base();
 			if(!this._preventUpdate) {
 				if(this._params.showAllOnFocus) {
 					this._updateList('');

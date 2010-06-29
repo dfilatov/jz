@@ -18,14 +18,13 @@ JZ.Builder = $.inherit({
 		});
 
 		// Строим хэш по именам после создании дерева виджетов, потому что имена некоторых виджетов зависят от детей
-		var i = fromIndex;
-		while(widget = _this._widgets[i++]) {
+		var widgets = _this._widgets, i = fromIndex;
+		while(widget = widgets[i++]) {
 			widget._hasVal() && (_this._widgetsByName[widget.getName()] = widget);
 		}
 
 		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
-		i = fromIndex;
-		while(widget = _this._widgets[i++]) {
+		while(widget = widgets[fromIndex++]) {
 			this._buildDependencies(widget);
 		}
 
@@ -36,7 +35,7 @@ JZ.Builder = $.inherit({
 				.init();
 		}
 		else {
-			this._widgets[0].init(initWidget);
+			widgets[0].init(initWidget);
 		}
 
 		return initWidget;
@@ -45,8 +44,9 @@ JZ.Builder = $.inherit({
 
 	_makeWidgetByElem : function(elem) {
 
-		var params = this.__self._extractParamsFromElem(elem),
-			result = new (this.__self._getWidgetClassByType(params.type))(elem, this.__self._getClassElem(elem, params), params);
+		var _self = this.__self,
+			params = _self._extractParamsFromElem(elem),
+			result = new (_self._getWidgetClassByType(params.type))(elem, _self._getClassElem(elem, params), params);
 
 		params.type != 'form' && this._getParentWidget(elem).addChild(result);
 

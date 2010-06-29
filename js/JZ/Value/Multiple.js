@@ -43,9 +43,9 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 
 	isContain : function(val) {
 
-		var i = 0, length = this._val.length;
+		var i = 0, thisVal = this._val, length = thisVal.length;
 		while(i < length) {
-			if(this._val[i++] == val) {
+			if(thisVal[i++] == val) {
 				return true;
 			}
 		}
@@ -59,15 +59,17 @@ JZ.Value.Multiple = $.inherit(JZ.Value, {
 			return false;
 		}
 
-		var compareValue = val instanceof this.__self? val.get() : val;
+		var compareVal = val instanceof this.__self? val.get() : val,
+			thisVal = this._val,
+			thisValLength = thisVal.length;
 
-		if(this._val.length != compareValue.length) {
+		if(thisValLength != compareVal.length) {
 			return false;
 		}
 
-		var i = 0, length = this._val.length;
-		while(i < length) {
-			if(this._val[i] != compareValue[i++]) {
+		var i = 0;
+		while(i < thisValLength) {
+			if(thisVal[i] != compareVal[i++]) {
 				return false;
 			}
 		}

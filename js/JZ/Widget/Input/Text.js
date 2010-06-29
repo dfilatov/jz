@@ -24,14 +24,14 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_onFocus : function() {
 
-		this.__base.apply(this, arguments);
+		this.__base();
 		this._updatePlaceholder();
 
 	},
 
 	_onBlur : function() {
 
-		this.__base.apply(this, arguments);
+		this.__base();
 		this._updatePlaceholder();
 
 	},
