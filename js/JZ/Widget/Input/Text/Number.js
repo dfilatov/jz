@@ -16,12 +16,12 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_init : function() {
 
-		this.__base();
-		this._elem.after(this._hiddenElem = $('<input type="hidden" value="' + this._elem.val() + '"' +
-			(this._elem.attr('id')? ' id="value-' + this._elem.attr('id') + '"' : '') + '/>'));
-		if(this._elem.attr('name')) {
-			this._hiddenElem.attr('name', this._elem.attr('name'));
-			this._elem.removeAttr('name');
+		var elem = this.__base()._elem;
+		elem.after(this._hiddenElem = $('<input type="hidden" value="' + elem.val() + '"' +
+			(elem.attr('id')? ' id="value-' + elem.attr('id') + '"' : '') + '/>'));
+		if(elem.attr('name')) {
+			this._hiddenElem.attr('name', elem.attr('name'));
+			elem.removeAttr('name');
 		}
 		this._checkElemValue();
 		return this;

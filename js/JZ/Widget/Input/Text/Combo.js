@@ -52,7 +52,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				return _this._params.listItemRenderFn(itemVal, elemVal, searchVal);
 			}).join(''));
 			this._showList();
-			
+
 		}
 
 	},
@@ -203,13 +203,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_prev : function() {
 
-		this._isListShowed && this._hilightItemByIndex((this._hilightedIndex > 0? this._hilightedIndex : this._itemsCount) - 1);
+		this._isListShowed &&
+			this._hilightItemByIndex((this._hilightedIndex > 0? this._hilightedIndex : this._itemsCount) - 1);
 
 	},
 
 	_next : function() {
 
-		this._isListShowed && this._hilightItemByIndex(this._hilightedIndex < this._itemsCount - 1? this._hilightedIndex + 1 : 0);
+		this._isListShowed &&
+			this._hilightItemByIndex(this._hilightedIndex < this._itemsCount - 1? this._hilightedIndex + 1 : 0);
 
 	},
 
