@@ -363,12 +363,15 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_checkDependencies : (function() {
 
 		var fullOrder = ['enabled', 'valid', 'required'];
-		return function(onlyType, recursively) {
+		return function(onlyType, recursively, fullCheck) {
 			var i = 0, type, dependenciesByType, order = !!onlyType? [onlyType] : fullOrder,
 				length = order.length, isReady = this.isReady();
 			while(i < length) {
-				(dependenciesByType = this._dependencies[type = order[i++]]) &&
-					this[this.__self._dependenceTypeToFn(type)](dependenciesByType.check());
+				dependenciesByType = this._dependencies[type = order[i++]];
+				if(dependenciesByType || fullCheck)
+					this[this.__self._dependenceTypeToFn(type)](dependenciesByType?
+						dependenciesByType.check() :
+						{ result : true, params : {} });
 			}
 			isReady != this.isReady() && this.trigger('ready-change', this);
 			return this;
@@ -385,10 +388,11 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_processEnabledDependenceCheck : function(check) {
 
 		if(check.result) {
+			var isEnabled = this.isEnabled();
 			this
 				.enable()
 				.show();
-			check.params.focusOnEnable && this.focus();
+			check.params.focusOnEnable && !isEnabled && this.focus();
 		}
 		else {
 			this.disable();
@@ -406,9 +410,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	_processValidDependenceCheck : function(check) {
 
 		this._updateValid(check.result);
-		var _this = this;
-		$.each(check.params.invalidCSSClasses, function() {
-			this.name && _this[(this.add? 'add' : 'remove') + 'CSSClass'](this.name);
+		var _this = this,
+			invalidCSSClasses = check.params.invalidCSSClasses;
+		invalidCSSClasses && $.each(invalidCSSClasses, function() {
+			_this[(this.add? 'add' : 'remove') + 'CSSClass'](this.name);
 		});
 
 	},
@@ -484,9 +489,9 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		$.each(this._dependencies, function(type) {
 			var dependence = this.removeFrom(widget);
 			dependence? _this._dependencies[type] = dependence : delete _this._dependencies[type];
+			_this._checkDependencies(type, false, true);
 		});
 		delete this._dependFromIds[widget.getId()];
-		this._checkDependencies();
 
 	},
 

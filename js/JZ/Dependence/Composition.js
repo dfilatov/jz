@@ -17,13 +17,12 @@ JZ.Dependence.Composition = $.inherit(JZ.Dependence, {
 			var dependence = this.removeFrom(widget);
 			dependence && dependencies.push(dependence);
 		});
-		if(dependencies.length == 0) {
-			return null;
-		}
-		if(dependencies.length == 1 && this._params.dependencies.length > 1) {
-			return dependencies[0];
-		}
-		return this;
+		var len = dependencies.length;
+		return len?
+			len == 1 && this._params.dependencies.length > 1?
+				dependencies[0] :
+				this :
+			null;
 
 	}
 

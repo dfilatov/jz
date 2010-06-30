@@ -9,18 +9,15 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	_processResult : function() {
 
-		return (!this._params.checkEmpty && this._params.widget._getVal().isEmpty()) ||
-			   this.__base();
+		return this._params.checkEmpty? this.__base() : (this._params.widget._getVal().isEmpty() || this.__base());				
 
 	},
 
 	_processParams : function(result) {
 
+		var invalidCSSClass = this._params.invalidCSSClass;
 		return {
-			invalidCSSClasses : [!!this._params.invalidCSSClass?
-				{ name : this._params.invalidCSSClass, add : !result } :
-				{}
-			]
+			invalidCSSClasses : invalidCSSClass? [{ name : invalidCSSClass, add : !result }] : []
 		};
 
 	},
