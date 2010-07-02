@@ -119,6 +119,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
+	_processFirstUnreadyWidget : function() {
+
+		return this._processFirstUnreadyChildWidget();
+
+	},
+
 	_checkDependencies : function() {
 
 		var _this = this;
