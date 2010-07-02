@@ -127,19 +127,23 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 			return this.__base(params);
 		}
 
-		var children = this._children, i = 0, child, countRequiredChild = 0;
+		var children = this._children, i = 0, child, countUnrequiredChild = 0;
 		while(child = children[i++]) {
 			if(child._dependencies['required']) {
-				child.isRequired() && ++countRequiredChild;
+				child.isRequired() || ++countUnrequiredChild;
 			}
 			else {
 				var pattern = params.pattern;
 				params.pattern = params.patternChild;
-				child._checkRequired(params) || ++countRequiredChild;
+				child._checkRequired(params) && ++countUnrequiredChild;
 				params.pattern = pattern;
 			}
+			if(countUnrequiredChild >= params.min) {
+				console.log(countUnrequiredChild, params.min);
+				return true;
+			}
 		}
-		return countRequiredChild == 0;
+		return false;
 
 	},
 
