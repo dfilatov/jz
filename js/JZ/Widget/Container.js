@@ -139,7 +139,6 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 				params.pattern = pattern;
 			}
 			if(countUnrequiredChild >= params.min) {
-				console.log(countUnrequiredChild, params.min);
 				return true;
 			}
 		}
