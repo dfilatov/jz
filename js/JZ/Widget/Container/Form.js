@@ -189,14 +189,16 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_onWidgetRemove : function(e, widget) {
 
 		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId];
-		delete this._widgetsDataById[widgetId];
-		!!widget.getName() && delete this._widgetsByName[widget.getName()];
-		if(!widgetData.isReady) {
-			this._unreadyCounter--;
-			delete this._unreadyWidgetIds[widgetId];
+		if(widgetData) {
+			delete this._widgetsDataById[widgetId];
+			!!widget.getName() && delete this._widgetsByName[widget.getName()];
+			if(!widgetData.isReady) {
+				this._unreadyCounter--;
+				delete this._unreadyWidgetIds[widgetId];
+			}
+			this._changedCounter++;
+			this.trigger('ready-change', this);
 		}
-		this._changedCounter++;
-		this.trigger('ready-change', this);
 
 	},
 
