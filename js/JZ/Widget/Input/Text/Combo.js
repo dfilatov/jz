@@ -164,7 +164,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyDown : function(e) {
 
-		if(typeof this._keyDownValue != 'undefined') {
+		if(this._keyDownValue !== null) {
 			return;
 		}
 
@@ -203,7 +203,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		e.keyCode != 9 && this._keyDownValue != this._elem.val() && this._updateList();
-		delete this._keyDownValue;
+		this._keyDownValue = null;
 
 	},
 
