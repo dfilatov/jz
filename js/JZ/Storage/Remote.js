@@ -10,7 +10,7 @@ JZ.Storage.Remote = $.inherit(JZ.Storage, {
 			error    : function() {
 				callback(value, []);
 			},
-			dataType : params.ajax.dataType || 'json',
+			dataType : 'json',
 			data     : (function() {
 				var result = {};
 				result[params.name] = value;

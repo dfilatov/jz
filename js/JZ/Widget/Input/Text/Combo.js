@@ -59,12 +59,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_bindEvents : function() {
 
+		var keyDown = $.browser.opera? 'keypress' : 'keydown',
+			keyBinds = { 'keyup' : this._onKeyUp };
+
+		keyBinds[keyDown] = this._onKeyDown;
 		this
 			.__base()
-			._bindToElem({
-				'keydown' : this._onKeyDown,
-				'keyup'   : this._onKeyUp
-			});
+			._bindToElem(keyBinds);
 
 		var arrow = this._params.arrow;
 		arrow && this
@@ -163,6 +164,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyDown : function(e) {
 
+		if(typeof this._keyDownValue != 'undefined') {
+			return;
+		}
+
 		this._keyDownValue = this._elem.val();
 		if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
 			return;
@@ -198,6 +203,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		e.keyCode != 9 && this._keyDownValue != this._elem.val() && this._updateList();
+		delete this._keyDownValue;
 
 	},
 
