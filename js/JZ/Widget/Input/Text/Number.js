@@ -3,7 +3,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 	__constructor : function() {
 
 		this.__base.apply(this, arguments);
-		this._hiddenElem = null; // тут будет храниться реальное значение
+		this._hiddenElem = this._keyDownCode = null;
 		this._keyDownAllowed = false;
 
 	},
@@ -60,6 +60,8 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyDown : function(e) {
 
+		this._keyDownCode = e.keyCode;
+
 		return this._keyDownAllowed = e.ctrlKey || e.metaKey ||
 			(e.keyCode > 47 && e.keyCode < 58) ||
 			(e.keyCode > 95 && e.keyCode < 106) ||
@@ -69,7 +71,7 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_onKeyPress : function(e) {
 
-		if(e.charCode === 0) {
+		if(e.charCode === 0 || (this._keyDownCode === e.keyCode && $.inArray(e.keyCode, [45, 46]) > -1)) {
 			return true;
 		}
 
