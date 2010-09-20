@@ -21,11 +21,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				if(!this._params.showListOnEmpty && this._elem.val() === '') {
 					return this._hideList();
 				}
-
 				var searchVal = typeof val == 'undefined'? this._elem.val() : val;
-				if(this._lastSearchVal === this._elem.val() && typeof val == 'undefined') {
-					return this._showList();
-				}
 				this._getStorage().filter(this._lastSearchVal = searchVal, $.proxy(this._onStorageFilter, this));
 			}
 
@@ -46,12 +42,32 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				return this._hideList();
 			}
 
-			var elemVal = this._elem.val(), _this = this;
-			this._getList().html($.map(list, function(itemVal, i) {
-				elemVal == itemVal && (_this._hilightedIndex = i);
-				return _this._params.listItemRenderFn(itemVal, elemVal, searchVal);
-			}).join(''));
+			var _this = this,
+				elemVal = _this._elem.val(),
+				listElem = _this._getList(),
+				itemRenderFn = _this._params.listItemRenderFn,
+				html = [],
+				i = 0, item, len = list.length,
+				isSelected;
+
+			while(i < len) {
+				item = list[i++];
+				isSelected = elemVal == item.valueOf(),
+				html.push('<li');
+				isSelected && html.push(' class="',  _this.__self.CSS_CLASS_SELECTED, '"');
+				html.push('>');
+				itemRenderFn(item, html, elemVal, isSelected);
+				isSelected && (_this._hilightedIndex = i - 1);
+			}
+
+			listElem
+				.html(html.join(''))
+				.css('height', 'auto');
+
 			this._showList();
+
+			list.length > this._params.listSize &&
+				listElem.css('height', listElem.find('li:first').outerHeight() * this._params.listSize);
 
 		}
 
@@ -176,8 +192,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		switch(e.keyCode) {
 			case 13:
 				if(this._isListShowed) {
-					this._itemsCount = 0;
-		            this._hilightedIndex = -1;
 					this
                         .val(this._lastSearchVal = this._keyDownValue)
                         ._hideList();
@@ -223,21 +237,29 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_hilightItemByIndex : function(index) {
 
-		this._getList().find('li')
-			.eq(this._hilightedIndex).removeClass(this.__self.CSS_CLASS_SELECTED).end()
-			.eq(index).addClass(this.__self.CSS_CLASS_SELECTED);
+		var listElem = this._getList(),
+			itemElems = listElem.find('li').eq(this._hilightedIndex)
+				.removeClass(this.__self.CSS_CLASS_SELECTED)
+				.end(),
+			hilightedElem = itemElems.eq(this._hilightedIndex = index).addClass(this.__self.CSS_CLASS_SELECTED),
+			itemHeight = hilightedElem.outerHeight(),
+			topIndex = Math.ceil(listElem.scrollTop() / itemHeight);
+
+		if(index < topIndex || index >= topIndex + this._params.listSize) {
+			listElem.scrollTop(itemHeight * (this._topItemIndex = index + 1 - this._params.listSize));
+		}
 
 		this
-			._selectItemByIndex(this._hilightedIndex = index)
+			._selectItemByIndex(hilightedElem)
 			._keyDownValue = this.val();
 
 	},
 
-	_selectItemByIndex : function(index) {
+	_selectItemByIndex : function(itemElem) {
 
 		if(this._isListShowed) {
 			var node = this
-				.val(this._lastSearchVal = this._getList().find('li').eq(index).text())
+				.val(this._lastSearchVal = itemElem.text())
 				._elem[0];
 			if(node.createTextRange && !node.selectionStart) {
 				var range = node.createTextRange();
@@ -299,14 +321,22 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
 
 		this._bindTo(result, 'mousedown', function(e) {
+			var itemElem = $(e.target).closest('li');
+
 			this._preventUpdate = this._focusOnBlur = true;
-			this
-				.val(this._lastSearchVal = $(e.target).closest('li').text())
-				.focus()
-				._hideList();
+			if(itemElem[0]) {
+				this
+					.val(this._lastSearchVal = itemElem.text())
+					.focus()
+					._hideList();
+			} else {
+				this._preventOnBlur = true;
+			}
+
 			setTimeout($.proxy(function() {
 				this._focusOnBlur = false;
 			}, this), 50);
+
 			return false;
 		});
 
@@ -327,7 +357,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			new JZ.Storage.Remote($.extend({
 					name : _this._params.storage.name || this.getName(),
 					widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
-						var name = $.trim(name);
+						name = $.trim(name);
 						return name? _this._form.getWidgetByName(name) : null;
 					})
 				}, _this._params.storage)) :
@@ -338,10 +368,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_refocus : function() {
 
 		if(document.selection) {
-			var range = this._elem[0].createTextRange();
+			var range = this._elem[0].createTextRange(),
+				len = this._elem.val().length;
 			range.collapse(true);
-			range.moveStart('character', 1000);
-			range.moveEnd('character', 1000);
+			range.moveStart('character', len);
+			range.moveEnd('character', len);
 			range.select();
 		}
 		return this;
@@ -373,11 +404,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getDefaultParams : function(params) {
 
 		return $.extend(this.__base(), {
+			listSize         : 5,
 			showAllOnFocus   : false,
 			showListOnEmpty  : true,
 			reposList        : false,
 			debounceInterval : params.storage.source == 'remote'? 200 : 50,
-			listItemRenderFn : this.__self._listItemRender
+			listItemRenderFn : this.__self._listItemRenderFn
 		});
 
 	},
@@ -402,17 +434,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	CSS_CLASS_LIST          : JZ.CSS_CLASS_WIDGET + '-list',
 	CSS_CLASS_ARROW_PRESSED : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
 
-	_listItemRender : function(itemVal, elemVal, searchVal) {
+	_listItemRenderFn : function(item, buffer, searchVal) {
 
-		var startIndex = itemVal.toLowerCase().indexOf(searchVal.toLowerCase());
-		return '<li' + (elemVal == itemVal?
-			' class="' + this.CSS_CLASS_SELECTED + '"' : '') +
-			'>' + (startIndex > -1?
-				itemVal.substr(0, startIndex) +
-					'<strong>' + itemVal.substr(startIndex, searchVal.length) + '</strong>' +
-				itemVal.substr(startIndex + searchVal.length) :
-				itemVal) +
-			'</li>';
+		var startIndex = item.toLowerCase().indexOf(searchVal.toLowerCase());
+		startIndex > -1?
+			buffer.push(
+				item.substr(0, startIndex),
+				'<strong>',
+				item.substr(startIndex, searchVal.length),
+				'</strong>',
+				item.substr(startIndex + searchVal.length)) :
+			buffer.push(item);
 
 	}
 
