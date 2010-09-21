@@ -2,48 +2,52 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	__constructor : function() {
 
-		this.__base.apply(this, arguments);
+		var _this = this;
 
-		this._isListShowed = this._preventOnBlur = this._preventOnFocus = this._preventUpdate = this._focusOnBlur = false;
-		this._hilightedIndex = -1;
-		this._itemsCount = 0;
-		this._lastSearchVal = this._keyDownValue = this._updateList = this._reposTimer = this._lastOffset = null;
+		_this.__base.apply(_this, arguments);
+
+		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus =
+			_this._preventUpdate = _this._focusOnBlur = false;
+		_this._hilightedIndex = -1;
+		_this._itemsCount = 0;
+		_this._lastSearchVal = _this._keyDownValue = _this._updateList = _this._reposTimer = _this._lastOffset = null;
 
 	},
 
 	_init : function() {
 
-		this.__base()._elem.attr('autocomplete', 'off');
-		this._params.arrow && this._params.arrow.attr('tabIndex', -1);
-		this._updateList = $.debounce(function(val) {
+		var _this = this;
+		_this.__base()._elem.attr('autocomplete', 'off');
+		_this._params.arrow && _this._params.arrow.attr('tabIndex', -1);
+		_this._updateList = $.debounce(function(val) {
 
-			if(this._elem) { // widget not destructed
-				if(!this._params.showListOnEmpty && this._elem.val() === '') {
-					return this._hideList();
+			if(_this._elem) { // widget not destructed
+				if(!_this._params.showListOnEmpty && _this._elem.val() === '') {
+					return _this._hideList();
 				}
-				var searchVal = typeof val == 'undefined'? this._elem.val() : val;
-				this._getStorage().filter(this._lastSearchVal = searchVal, $.proxy(this._onStorageFilter, this));
+				var searchVal = typeof val == 'undefined'? _this._elem.val() : val;
+				_this._getStorage().filter(_this._lastSearchVal = searchVal, $.proxy(_this._onStorageFilter, _this));
 			}
 
-		}, this._params.debounceInterval);
+		}, _this._params.debounceInterval);
 
-		return this;
+		return _this;
 
 	},
 
 	_onStorageFilter : function(searchVal, list) {
 
-		if(this._lastSearchVal == searchVal) {
+		var _this = this;
+		if(_this._lastSearchVal == searchVal) {
 
-			this._itemsCount = list.length;
-			this._hilightedIndex = -1;
+			_this._itemsCount = list.length;
+			_this._hilightedIndex = -1;
 
 			if(!list.length) {
-				return this._hideList();
+				return _this._hideList();
 			}
 
-			var _this = this,
-				elemVal = _this._elem.val(),
+			var elemVal = _this._elem.val(),
 				listElem = _this._getList(),
 				itemRenderFn = _this._params.listItemRenderFn,
 				html = [],
@@ -64,10 +68,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				.html(html.join(''))
 				.css('height', 'auto');
 
-			this._showList();
+			_this._showList();
 
-			list.length > this._params.listSize &&
-				listElem.css('height', listElem.find('li:first').outerHeight() * this._params.listSize);
+			list.length > _this._params.listSize &&
+				listElem.css('height', listElem.find('li:first').outerHeight() * _this._params.listSize);
 
 		}
 
@@ -75,66 +79,69 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_bindEvents : function() {
 
-		var keyDown = $.browser.opera? 'keypress' : 'keydown',
-			keyBinds = { 'keyup' : this._onKeyUp };
+		var _this = this,
+			keyDown = $.browser.opera? 'keypress' : 'keydown',
+			keyBinds = { 'keyup' : _this._onKeyUp },
+			arrow = _this._params.arrow;
 
-		keyBinds[keyDown] = this._onKeyDown;
-		this
+		keyBinds[keyDown] = _this._onKeyDown;
+		_this
 			.__base()
 			._bindToElem(keyBinds);
 
-		var arrow = this._params.arrow;
-		arrow && this
+		arrow && _this
 			._bindTo(arrow, {
-				'mousedown' : this._onArrowMouseDown,
-				'mouseup'   : this._onArrowMouseUp,
-				'click'     : this._onArrowClick
+				'mousedown' : _this._onArrowMouseDown,
+				'mouseup'   : _this._onArrowMouseUp,
+				'click'     : _this._onArrowClick
 			});
 
-		return this;
+		return _this;
 
 	},
 
 	_onFocus : function() {
 
-		if(!this._preventOnFocus) {
-			this.__base();
-			if(!this._preventUpdate) {
-				if(this._params.showAllOnFocus) {
-					this._updateList('');
-					this._lastSearchVal = this._elem.val();
-				}
-				else {
-					this._updateList();
-				}
-			}
-			else {
-				this._preventUpdate = false;
-			}
+		var _this = this;
+		if(_this._preventOnFocus) {
+			_this._preventOnFocus = false;
 		}
 		else {
-			this._preventOnFocus = false;
+			_this.__base();
+			if(_this._preventUpdate) {
+				_this._preventUpdate = false;
+			}
+			else {
+				if(_this._params.showAllOnFocus) {
+					_this._updateList('');
+					_this._lastSearchVal = _this._elem.val();
+				}
+				else {
+					_this._updateList();
+				}
+			}
 		}
 
 	},
 
 	_onBlur : function() {
 
-		if(!this._preventOnBlur) {
-			this.__base();
-			this._hideList();
+		var _this = this;
+		if(!_this._preventOnBlur) {
+			_this.__base();
+			_this._hideList();
 		}
 		else {
-			this._preventOnBlur = false;
+			_this._preventOnBlur = false;
 		}
 
-		if(this._focusOnBlur) {
-			this._focusOnBlur = false;
-			setTimeout($.proxy(function() {
-				this
+		if(_this._focusOnBlur) {
+			_this._focusOnBlur = false;
+			setTimeout(function() {
+				_this
 					.focus()
 					._refocus();
-			}, this), 0);
+			}, 0);
 		}
 
 	},
@@ -155,57 +162,57 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_onArrowClick : function() {
+	_onArrowClick : function(e) {
 
-		if(!this.isEnabled()) {
-			return;
-		}
+		e.preventDefault();
 
-		if(this._isListShowed) {
-			this._hideList();
-			this._preventOnFocus = true;
-			this.focus();
+		var _this = this;
+		if(_this.isEnabled()) {
+			if(_this._isListShowed) {
+				_this._hideList();
+				_this._preventOnFocus = true;
+				_this.focus();
+			}
+			else {
+				_this._preventUpdate = true;
+				_this
+					.focus()
+					._refocus()
+					._updateList('');
+				_this._preventOnBlur = false;
+			}
 		}
-		else {
-			this._preventUpdate = true;
-			this
-				.focus()
-				._refocus()
-				._updateList('');
-			this._preventOnBlur = false;
-		}
-		return false;
 
 	},
 
 	_onKeyDown : function(e) {
 
-		if(this._keyDownValue !== null) {
-			return;
-		}
+		var _this = this;
 
-		this._keyDownValue = this._elem.val();
-		if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-			return;
-		}
+		if(_this._keyDownValue === null) {
+			_this._keyDownValue = _this._elem.val();
+			if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+				return;
+			}
 
-		switch(e.keyCode) {
-			case 13:
-				if(this._isListShowed) {
-					this
-                        .val(this._lastSearchVal = this._keyDownValue)
-                        ._hideList();
+			switch(e.keyCode) {
+				case 13:
+					if(_this._isListShowed) {
+						_this
+							.val(_this._lastSearchVal = _this._keyDownValue)
+							._hideList();
+						return false;
+					}
+				break;
+
+				case 38:
+					_this._prev();
 					return false;
-				}
-			break;
 
-			case 38:
-				this._prev();
-				return false;
-
-			case 40:
-				this._next();
-				return false;
+				case 40:
+					_this._next();
+					return false;
+			}
 		}
 
 	},
@@ -237,17 +244,18 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_hilightItemByIndex : function(index) {
 
-		var listElem = this._getList(),
-			itemElems = listElem.find('li').eq(this._hilightedIndex)
-				.removeClass(this.__self.CSS_CLASS_SELECTED)
+		var _this = this,
+			listElem = _this._getList(),
+			itemElems = listElem.find('li').eq(_this._hilightedIndex)
+				.removeClass(_this.__self.CSS_CLASS_SELECTED)
 				.end(),
-			hilightedElem = itemElems.eq(this._hilightedIndex = index).addClass(this.__self.CSS_CLASS_SELECTED),
+			hilightedElem = itemElems.eq(_this._hilightedIndex = index).addClass(_this.__self.CSS_CLASS_SELECTED),
 			itemHeight = hilightedElem.outerHeight(),
 			topIndex = Math.ceil(listElem.scrollTop() / itemHeight),
 			newTopIndex = topIndex;
 
-		if(index >= topIndex + this._params.listSize) {
-			newTopIndex = index + 1 - this._params.listSize;
+		if(index >= topIndex + _this._params.listSize) {
+			newTopIndex = index + 1 - _this._params.listSize;
 		}
 		else if(index < topIndex) {
 			newTopIndex = index;
@@ -255,9 +263,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		topIndex == newTopIndex || listElem.scrollTop(itemHeight * newTopIndex);
 
-		this
+		_this
 			._selectItemByIndex(hilightedElem)
-			._keyDownValue = this.val();
+			._keyDownValue = _this.val();
 
 	},
 
@@ -265,8 +273,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		if(this._isListShowed) {
 			var node = this
-				.val(this._lastSearchVal = itemElem.text())
-				._elem[0];
+					.val(this._lastSearchVal = itemElem.text())
+					._elem[0];
 			if(node.createTextRange && !node.selectionStart) {
 				var range = node.createTextRange();
 				range.move('character', this._elem.val().length);
@@ -280,73 +288,77 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_showList : function() {
 
-		if(this._isListShowed || !this._isFocused || !this._itemsCount ||
-			(this._itemsCount == 1 && this._hilightedIndex == 0)) {
+		var _this = this;
+		if(_this._isListShowed || !_this._isFocused || !_this._itemsCount ||
+			(_this._itemsCount == 1 && _this._hilightedIndex == 0)) {
 			return;
 		}
 
-		this._getListContainer().removeClass(this.__self.CSS_CLASS_INVISIBLE);
-		this._reposList();
-		this._isListShowed = true;
+		_this._getListContainer().removeClass(_this.__self.CSS_CLASS_INVISIBLE);
+		_this._reposList();
+		_this._isListShowed = true;
 
 	},
 
 	_hideList : function() {
 
-		if(this._isListShowed) {
-			this._reposTimer && clearTimeout(this._reposTimer);
-			this._getListContainer().addClass(this.__self.CSS_CLASS_INVISIBLE);
-			this._isListShowed = false;
+		var _this = this;
+		if(_this._isListShowed) {
+			_this._reposTimer && clearTimeout(_this._reposTimer);
+			_this._getListContainer().addClass(_this.__self.CSS_CLASS_INVISIBLE);
+			_this._isListShowed = false;
 		}
 
 	},
 
 	_reposList : function() {
 
-		var offset = this._elem.offset(),
+		var _this = this,
+			offset = _this._elem.offset(),
 			offsetLeft = offset.left,
 			offsetTop = offset.top + this._elem.outerHeight();
 
-		if(!(this._lastOffset && this._lastOffset.left == offsetLeft && this._lastOffset.top == offsetTop)) {
-			this._lastOffset = { left : offsetLeft, top : offsetTop };
-			this._getListContainer()
+		if(!(_this._lastOffset && _this._lastOffset.left == offsetLeft && _this._lastOffset.top == offsetTop)) {
+			_this._lastOffset = { left : offsetLeft, top : offsetTop };
+			_this._getListContainer()
 				.css({
-					width : this._elem.outerWidth() + 'px',
+					width : _this._elem.outerWidth() + 'px',
 					left  : offsetLeft + 'px',
 					top   : offsetTop + 'px'
 				});
 		}
 
-		this._params.reposList && (this._reposTimer = setTimeout($.proxy(arguments.callee, this), 50));
+		_this._params.reposList && (_this._reposTimer = setTimeout($.proxy(arguments.callee, _this), 50));
 
 	},
 
 	_getListContainer : $.memoize(function() {
 
-		var result = $('<div class="' + this.__self.CSS_CLASS_LIST + ' ' + this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
+		var _this = this,
+			res = $('<div class="' + _this.__self.CSS_CLASS_LIST + ' ' + _this.__self.CSS_CLASS_INVISIBLE + '">' +
+		   		'<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
 
-		this._bindTo(result, 'mousedown', function(e) {
+		_this._bindTo(res, 'mousedown', function(e) {
 			var itemElem = $(e.target).closest('li');
 
-			this._preventUpdate = this._focusOnBlur = true;
+			_this._preventUpdate = _this._focusOnBlur = true;
 			if(itemElem[0]) {
-				this
-					.val(this._lastSearchVal = itemElem.text())
+				_this
+					.val(_this._lastSearchVal = itemElem.text())
 					.focus()
 					._hideList();
 			} else {
-				this._preventOnBlur = true;
+				_this._preventOnBlur = true;
 			}
 
-			setTimeout($.proxy(function() {
-				this._focusOnBlur = false;
-			}, this), 50);
+			setTimeout(function() {
+				_this._focusOnBlur = false;
+			}, 50);
 
 			return false;
 		});
 
-		return result.appendTo('body');
+		return res.appendTo('body');
 
 	}),
 
