@@ -243,11 +243,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				.end(),
 			hilightedElem = itemElems.eq(this._hilightedIndex = index).addClass(this.__self.CSS_CLASS_SELECTED),
 			itemHeight = hilightedElem.outerHeight(),
-			topIndex = Math.ceil(listElem.scrollTop() / itemHeight);
+			topIndex = Math.ceil(listElem.scrollTop() / itemHeight),
+			newTopIndex = topIndex;
 
-		if(index < topIndex || index >= topIndex + this._params.listSize) {
-			listElem.scrollTop(itemHeight * (this._topItemIndex = index + 1 - this._params.listSize));
+		if(index >= topIndex + this._params.listSize) {
+			newTopIndex = index + 1 - this._params.listSize;
 		}
+		else if(index < topIndex) {
+			newTopIndex = index;
+		}
+
+		topIndex == newTopIndex || listElem.scrollTop(itemHeight * newTopIndex);
 
 		this
 			._selectItemByIndex(hilightedElem)
