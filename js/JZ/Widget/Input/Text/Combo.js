@@ -422,7 +422,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getDefaultParams : function(params) {
 
 		return $.extend(this.__base(), {
-			listSize         : 5,
+			listSize         : 15,
 			showAllOnFocus   : false,
 			showListOnEmpty  : true,
 			reposList        : false,
