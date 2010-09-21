@@ -100,19 +100,20 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_onSubmit : function() {
 
-		if(this.isReady()) {
-			this._beforeSubmit();
-			var preventSubmit = this._params.preventSubmit;
-			this.trigger('before-submit', this);
+		var _this = this;
+
+		if(_this.isReady()) {
+			_this._beforeSubmit();
+			var preventSubmit = _this._params.preventSubmit;
+			_this.trigger('before-submit', _this);
 			return !preventSubmit;
 		}
 
-		var _this = this;
-		if(this._unreadyCounter > 0) {
-			$.each(this._unreadyWidgetIds, function(id) {
+		if(_this._unreadyCounter) {
+			$.each(_this._unreadyWidgetIds, function(id) {
 				_this._widgetsDataById[id].widget._setNoReady(true);
 			});
-			this._params.focusOnNoReady && this._processFirstUnreadyWidget().focus();
+			_this._params.focusOnNoReady && _this._processFirstUnreadyWidget().focus();
 		}
 
 		return false;
@@ -188,16 +189,19 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_onWidgetRemove : function(e, widget) {
 
-		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId];
+		var _this = this,
+			widgetId = widget.getId(),
+			widgetData = _this._widgetsDataById[widgetId];
+
 		if(widgetData) {
-			delete this._widgetsDataById[widgetId];
-			!!widget.getName() && delete this._widgetsByName[widget.getName()];
+			delete _this._widgetsDataById[widgetId];
+			!!widget.getName() && delete _this._widgetsByName[widget.getName()];
 			if(!widgetData.isReady) {
-				this._unreadyCounter--;
-				delete this._unreadyWidgetIds[widgetId];
+				_this._unreadyCounter--;
+				delete _this._unreadyWidgetIds[widgetId];
 			}
-			this._changedCounter++;
-			this.trigger('ready-change', this);
+			_this._changedCounter++;
+			_this.trigger('ready-change', _this);
 		}
 
 	},
