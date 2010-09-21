@@ -65,16 +65,19 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_init : function() {
 
-		this
-			._setForm(this)
+		var _this = this;
+
+		_this
+			._setForm(_this)
 			.__base()
 			._checkDependencies()
-			.addCSSClass(this.__self.CSS_CLASS_INITED)
-			.__self._addInstance(this);
+			.addCSSClass(_this.__self.CSS_CLASS_INITED)
+			.__self._addInstance(_this);
 
-		this._unreadyCounter == 0 && this.trigger('ready-change', this); // инициирующее событие
-		this._elem.trigger('init.jz', this);
-		return this;
+		_this._unreadyCounter || _this.trigger('ready-change', _this); // инициирующее событие
+		_this._elem.trigger('init.jz', _this);
+
+		return _this;
 
 	},
 
@@ -148,33 +151,40 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	_addWidget : function(widget) {
 
-		this._widgetsDataById[widget.getId()] = {
+		var _this = this;
+
+		_this._widgetsDataById[widget.getId()] = {
 			widget  : widget,
 			isReady : true
 		};
 
-		!!widget.getName() && (this._widgetsByName[widget.getName()] = widget);
+		!!widget.getName() && (_this._widgetsByName[widget.getName()] = widget);
 
-		widget !== this._bindTo(widget, 'focus', function() {
-			this.__self._currentInstance = this;
-		}) && this
+		widget !== _this._bindTo(widget, 'focus', function() {
+			_this.__self._currentInstance = _this;
+		}) && _this
 			._bindTo(widget, {
-				'ready-change' : this._onWidgetReadyChange,
-				'remove'       : this._onWidgetRemove
+				'ready-change' : _this._onWidgetReadyChange,
+				'remove'       : _this._onWidgetRemove
 			});
 
 		widget._hasVal() &&
-			this._bindTo(widget, 'initial-value-change', this._onWidgetInitialValueChange);
+			_this._bindTo(widget, 'initial-value-change', _this._onWidgetInitialValueChange);
 
 	},
 
 	_onWidgetReadyChange : function(e, widget) {
 
-		var widgetId = widget.getId(), widgetData = this._widgetsDataById[widgetId], isReady = widget.isReady();
+		var _this = this,
+			widgetId = widget.getId(),
+			widgetData = _this._widgetsDataById[widgetId], isReady = widget.isReady();
+
 		if(widgetData.isReady != isReady) {
-			this._unreadyCounter += (widgetData.isReady = isReady)? -1 : 1;
-			isReady? delete this._unreadyWidgetIds[widgetId] : this._unreadyWidgetIds[widgetId] = true;
-			this.trigger('ready-change', this);
+			_this._unreadyCounter += (widgetData.isReady = isReady)? -1 : 1;
+			isReady?
+				delete _this._unreadyWidgetIds[widgetId] :
+				_this._unreadyWidgetIds[widgetId] = true;
+			_this.trigger('ready-change', _this);
 		}
 
 	},
