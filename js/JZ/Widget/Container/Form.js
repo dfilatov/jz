@@ -209,7 +209,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			.__base();
 		this.__self._removeInstance(this);
 
-		this._delete('_widgetsByName', '_widgetsDataById', '_unreadyWidgetIds');
+		this._del('_widgetsByName', '_widgetsDataById', '_unreadyWidgetIds');
 
 	}
 

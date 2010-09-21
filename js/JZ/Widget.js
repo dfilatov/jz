@@ -317,7 +317,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_delete : function() {
+	_del : function() {
 
 		var _this = this;
 		$.each(arguments, function(i, prop) {
@@ -332,7 +332,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._elem.removeData('jz');
 
-		this._delete(
+		this._del(
 			'_elem', '_classElem', '_params', '_parent', '_val', '_initialVal', '_dependencies', '_dependFromIds');
 
 	},
