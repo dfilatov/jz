@@ -2,16 +2,18 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	__constructor : function(elem, classElem, params) {
 
-		this._elem = elem.data('jz', this);
-		this._classElem = classElem || elem;
-		this._params = $.extend(this._getDefaultParams(params), params);
-		this._parent = this._form = null;
-		this._isInited = this._isRequired = false;
-		this._isValid = true;
-		this._isEnabled = !this._elem.attr('disabled');
-		this._val = this._initialVal = null;
-		this._dependencies = {};
-		this._dependFromIds = {};
+		var _this = this;
+
+		_this._elem = elem.data('jz', _this);
+		_this._classElem = classElem || elem;
+		_this._params = $.extend(_this._getDefaultParams(params), params);
+		_this._parent = _this._form = null;
+		_this._isInited = _this._isRequired = false;
+		_this._isValid = true;
+		_this._isEnabled = !_this._elem.attr('disabled');
+		_this._val = _this._initialVal = null;
+		_this._dependencies = {};
+		_this._dependFromIds = {};
 
 	},
 
@@ -114,34 +116,39 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	enable : function(byParent) {
 
-		if(this.isEnabled() || !this._parent.isEnabled()) {
-			return this;
+		var _this = this;
+
+		if(_this.isEnabled() || !_this._parent.isEnabled()) {
+			return _this;
 		}
 
-		if(byParent && this._dependencies['enabled']) {
-			return this._checkDependencies('enabled');
+		if(byParent && _this._dependencies['enabled']) {
+			return _this._checkDependencies('enabled');
 		}
 
-		this._enableElems();
-		var isReady = this.removeCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
-		this._isEnabled = true;
-		isReady != this.isReady() && this.trigger('ready-change', this);
-		this.isChanged() && this.trigger('initial-value-change', true);
-		return this.trigger('enable', this);
+		_this._enableElems();
+		var isReady = _this.removeCSSClass(_this.__self.CSS_CLASS_DISABLED).isReady();
+		_this._isEnabled = true;
+		isReady != _this.isReady() && _this.trigger('ready-change', _this);
+		_this.isChanged() && _this.trigger('initial-value-change', true);
+		return _this.trigger('enable', _this);
 
 	},
 
 	disable : function() {
 
-		if(this.isEnabled()) {
-			this._disableElems();
-			var isReady = this.addCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
-			this._isEnabled = false;
-			isReady != this.isReady() && this.trigger('ready-change', this);
-			this.isChanged() && this.trigger('initial-value-change', false);
-			this.trigger('disable', this);
+		var _this = this;
+
+		if(_this.isEnabled()) {
+			_this._disableElems();
+			var isReady = _this.addCSSClass(_this.__self.CSS_CLASS_DISABLED).isReady();
+			_this._isEnabled = false;
+			isReady != _this.isReady() && _this.trigger('ready-change', _this);
+			_this.isChanged() && _this.trigger('initial-value-change', false);
+			_this.trigger('disable', _this);
 		}
-		return this;
+
+		return _this;
 
 	},
 
@@ -174,10 +181,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	addDependence : function(type, dependence) {
 
-		this._dependencies[type] = dependence;
-
 		var _this = this;
-		$.each(dependence.getFrom(), function() {
+		$.each((_this._dependencies[type] = dependence).getFrom(), function() {
 			_this._dependFromIds[this.getId()] ||
 				(_this
 					._bindTo(this, {
@@ -282,15 +287,18 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_setVal : function(val, prevent) {
 
-		if(!this._val.isEqual(val)) {
-			var isChanged = this.isChanged();
-			this._val = val;
-			prevent || this._setValToElem(val);
-			isChanged == this.trigger('value-change', this).isChanged() ||
-				this[(isChanged? 'remove' : 'add') + 'CSSClass'](this.__self.CSS_CLASS_CHANGED)
+		var _this = this;
+
+		if(!_this._val.isEqual(val)) {
+			var isChanged = _this.isChanged();
+			_this._val = val;
+			prevent || _this._setValToElem(val);
+			isChanged == _this.trigger('value-change', _this).isChanged() ||
+				_this[(isChanged? 'remove' : 'add') + 'CSSClass'](_this.__self.CSS_CLASS_CHANGED)
 					.trigger('initial-value-change', !isChanged);
 		}
-		return this;
+
+		return _this;
 
 	},
 
@@ -324,7 +332,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		this._elem.removeData('jz');
 
-		this._delete('_elem', '_classElem', '_params', '_parent', '_val', '_initialVal', '_dependencies', '_dependFromIds');
+		this._delete(
+			'_elem', '_classElem', '_params', '_parent', '_val', '_initialVal', '_dependencies', '_dependFromIds');
 
 	},
 
@@ -364,17 +373,18 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var fullOrder = ['enabled', 'valid', 'required'];
 		return function(onlyType, recursively, fullCheck) {
-			var i = 0, type, dependenciesByType, order = !!onlyType? [onlyType] : fullOrder,
-				length = order.length, isReady = this.isReady();
+			var _this = this,
+				i = 0, type, dependenciesByType, order = !!onlyType? [onlyType] : fullOrder,
+				length = order.length, isReady = _this.isReady();
 			while(i < length) {
-				dependenciesByType = this._dependencies[type = order[i++]];
+				dependenciesByType = _this._dependencies[type = order[i++]];
 				if(dependenciesByType || fullCheck)
-					this[this.__self._dependenceTypeToFn(type)](dependenciesByType?
+					_this[_this.__self._dependenceTypeToFn(type)](dependenciesByType?
 						dependenciesByType.check() :
 						{ result : true, params : {} });
 			}
-			isReady != this.isReady() && this.trigger('ready-change', this);
-			return this;
+			isReady != _this.isReady() && _this.trigger('ready-change', _this);
+			return _this;
 		};
 
 	})(),

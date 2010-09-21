@@ -149,12 +149,10 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 	_processFirstUnreadyWidget : function() {
 
 		var baseResult = this.__base();
-		if(baseResult || this._hasVal()) {
-			return baseResult;
-		}
-
-		return this._processFirstUnreadyChildWidget();
-
+		return baseResult || this._hasVal()?
+			baseResult :
+			this._processFirstUnreadyChildWidget();
+				
 	},
 
 	_processFirstUnreadyChildWidget : function() {
