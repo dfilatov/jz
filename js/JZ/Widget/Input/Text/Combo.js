@@ -56,7 +56,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			while(i < len) {
 				item = list[i];
-				html.push('<li onclick="return ', i++,'"');
+				html.push('<li onclick="return ', i++, '"');
 				if(isSelected = itemProcessor.isSelected(item, elemVal)) {
 					html.push(' class="', _this.__self.CSS_CLASS_SELECTED, '"');
 					_this._hilightedIndex = i - 1;
@@ -344,17 +344,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		   		'<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
 
 		_this._bindTo(res, 'mousedown', function(e) {
-			var itemElem = $(e.target).closest('li');
+			var itemNode = $(e.target).closest('li')[0];
 
 			_this._preventUpdate = _this._focusOnBlur = true;
-			if(itemElem[0]) {
+			itemNode?
 				_this
-					._selectItemByIndex(itemElem[0].onclick())
+					._selectItemByIndex(itemNode.onclick())
 					.focus()
-					._hideList();
-			} else {
+					._hideList() :
 				_this._preventOnBlur = true;
-			}
 
 			setTimeout(function() {
 				_this._focusOnBlur = false;
