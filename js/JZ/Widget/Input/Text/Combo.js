@@ -383,16 +383,21 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_getStorage : $.memoize(function() {
 
-		var _this = this;
-		return _this._params.storage.source == 'remote'?
-			new JZ.Storage.Remote($.extend({
-					name : _this._params.storage.name || this.getName(),
-					widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
-						name = $.trim(name);
-						return name? _this._form.getWidgetByName(name) : null;
-					})
-				}, _this._params.storage)) :
-			new JZ.Storage.Local(_this._params.storage);
+		var _this = this,
+			params = $.extend({
+				name : _this._params.storage.name || this.getName(),
+				widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
+					name = $.trim(name);
+					return name? _this._form.getWidgetByName(name) : null;
+				})
+			}, _this._params.storage),
+			source = _this._params.storage.source;
+
+		return typeof source == 'string'?
+		    (_this._params.storage.source == 'remote'?
+			    new JZ.Storage.Remote(params) :
+			    new JZ.Storage.Local(params)) :
+			new source(params);
 
 	}),
 
