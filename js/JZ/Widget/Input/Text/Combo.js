@@ -148,6 +148,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
+	_onSelect : function() {
+
+		this.trigger('select');
+
+	},
+
 	_onArrowMouseDown : function() {
 
 		if(this.isEnabled()) {
@@ -171,8 +177,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var _this = this;
 		if(_this.isEnabled()) {
 			if(_this._isListShowed) {
-				_this._hideList();
-				_this._preventOnFocus = true;
+				_this
+					._hideList()
+					._preventOnFocus = true;
 				_this.focus();
 			}
 			else {
@@ -202,7 +209,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					if(_this._isListShowed) {
 						_this
 							.val(_this._lastSearchVal = _this._keyDownValue)
-							._hideList();
+							._hideList()
+							._onSelect();
 						return false;
 					}
 				break;
@@ -296,12 +304,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var _this = this;
 		if(_this._isListShowed || !_this._isFocused || !_this._items.length ||
 			(_this._items.length == 1 && _this._hilightedIndex == 0)) {
-			return;
+			return _this;
 		}
 
 		_this._getListContainer().removeClass(_this.__self.CSS_CLASS_INVISIBLE);
 		_this._reposList();
 		_this._isListShowed = true;
+
+		return _this;
 
 	},
 
@@ -313,6 +323,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this._getListContainer().addClass(_this.__self.CSS_CLASS_INVISIBLE);
 			_this._isListShowed = false;
 		}
+
+		return _this;
 
 	},
 
@@ -351,7 +363,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				_this
 					._selectItemByIndex(itemNode.onclick())
 					.focus()
-					._hideList() :
+					._hideList()
+					._onSelect() :
 				_this._preventOnBlur = true;
 
 			setTimeout(function() {
@@ -452,8 +465,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_destruct : function() {
 
-		this._hideList();
-		this.__base();
+		this
+			._hideList()
+			.__base();
 		this._getListContainer().remove();
 
 	},
