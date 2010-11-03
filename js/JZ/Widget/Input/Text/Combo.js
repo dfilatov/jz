@@ -8,8 +8,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus =
 			_this._preventUpdate = _this._focusOnBlur = false;
-		_this._items = _this._lastSearchVal = _this._keyDownValue = _this._updateList =
-			 _this._reposTimer = _this._lastOffset = null;
+		_this._hiddenElem = _this._items = _this._lastSearchVal = _this._keyDownValue =
+			_this._updateList = _this._reposTimer = _this._lastOffset = null;
 		_this._hilightedIndex = -1;
 
 	},
@@ -17,7 +17,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_init : function() {
 
 		var _this = this;
-		_this.__base()._elem.attr('autocomplete', 'off');
+		var elem = _this.__base()._elem.attr('autocomplete', 'off');
+		elem.after(_this._hiddenElem = $('<input type="hidden" value="' + elem.val() + '"' +
+			(elem.attr('id')? ' id="value-' + elem.attr('id') + '"' : '') + '/>'));
+		if(elem.attr('name')) {
+			_this._hiddenElem.attr('name', elem.attr('name'));
+			elem.removeAttr('name');
+		}
 		_this._params.arrow && _this._params.arrow.attr('tabIndex', -1);
 		_this._updateList = $.debounce(function(val) {
 
@@ -32,6 +38,31 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}, _this._params.debounceInterval);
 
 		return _this;
+
+	},
+
+	_extractName : function() {
+
+		return (this._hiddenElem || this._elem).attr('name');
+
+	},
+
+	_createVal : function(val) {
+
+		return this.__base(this._getValMapper().toVal(val));
+
+	},
+
+	_setVal : function(val, prevent) {
+
+		this._hiddenElem.val(val.toString());
+		return this.__base(val, prevent);
+
+	},
+
+	_setValToElem : function(val) {
+
+		this.__base(this._createVal(this._getValMapper().toString(val)));
 
 	},
 
@@ -208,7 +239,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				case 13:
 					if(_this._isListShowed) {
 						_this
-							.val(_this._lastSearchVal = _this._keyDownValue)
+							._setVal(this._createVal(_this._lastSearchVal = _this._keyDownValue))
 							._hideList()
 							._onSelect();
 						return false;
@@ -275,17 +306,19 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		_this
 			._selectItemByIndex(index)
-			._keyDownValue = _this.val();
+			._keyDownValue = _this._elem.val();
 
 	},
 
 	_selectItemByIndex : function(index) {
 
-		if(this._isListShowed) {
-			var item = this._items[index];
+		var _this = this;
+
+		if(_this._isListShowed) {
+			var item = _this._items[index];
 			if(item) {
-				var node = this
-						.val(this._lastSearchVal = this._getItemProcessor().val(item))
+				var node = _this
+						._setVal(_this._createVal(_this._lastSearchVal = _this._getItemProcessor().val(item)))
 						._elem[0];
 				if(node.createTextRange && !node.selectionStart) {
 					var range = node.createTextRange();
@@ -394,11 +427,21 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	}),
 
+	_getValMapper : $.memoize(function() {
+
+		var valMapper = this._params.valMapper,
+			defaultValMapper = this.__self._valMapper;
+		return new (valMapper === defaultValMapper?
+			valMapper :
+			$.inherit(defaultValMapper, valMapper));
+
+	}),
+
 	_getStorage : $.memoize(function() {
 
 		var _this = this,
 			params = $.extend({
-				name : _this._params.storage.name || this.getName(),
+				name : _this._params.storage.name || _this.getName(),
 				widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
 					name = $.trim(name);
 					return name? _this._form.getWidgetByName(name) : null;
@@ -458,12 +501,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			showListOnEmpty  : true,
 			reposList        : false,
 			debounceInterval : params.storage.source == 'remote'? 200 : 50,
-			itemProcessor    : this.__self._itemProcessor
+			itemProcessor    : this.__self._itemProcessor,
+			valMapper        : this.__self._valMapper
 		});
 
 	},
 
 	_destruct : function() {
+
+		this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
+		this._hiddenElem.remove();
+		this._hiddenElem = null;
 
 		this
 			._hideList()
@@ -511,6 +559,22 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		isSelected : function(item, searchVal) {
 
 			return this.val(item).toLowerCase() === searchVal.toLowerCase();
+
+		}
+
+	}),
+
+	_valMapper : $.inherit({
+
+		toVal : function(str) {
+
+			return str;
+
+		},
+
+		toString : function(val) {
+
+			return val;
 
 		}
 
