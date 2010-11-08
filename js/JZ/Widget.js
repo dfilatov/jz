@@ -363,7 +363,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_updateValue : function() {
+	_updateVal : function() {
 
 		this._setVal(this._createVal(this._extractValFromElem()), true);
 

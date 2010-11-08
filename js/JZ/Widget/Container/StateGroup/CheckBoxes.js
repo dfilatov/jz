@@ -9,7 +9,7 @@ JZ.Widget.Container.StateGroup.CheckBoxes = $.inherit(JZ.Widget.Container.StateG
 	_onChildChange : function(widget, index) {
 
 		this._children[index]._setChecked(widget._isChecked());
-		this._updateValue();
+		this._updateVal();
 
 	},
 

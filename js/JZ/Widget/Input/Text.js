@@ -38,7 +38,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_onChange : function() {
 
-		this._updateValue();
+		this._updateVal();
 
 	},
 

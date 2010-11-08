@@ -10,7 +10,7 @@ JZ.Widget.Input.Select = $.inherit(JZ.Widget.Input, {
 
 	_onChange : function() {
 
-		this._updateValue();
+		this._updateVal();
 
 	},
 

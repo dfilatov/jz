@@ -14,6 +14,7 @@ JZ.Observable = $.inherit(/** @lends JZ.Observable.prototype */{
 		if($.isFunction(data)) {
 			ctx = fn;
 			fn = data;
+			data = undefined;
 		}
 
 		var i = 0, types = type.split(' '), typeNs, hasNs;
