@@ -11,6 +11,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		_this._isInited = _this._isRequired = false;
 		_this._isValid = true;
 		_this._isEnabled = !_this._elem.attr('disabled');
+		_this._isFocused = false;
 		_this._val = _this._initialVal = null;
 		_this._dependencies = {};
 		_this._dependFromIds = {};
@@ -38,6 +39,13 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	focus : function() {
 
 		this._elem[0].focus();
+		return this;
+
+	},
+
+	blur : function() {
+
+		this._elem[0].blur();
 		return this;
 
 	},
@@ -118,7 +126,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var _this = this;
 
-		if(_this.isEnabled() || !_this._parent.isEnabled()) {
+		if(_this.isEnabled() || (_this._parent && !_this._parent.isEnabled())) {
 			return _this;
 		}
 
@@ -140,6 +148,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 		var _this = this;
 
 		if(_this.isEnabled()) {
+			_this._isFocused && this.blur();
 			_this._disableElems();
 			var isReady = _this.addCSSClass(_this.__self.CSS_CLASS_DISABLED).isReady();
 			_this._isEnabled = false;

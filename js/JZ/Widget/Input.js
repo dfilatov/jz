@@ -1,13 +1,5 @@
 JZ.Widget.Input = $.inherit(JZ.Widget, {
 
-	__constructor : function() {
-
-		this.__base.apply(this, arguments);
-
-		this._isFocused = false;
-
-	},
-
 	_bindEvents : function() {
 
 		return this
