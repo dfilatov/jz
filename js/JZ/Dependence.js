@@ -61,7 +61,7 @@ JZ.Dependence = $.inherit({
 
 }, {
 
-	_onOr : function() {},
-	_onAnd : function() {}
+	_onOR  : function() {},
+	_onAND : function() {}
 
 });

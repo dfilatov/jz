@@ -272,7 +272,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				._setVal(this._createVal(_this._lastSearchVal = _this._keyDownValue))
 				._hideList()
 				._onSelect();
-			_this._keyDownValue = null;
 			return false;
 		}
 
