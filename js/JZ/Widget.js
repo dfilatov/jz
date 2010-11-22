@@ -342,8 +342,8 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			var dependWidgets = this.getFrom(), dependWidget, i = 0;
 			while(dependWidget = dependWidgets[i++]) {
 				dependWidget
-					.unbind('value-change enable disable', this._onChangeDependFromWidget, this)
-					.unbind('remove', this._onRemoveDependFromWidget, this);
+					.unbind('value-change enable disable', _this._onChangeDependFromWidget, _this)
+					.unbind('remove', _this._onRemoveDependFromWidget, _this);
 			}
 		});
 
