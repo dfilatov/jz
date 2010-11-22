@@ -19,6 +19,12 @@ var JZ = {
 
 	},
 
+	getWidgetClassByType : function(type) {
+
+		return this.Builder._getWidgetClassByType(type);
+
+	},
+
 	_throwException : function(text) {
 
 		throw 'JZException: ' + text;
