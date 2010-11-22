@@ -192,13 +192,12 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 		var _this = this;
 		$.each((_this._dependencies[type] = dependence).getFrom(), function() {
-			_this._dependFromIds[this.getId()] ||
-				(_this
-					._bindTo(this, {
-						'value-change enable disable' : this._onChangeDependFromWidget,
-						'remove'                      : this._onRemoveDependFromWidget
-					})
-					._dependFromIds[this.getId()] = true);
+			if(!_this._dependFromIds[this.getId()]) {
+				this
+					.bind('value-change enable disable', _this._onChangeDependFromWidget, _this)
+					.bind('remove', _this._onRemoveDependFromWidget, _this);
+				_this._dependFromIds[this.getId()] = true;
+			}
 		});
 
 	},
