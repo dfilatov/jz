@@ -196,7 +196,7 @@ JZ.Builder = $.inherit({
 
 	_rebuildTypeRE : function() {
 
-		return this._typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(' + this._types.join('|') +')');
+		return this._typeRE = new RegExp(JZ.CSS_CLASS_WIDGET + '-(' + this._types.join('|') +')(?:\\s|$)');
 
 	},
 
