@@ -164,7 +164,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	val : function(val) {
 
 		return typeof val == 'undefined'?
-	   		this._val.get() :
+	   		this._getVal().get() :
 			this._setVal(this._processVal(this._createVal(val)));
 
 	},
