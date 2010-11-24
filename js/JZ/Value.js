@@ -42,7 +42,7 @@ JZ.Value = $.inherit({
 	isEqual : function(val) {
 
 		return this._checkForCompareTypes(val) &&
-			   this.get() === new this.__self((val instanceof JZ.Value)? val.get() : val).get();
+			   this.toString() === new this.__self((val instanceof JZ.Value)? val.get() : val).toString();
 
 	},
 
