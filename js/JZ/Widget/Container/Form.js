@@ -210,7 +210,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 				_this._unreadyCounter--;
 				delete _this._unreadyWidgetIds[widgetId];
 			}
-			_this._changedCounter++;
+			widget._hasVal() && _this._changedCounter++;
 			_this.trigger('ready-change', _this);
 		}
 
