@@ -7,7 +7,7 @@ JZ.Observable = $.inherit(/** @lends JZ.Observable.prototype */{
      * @param {Function} fn обработчик
      * @param {Object} [ctx] контекст обработчика
      */
-    bind : function(type, data, fn, ctx) {
+    bind : function(type, data, fn, ctx, undefined) {
 
         this._observers || (this._observers = {});
 
@@ -33,8 +33,8 @@ JZ.Observable = $.inherit(/** @lends JZ.Observable.prototype */{
             }
         }
         else {
-            $.each(type, function(type, fn) {
-                _this.bind(type, fn, data);
+            $.each(type, function(type) {
+                _this.bind(type, data, this, fn);
             });
         }
 
