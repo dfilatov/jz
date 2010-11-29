@@ -33,8 +33,8 @@ JZ.Observable = $.inherit(/** @lends JZ.Observable.prototype */{
             }
         }
         else {
-            $.each(type, function(type) {
-                _this.bind(type, data, this, fn);
+            $.each(type, function(type, fn) {
+                _this.bind(type, fn, data);
             });
         }
 
