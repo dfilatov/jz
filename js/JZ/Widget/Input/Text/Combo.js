@@ -90,7 +90,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				item = list[i];
 				html.push('<li onclick="return ', i++, '"');
 				if(isSelected = itemProcessor.isSelected(item, elemVal)) {
-					html.push(' class="', _this.__self.CSS_CLASS_SELECTED, '"');
 					_this._hilightedIndex = i - 1;
 				}
 				html.push('>');
@@ -100,12 +99,24 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			listElem
 				.html(html.join(''))
-				.css('height', 'auto');
+				.css({ height : 'auto', width : 'auto' });
 
 			_this._showList();
 
+            var css = {
+                width : Math.max(
+                    listElem.outerWidth(),
+                    _this._elem.outerWidth())
+            };
+
 			list.length > _this._params.listSize &&
-				listElem.css('height', listElem.find('li:first').outerHeight() * _this._params.listSize);
+                (css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
+
+            listElem.css(css);
+
+            _this._hilightedIndex > -1?
+                _this._hilightItemByIndex(_this._hilightedIndex) :
+                listElem.scrollTop(0);
 
 		}
 
@@ -172,9 +183,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		if(_this._focusOnBlur) {
 			_this._focusOnBlur = false;
 			setTimeout(function() {
-				_this
-					.focus()
-					._refocus();
+				_this._refocus();
 			}, 0);
 		}
 
@@ -208,7 +217,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var _this = this;
 		if(_this.isEnabled()) {
-			if(_this._isListShowed) {
+			if(_this._isListShowed && !_this._lastSearchVal) {
 				_this
 					._hideList()
 					._preventOnFocus = true;
@@ -217,7 +226,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			else {
 				_this._preventUpdate = true;
 				_this
-					.focus()
 					._refocus()
 					._updateList('');
 				_this._preventOnBlur = false;
@@ -229,26 +237,25 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onKeyDown : function(e) {
 
 		var _this = this;
-		if(_this._keyDownValue === null) {
-			_this._keyDownValue = _this._elem.val();
-			if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-				return;
-			}
 
-			switch(e.keyCode) {
-				case 13:
-					return _this._onEnter();
-				break;
+        _this._keyDownValue === null && (_this._keyDownValue = _this._elem.val());
 
-				case 38:
-					_this._prev();
-					return false;
+        if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+            return;
+        }
+        switch(e.keyCode) {
+            case 13:
+                return _this._onEnter();
+            break;
 
-				case 40:
-					_this._next();
-					return false;
-			}
-		}
+            case 38:
+                _this._prev();
+                return false;
+
+            case 40:
+                _this._next();
+                return false;
+        }
 
 	},
 
@@ -384,7 +391,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this._lastOffset = { left : offsetLeft, top : offsetTop };
 			_this._getListContainer()
 				.css({
-					width : _this._elem.outerWidth() + 'px',
 					left  : offsetLeft + 'px',
 					top   : offsetTop + 'px'
 				});
@@ -398,7 +404,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var _this = this,
 			res = $('<div class="' + _this.__self.CSS_CLASS_LIST + ' ' + _this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   		'<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/><ul/></div>');
+		   		(this._params.useIframeUnder? '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/>' : '') +
+				'<ul/></div>');
 
 		_this._bindTo(res, 'mousedown', function(e) {
 			var itemNode = $(e.target).closest('li')[0];
@@ -472,14 +479,20 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_refocus : function() {
 
-		if(document.selection) {
-			var range = this._elem[0].createTextRange(),
-				len = this._elem.val().length;
-			range.collapse(true);
-			range.moveStart('character', len);
-			range.moveEnd('character', len);
-			range.select();
+        var elem = this._elem[0],
+            len = elem.value.length;
+
+        elem.focus();
+
+        if($.browser.opera) {
+            elem.setSelectionRange(len, len);
+        }
+		else if(elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.move('character', len);
+            range.select();
 		}
+
 		return this;
 
 	},
@@ -493,7 +506,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_disableElems : function() {
 
 		this.__base();
-		this._enableArrow(false);
+		this
+			._hideList()
+			._enableArrow(false);
 
 	},
 
@@ -516,7 +531,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			reposList        : false,
 			debounceInterval : params.storage.source == 'remote'? 200 : 50,
 			itemProcessor    : this.__self._itemProcessor,
-			valMapper        : this.__self._valMapper
+			valMapper        : this.__self._valMapper,
+			useIframeUnder   : false
 		});
 
 	},
@@ -527,10 +543,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this._hiddenElem.remove();
 		this._hiddenElem = null;
 
+		var listContainer = this._getListContainer();
 		this
 			._hideList()
 			.__base();
-		this._getListContainer().remove();
+		listContainer.remove();
 
 	},
 
