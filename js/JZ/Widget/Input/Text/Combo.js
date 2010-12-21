@@ -63,7 +63,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_setValToElem : function(val) {
 
-		this.__base(this._createVal(this._getValMapper().toString(val), true));
+		var newVal = this._createVal(this._getValMapper().toString(val), true);
+		newVal.toString().toLowerCase() != this._elem.val().toLowerCase() && this.__base(newVal);
 
 	},
 
