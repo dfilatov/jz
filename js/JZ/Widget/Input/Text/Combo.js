@@ -57,14 +57,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_setVal : function(val, prevent) {
 
 		this._hiddenElem.val(val.toString());
+
 		return this.__base(val, prevent);
 
 	},
 
 	_setValToElem : function(val) {
 
-		var newVal = this._createVal(this._getValMapper().toString(val), true);
-		newVal.toString().toLowerCase() != this._elem.val().toLowerCase() && this.__base(newVal);
+		this.__base(this._createVal(this._getValMapper().toString(val), true));
 
 	},
 
@@ -180,6 +180,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		else {
 			_this._preventOnBlur = false;
 		}
+
+		this._preventUpdate = false;
 
 		if(_this._focusOnBlur) {
 			_this._focusOnBlur = false;
@@ -444,7 +446,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			defaultItemProcessor = this.__self._itemProcessor;
 		return new (itemProcessor === defaultItemProcessor?
 			itemProcessor :
-			$.inherit(defaultItemProcessor, itemProcessor));
+			$.inherit(defaultItemProcessor, itemProcessor))(this._params.caseSensitivity);
 
 	}),
 
@@ -533,6 +535,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			debounceInterval : params.storage.source == 'remote'? 200 : 50,
 			itemProcessor    : this.__self._itemProcessor,
 			valMapper        : this.__self._valMapper,
+			caseSensitivity  : false,
 			useIframeUnder   : false
 		});
 
@@ -566,9 +569,16 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_itemProcessor : $.inherit({
 
+		__constructor : function(caseSensitivity) {
+
+			this._caseSensitivity = caseSensitivity;
+
+		},
+
 		toHtml : function(item, searchVal, buffer) {
 
-			var startIndex = item.toLowerCase().indexOf(searchVal.toLowerCase()),
+			var startIndex = (this._caseSensitivity? item : item.toLowerCase())
+					.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())),
 				searchValLen = searchVal.length;
 
 			startIndex > -1?
@@ -590,7 +600,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		isSelected : function(item, searchVal) {
 
-			return this.val(item).toLowerCase() === searchVal.toLowerCase();
+			var val = this.val(item);
+			return (this._caseSensitivity? val : val.toLowerCase()) ===
+		   		(this._caseSensitivity? searchVal : searchVal.toLowerCase());
 
 		}
 

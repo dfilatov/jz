@@ -146,7 +146,7 @@ JZ.Builder = $.inherit({
 				return elem.parent();
 
 			default:
-				return elem.parent().parent();
+				return elem.attr('type') == 'hidden'? elem : elem.parent().parent();
 		}
 
 	},
