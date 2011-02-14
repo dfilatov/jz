@@ -181,9 +181,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this._preventOnBlur = false;
 		}
 
-		this._preventUpdate = false;
-
 		if(_this._focusOnBlur) {
+			_this._preventUpdate = true;
 			_this._focusOnBlur = false;
 			setTimeout(function() {
 				_this._refocus();
@@ -417,7 +416,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					._selectItemByIndex(itemNode.onclick())
 					._hideList()
 					._onSelect();
-				_this._preventUpdate = _this._focusOnBlur = !_this._params.blurOnSelect;
+				_this._focusOnBlur = !_this._params.blurOnSelect;
                 _this._params.blurOnSelect && _this.blur();
 			} else {
 				_this._preventOnBlur = _this._focusOnBlur = _this._preventUpdate = true;
