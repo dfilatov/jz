@@ -26,6 +26,14 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	blur : function() {
+
+		return this
+			.__base()
+			._applyFnToChildren('blur');
+
+	},
+
 	enable : function(byParent) {
 
 		return this
@@ -152,7 +160,7 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 		return baseResult || this._hasVal()?
 			baseResult :
 			this._processFirstUnreadyChildWidget();
-				
+
 	},
 
 	_processFirstUnreadyChildWidget : function() {
