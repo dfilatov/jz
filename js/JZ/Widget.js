@@ -541,6 +541,7 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	CSS_CLASS_INITED           : JZ.CSS_CLASS_WIDGET + '-inited',
 	CSS_CLASS_CHANGED          : JZ.CSS_CLASS_WIDGET + '-changed',
 	CSS_CLASS_FOCUSED          : JZ.CSS_CLASS_WIDGET + '-focused',
+	CSS_CLASS_SELECTABLE       : JZ.CSS_CLASS_WIDGET + '-selectable',
 	CSS_CLASS_SELECTED         : JZ.CSS_CLASS_WIDGET + '-selected',
 	CSS_CLASS_DISABLED         : JZ.CSS_CLASS_WIDGET + '-disabled',
 	CSS_CLASS_REQUIRED         : JZ.CSS_CLASS_WIDGET + '-required',

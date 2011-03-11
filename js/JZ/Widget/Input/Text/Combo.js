@@ -72,7 +72,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var _this = this;
 		if(_this._lastSearchVal == searchVal) {
-
 			_this._items = list;
 			_this._hilightedIndex = -1;
 
@@ -89,7 +88,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			while(i < len) {
 				item = list[i];
-				html.push('<li onclick="return ', i++, '"');
+				html.push('<li');
+				itemProcessor.isSelectable(item) && html.push(' class="', this.__self.CSS_CLASS_SELECTABLE, '"');
+				html.push(' onclick="return ', i++, '"');
 				if(isSelected = itemProcessor.isSelected(item, elemVal)) {
 					_this._hilightedIndex = i - 1;
 				}
@@ -251,11 +252,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
             break;
 
             case 38:
-                _this._prev();
+                _this._next(-1);
                 return false;
 
             case 40:
-                _this._next();
+                _this._next(1);
                 return false;
         }
 
@@ -286,17 +287,28 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_prev : function() {
+	_next : function(direction) {
 
-		this._isListShowed &&
-			this._hilightItemByIndex((this._hilightedIndex > 0? this._hilightedIndex : this._items.length) - 1);
+		if(this._isListShowed) {
+			var itemProcessor = this._getItemProcessor(),
+				i = this._hilightedIndex,
+				len = this._items.length;
 
-	},
+			do {
+				i += direction;
+				if(i == len) {
+					i = 0;
+				}
+				else if(i == -1) {
+					i = len - 1;
+				}
 
-	_next : function() {
-
-		this._isListShowed &&
-			this._hilightItemByIndex(this._hilightedIndex < this._items.length - 1? this._hilightedIndex + 1 : 0);
+				if(itemProcessor.isSelectable(this._items[i])) {
+					return this._hilightItemByIndex(i);
+				}
+			}
+			while(i != this._hilightedIndex);
+		}
 
 	},
 
@@ -411,7 +423,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		_this._bindTo(res, 'mousedown', function(e) {
 			var itemNode = $(e.target).closest('li')[0];
-			if(itemNode) {
+			if(itemNode && $(itemNode).hasClass(_this.__self.CSS_CLASS_SELECTABLE)) {
 				_this
 					._selectItemByIndex(itemNode.onclick())
 					._hideList()
@@ -459,10 +471,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	}),
 
-	_getStorage : $.memoize(function() {
+	_getStorage : function() {
 
-		var _this = this,
-			params = $.extend({
+		var _this = this;
+
+		if(_this._storage) {
+			return _this._storage;
+		}
+
+		var params = $.extend({
 				name : _this._params.storage.name || _this.getName(),
 				widgets : $.map((_this._params.storage.values || '').split(','), function(name) {
 					name = $.trim(name);
@@ -471,13 +488,21 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}, _this._params.storage),
 			source = _this._params.storage.source;
 
-		return typeof source == 'string'?
-		    (_this._params.storage.source == 'remote'?
-			    new JZ.Storage.Remote(params) :
-			    new JZ.Storage.Local(params)) :
-			new source(params);
+		return _this._storage = (
+			typeof source == 'string'?
+		    	(_this._params.storage.source == 'remote'?
+					new JZ.Storage.Remote(params) :
+					new JZ.Storage.Local(params)) :
+				new source(params));
 
-	}),
+	},
+
+	setStorage : function(storage) {
+
+		this._storage = storage;
+		this._isFocused && this._updateList(this._params.showAllOnFocus? '' : undefined);
+
+	},
 
 	_refocus : function() {
 
@@ -576,18 +601,25 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		toHtml : function(item, searchVal, buffer) {
 
-			var startIndex = (this._caseSensitivity? item : item.toLowerCase())
-					.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())),
-				searchValLen = searchVal.length;
+			var val = this.val(item);
 
-			startIndex > -1?
-				buffer.push(
-					item.substr(0, startIndex),
-					'<strong>',
-					item.substr(startIndex, searchValLen),
-					'</strong>',
-					item.substr(startIndex + searchValLen)) :
-				buffer.push(item);
+			if(this.isSelectable(item)) {
+				var startIndex = (this._caseSensitivity? val : val.toLowerCase())
+						.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())),
+					searchValLen = searchVal.length;
+
+				startIndex > -1?
+					buffer.push(
+						val.substr(0, startIndex),
+						'<strong>',
+						val.substr(startIndex, searchValLen),
+						'</strong>',
+						val.substr(startIndex + searchValLen)) :
+					buffer.push(val);
+			}
+			else {
+				buffer.push(val);
+			}
 
 		},
 
@@ -597,7 +629,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		},
 
+		isSelectable : function(item) {
+
+			return true;
+
+		},
+
 		isSelected : function(item, searchVal) {
+
+			if(!this.isSelectable(item)) {
+				return false;
+			}
 
 			var val = this.val(item);
 			return (this._caseSensitivity? val : val.toLowerCase()) ===
