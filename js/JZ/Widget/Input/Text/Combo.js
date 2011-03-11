@@ -79,8 +79,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				return _this._hideList();
 			}
 
-			var elemVal = _this._elem.val(),
-				listElem = _this._getList(),
+			var listElem = _this._getList(),
 				itemProcessor = _this._getItemProcessor(),
 				html = [],
 				i = 0, item, len = list.length,
@@ -91,11 +90,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				html.push('<li');
 				itemProcessor.isSelectable(item) && html.push(' class="', this.__self.CSS_CLASS_SELECTABLE, '"');
 				html.push(' onclick="return ', i++, '"');
-				if(isSelected = itemProcessor.isSelected(item, elemVal)) {
+				if(isSelected = itemProcessor.isSelected(item, searchVal)) {
 					_this._hilightedIndex = i - 1;
 				}
 				html.push('>');
-				itemProcessor.toHtml(item, elemVal, html);
+				itemProcessor.toHtml(item, searchVal, html);
 				html.push('</li>');
 			}
 
