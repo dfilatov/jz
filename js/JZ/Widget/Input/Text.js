@@ -7,6 +7,12 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	},
 
+	isFocusable : function() {
+
+		return this._elem[0].type.toLowerCase() != 'hidden';
+
+	},
+
 	_init : function() {
 
 		this.__base()._isFocused || this._updatePlaceholder();

@@ -9,6 +9,12 @@ JZ.Storage.Local = $.inherit(JZ.Storage, {
 
 	},
 
+	isEmpty : function() {
+
+		return !this._searchList.length;
+
+	},
+
 	filter : function(val, callback) {
 
 		var searchVal = val.toLowerCase(), searchList = this._searchList;

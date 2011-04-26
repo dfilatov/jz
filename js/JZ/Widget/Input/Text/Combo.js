@@ -25,7 +25,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this._hiddenElem.attr('name', elem.attr('name'));
 			elem.removeAttr('name');
 		}
+
 		_this._params.arrow && _this._params.arrow.attr('tabIndex', -1);
+		_this._updateArrow();
+
 		_this._updateList = $.debounce(function(val) {
 
 			if(_this._elem) { // widget not destructed
@@ -100,24 +103,25 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			listElem
 				.html(html.join(''))
-				.css({ height : 'auto', width : 'auto' });
+				.css({ overflow : 'hidden', height : 'auto', width : 'auto' });
 
 			_this._showList();
 
-            var css = {
-                width : Math.max(
-                    listElem.outerWidth(),
-                    _this._elem.outerWidth())
-            };
+			var css = {
+				overflow : 'auto',
+				width    : Math.max(
+					listElem.outerWidth(),
+					_this._elem.outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
+			};
 
 			list.length > _this._params.listSize &&
-                (css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
+				(css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
 
-            listElem.css(css);
+			listElem.css(css);
 
-            _this._hilightedIndex > -1?
-                _this._hilightItemByIndex(_this._hilightedIndex) :
-                listElem.scrollTop(0);
+			_this._hilightedIndex > -1?
+				_this._hilightItemByIndex(_this._hilightedIndex) :
+				listElem.scrollTop(0);
 
 		}
 
@@ -173,12 +177,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onBlur : function() {
 
 		var _this = this;
-		if(!_this._preventOnBlur) {
-			_this.__base();
-			_this._hideList();
+		if(_this._preventOnBlur) {
+			_this._preventOnBlur = false;
 		}
 		else {
-			_this._preventOnBlur = false;
+			_this.__base();
+			_this._hideList();
 		}
 
 		if(_this._focusOnBlur) {
@@ -240,24 +244,23 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var _this = this;
 
-        _this._keyDownValue === null && (_this._keyDownValue = _this._elem.val());
+		_this._keyDownValue === null && (_this._keyDownValue = _this._elem.val());
 
-        if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-            return;
-        }
-        switch(e.keyCode) {
-            case 13:
-                return _this._onEnter();
-            break;
+		if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+			return;
+		}
+		switch(e.keyCode) {
+			case 13:
+				return _this._onEnter();
 
-            case 38:
-                _this._next(-1);
-                return false;
+			case 38:
+				_this._next(-1);
+				return false;
 
-            case 40:
-                _this._next(1);
-                return false;
-        }
+			case 40:
+				_this._next(1);
+				return false;
+		}
 
 	},
 
@@ -267,7 +270,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			return;
 		}
 
-		e.keyCode != 9 && this._keyDownValue != this._elem.val() && this._updateList();
+		e.keyCode != 9 && this._keyDownValue !== null && this._keyDownValue != this._elem.val() && this._updateList();
 		this._keyDownValue = null;
 
 	},
@@ -404,8 +407,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this._lastOffset = { left : offsetLeft, top : offsetTop };
 			_this._getListContainer()
 				.css({
-					left  : offsetLeft + 'px',
-					top   : offsetTop + 'px'
+					left : offsetLeft + 'px',
+					top  : offsetTop + 'px'
 				});
 		}
 
@@ -434,7 +437,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}
 
 			_this._focusOnBlur && setTimeout(function() {
-				_this._focusOnBlur = false;
+				_this._focusOnBlur = _this._preventUpdate  = false;
 			}, 50);
 
 			return !_this._focusOnBlur;
@@ -487,36 +490,36 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}, _this._params.storage),
 			source = _this._params.storage.source;
 
-		return _this._storage = (
-			typeof source == 'string'?
-		    	(_this._params.storage.source == 'remote'?
-					new JZ.Storage.Remote(params) :
-					new JZ.Storage.Local(params)) :
-				new source(params));
+		return _this._storage =  typeof source == 'string'?
+			(_this._params.storage.source == 'remote'?
+				new JZ.Storage.Remote(params) :
+				new JZ.Storage.Local(params)) :
+			new source(params);
 
 	},
 
 	setStorage : function(storage) {
 
 		this._storage = storage;
+		this._updateArrow();
 		this._isFocused && this._updateList(this._params.showAllOnFocus? '' : undefined);
 
 	},
 
 	_refocus : function() {
 
-        var elem = this._elem[0],
-            len = elem.value.length;
+		var elem = this._elem[0],
+			len = elem.value.length;
 
-        elem.focus();
+		elem.focus();
 
-        if($.browser.opera) {
-            elem.setSelectionRange(len, len);
-        }
+		if($.browser.opera) {
+			elem.setSelectionRange(len, len);
+		}
 		else if(elem.createTextRange) {
-            var range = elem.createTextRange();
-            range.move('character', len);
-            range.select();
+			var range = elem.createTextRange();
+			range.move('character', len);
+			range.select();
 		}
 
 		return this;
@@ -542,8 +545,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var arrowElem = this._params.arrow;
 		arrowElem &&
-			(arrowElem[(enable? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_DISABLED))[0].tagName == 'INPUT' &&
+			(arrowElem[(enable? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_ARROW_DISABLED))[0].tagName == 'INPUT' &&
 			arrowElem.attr('disabled', !enable);
+
+	},
+
+	_updateArrow : function() {
+
+		var arrowElem = this._params.arrow;
+		arrowElem && arrowElem[(this._getStorage().isEmpty()? 'add' : 'remove') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
 
 	},
 
@@ -559,7 +569,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			itemProcessor    : this.__self._itemProcessor,
 			valMapper        : this.__self._valMapper,
 			caseSensitivity  : false,
-			useIframeUnder   : false
+			useIframeUnder   : $.browser.msie && $.browser.version == 6
 		});
 
 	},
@@ -587,8 +597,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 }, {
 
-	CSS_CLASS_LIST          : JZ.CSS_CLASS_WIDGET + '-list',
-	CSS_CLASS_ARROW_PRESSED : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
+	CSS_CLASS_LIST           : 'b-form-combobox__select',
+	CSS_CLASS_ARROW_PRESSED  : 'b-form-combobox__button_pressed',
+	CSS_CLASS_ARROW_DISABLED : JZ.CSS_CLASS_WIDGET + '-comboarrow-disabled',
 
 	_itemProcessor : $.inherit({
 

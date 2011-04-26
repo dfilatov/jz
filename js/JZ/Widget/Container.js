@@ -18,10 +18,29 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
+	isFocusable : function() {
+
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			if(child.isFocusable()) {
+				return true;
+			}
+		}
+
+		return false;
+
+	},
+
 	focus : function() {
 
-		var firstChild = this._children[0];
-		firstChild && firstChild.focus();
+		var children = this._children, i = 0, child;
+		while(child = children[i++]) {
+			if(child.isFocusable()) {
+				child.focus();
+				break;
+			}
+		}
+
 		return this;
 
 	},

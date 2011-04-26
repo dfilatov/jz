@@ -6,6 +6,12 @@ JZ.Storage = $.inherit({
 
 	},
 
+	isEmpty : function() {
+
+		return false;
+
+	},
+
 	filter : function(value, callback) {}
 
 });

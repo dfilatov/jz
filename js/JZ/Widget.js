@@ -36,9 +36,15 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	}),
 
+	isFocusable : function() {
+
+		return true;
+
+	},
+
 	focus : function() {
 
-		this._elem[0].focus();
+		this.isFocusable() && this._elem[0].focus();
 		return this;
 
 	},
