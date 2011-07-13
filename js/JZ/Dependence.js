@@ -30,6 +30,8 @@ JZ.Dependence = $.inherit({
 
 	_preprocessParams : function(params) {
 
+		typeof params.pattern == 'string' && (params.pattern = new RegExp(params.pattern));
+
 		return params;
 
 	},
