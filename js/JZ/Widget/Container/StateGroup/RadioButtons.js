@@ -14,6 +14,16 @@ JZ.Widget.Container.StateGroup.RadioButtons = $.inherit(JZ.Widget.Container.Stat
 
 	},
 
+	focus : function() {
+
+		this._checkedIndex > -1?
+			this._children[this._checkedIndex].focus() :
+			this.__base();
+
+		return this;
+
+	},
+
 	_onChildChange : function(widget, index) {
 
 		var children = this._children;
@@ -43,7 +53,7 @@ JZ.Widget.Container.StateGroup.RadioButtons = $.inherit(JZ.Widget.Container.Stat
 			else if(child._isChecked()) {
 				child._setChecked(false);
 			}
-		};
+		}
 		this._checkedIndex = -1;
 
 	}
