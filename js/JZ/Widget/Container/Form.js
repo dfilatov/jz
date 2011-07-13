@@ -8,6 +8,7 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		this._widgetsDataById = {};
 		this._unreadyWidgetIds = {};
 		this._unreadyCounter = this._changedCounter = 0;
+		this._submitted = false;
 
 	},
 
@@ -84,6 +85,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_reinit : function() {
 
 		this._changedCounter = 0;
+		this._submitted = false;
+
 		return this.__base();
 
 	},
@@ -93,10 +96,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 	_bindEvents : function() {
 
 		return this
-            ._bindToElem({
+			._bindToElem({
 				'submit'  : this._onSubmit,
-            	'keydown' : function(e) {
-                	e.keyCode == 27 && e.preventDefault(); // IE пытается возвращать форму в исходное значение
+				'keydown' : function(e) {
+					e.keyCode == 27 && e.preventDefault(); // IE пытается возвращать форму в исходное значение
 				}});
 
 	},
@@ -105,10 +108,15 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 		var _this = this;
 
+		if(_this._submitted) {
+			return false;
+		}
+
 		if(_this.isReady()) {
 			_this._beforeSubmit();
 			var preventSubmit = _this._params.preventSubmit;
 			_this.trigger('before-submit', _this);
+			_this._submitted = true;
 			return !preventSubmit;
 		}
 
