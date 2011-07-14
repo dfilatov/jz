@@ -35,7 +35,7 @@ JZ.Builder = $.inherit({
 				.init();
 		}
 		else {
-			widgets[0].init(initWidget);
+			widgets[0].init(false, initWidget);
 		}
 
 		return initWidget;

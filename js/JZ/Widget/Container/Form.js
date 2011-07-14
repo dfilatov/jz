@@ -52,14 +52,14 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	init : function(widget) {
+	init : function(updateVal, widget) {
 
 		widget?
 			widget
 				._setForm(this)
 				._init()
 				._checkDependencies(null, true) :
-			this.__base();
+			this.__base(updateVal);
 		return this;
 
 	},
@@ -82,12 +82,12 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 
 	},
 
-	_reinit : function() {
+	_reinit : function(updateVal) {
 
-		this._changedCounter = 0;
 		this._submitted = false;
+		updateVal && (this._changedCounter = 0);
 
-		return this.__base();
+		return this.__base(updateVal);
 
 	},
 

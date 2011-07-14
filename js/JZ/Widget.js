@@ -83,11 +83,10 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	init : function() {
+	init : function(updateVal) {
 
-		// TODO
 		return this._isInited?
-			this._reinit() :
+			this._reinit(updateVal) :
 			this._init();
 
 	},
@@ -264,12 +263,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	_reinit : function() {
+	_reinit : function(updateVal) {
 
 		if(this._hasVal()) {
 			this._setNoReady(false);
-			this.isChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
-			this._initialVal = this._val;
+			if(updateVal) {
+				this.isChanged() && this.removeCSSClass(this.__self.CSS_CLASS_CHANGED);
+				this._initialVal = this._val;
+			}
 		}
 		return this;
 

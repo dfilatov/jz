@@ -104,11 +104,11 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
-	_reinit : function() {
+	_reinit : function(updateVal) {
 
 		return this
-			._applyFnToChildren('_reinit')
-			.__base();
+			._applyFnToChildren('_reinit', [updateVal])
+			.__base(updateVal);
 
 	},
 
