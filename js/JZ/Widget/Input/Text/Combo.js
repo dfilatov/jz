@@ -597,8 +597,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 }, {
 
-	CSS_CLASS_LIST           : 'b-form-combobox__select',
-	CSS_CLASS_ARROW_PRESSED  : 'b-form-combobox__button_pressed',
+	CSS_CLASS_LIST           : JZ.CSS_CLASS_WIDGET + '-list',
+	CSS_CLASS_ARROW_PRESSED  : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
 	CSS_CLASS_ARROW_DISABLED : JZ.CSS_CLASS_WIDGET + '-comboarrow-disabled',
 
 	_itemProcessor : $.inherit({
