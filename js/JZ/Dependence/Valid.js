@@ -2,6 +2,8 @@ JZ.Dependence.Valid = $.inherit(JZ.Dependence, {
 
 	_preprocessParams : function(params) {
 
+		this.__base(params);
+
 		params.type == 'email' && (params.pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.\-\_\~]*\@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]{2,4}$/);
 		return params;
 
