@@ -111,7 +111,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				overflow : 'auto',
 				width    : Math.max(
 					listElem.outerWidth(),
-					_this._elem.outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
+					_this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
 			};
 
 			list.length > _this._params.listSize &&
@@ -399,9 +399,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_reposList : function() {
 
 		var _this = this,
-			offset = _this._elem.offset(),
+			elem = _this._getMeasurerElem(),
+			offset = elem.offset(),
 			offsetLeft = offset.left,
-			offsetTop = offset.top + _this._elem.outerHeight();
+			offsetTop = offset.top + elem.outerHeight();
 
 		if(!(_this._lastOffset && _this._lastOffset.left == offsetLeft && _this._lastOffset.top == offsetTop)) {
 			_this._lastOffset = { left : offsetLeft, top : offsetTop };
@@ -450,6 +451,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getList : $.memoize(function() {
 
 		return this._getListContainer().find('ul');
+
+	}),
+
+	_getMeasurerElem : $.memoize(function() {
+
+		return this._params.measurer? this._elem.closest(this._params.measurer) : this._elem;
 
 	}),
 
