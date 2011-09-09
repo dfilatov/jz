@@ -34,7 +34,7 @@ CORE_SRC = js/JZ.js $(foreach i, \
 	Dependence/Valid \
 	Dependence/Enabled \
 	Builder \
-    Resources, \
+	Resources, \
 	js/JZ/$i.js) js/init.js
 
 ALL_SRC = $(JQUERY_PLUGINS_SRC) $(CORE_SRC)
