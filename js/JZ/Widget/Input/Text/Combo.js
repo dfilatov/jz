@@ -26,7 +26,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			elem.removeAttr('name');
 		}
 
-		_this._params.arrow && _this._params.arrow.attr('tabIndex', -1);
+		_this._getArrowElem().attr('tabIndex', -1);
 		_this._updateArrow();
 
 		_this._updateList = $.debounce(function(val) {
@@ -131,16 +131,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		var _this = this,
 			keyDown = $.browser.opera? 'keypress' : 'keydown',
-			keyBinds = { 'keyup' : _this._onKeyUp },
-			arrow = _this._params.arrow;
+			keyBinds = { 'keyup' : _this._onKeyUp };
 
 		keyBinds[keyDown] = _this._onKeyDown;
 		_this
 			.__base()
 			._bindToElem(keyBinds);
 
-		arrow && _this
-			._bindTo(arrow, {
+		_this
+			._bindTo(_this._getArrowElem(), {
 				'mousedown' : _this._onArrowMouseDown,
 				'mouseup'   : _this._onArrowMouseUp,
 				'click'     : _this._onArrowClick
@@ -205,7 +204,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		if(this.isEnabled()) {
 			this._preventOnBlur = true;
-			this._params.arrow.addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
+			this._getArrowElem().addClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 		}
 
 	},
@@ -213,7 +212,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onArrowMouseUp : function() {
 
 		this.isEnabled() &&
-			this._params.arrow.removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
+			this._getArrowElem().removeClass(this.__self.CSS_CLASS_ARROW_PRESSED);
 
 	},
 
@@ -420,8 +419,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_getListContainer : $.memoize(function() {
 
 		var _this = this,
+			params = _this._params,
 			res = $('<div class="' + _this.__self.CSS_CLASS_LIST + ' ' + _this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   		(this._params.useIframeUnder? '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/>' : '') +
+		   			(params.useIframeUnder? '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/>' : '') +
 				'<ul/></div>');
 
 		_this._bindTo(res, 'mousedown', function(e) {
@@ -431,8 +431,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					._selectItemByIndex(itemNode.onclick())
 					._hideList()
 					._onSelect();
-				_this._focusOnBlur = !_this._params.blurOnSelect;
-                _this._params.blurOnSelect && _this.blur();
+				_this._focusOnBlur = !params.blurOnSelect;
+				params.blurOnSelect && _this.blur();
 			} else {
 				_this._preventOnBlur = _this._focusOnBlur = _this._preventUpdate = true;
 			}
@@ -454,9 +454,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	}),
 
+	_getArrowElem : $.memoize(function() {
+
+		return this._classElem.find('.' + this.__self.CSS_CLASS_ARROW);
+
+	}),
+
 	_getMeasurerElem : $.memoize(function() {
 
-		return this._params.measurer? this._elem.closest(this._params.measurer) : this._elem;
+		return this._params.measurer? this._classElem.find(this._params.measurer) : this._elem;
 
 	}),
 
@@ -550,8 +556,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_enableArrow : function(enable) {
 
-		var arrowElem = this._params.arrow;
-		arrowElem &&
+		var arrowElem = this._getArrowElem();
+		arrowElem[0] &&
 			(arrowElem[(enable? 'remove' : 'add') + 'Class'](this.__self.CSS_CLASS_ARROW_DISABLED))[0].tagName == 'INPUT' &&
 			arrowElem.attr('disabled', !enable);
 
@@ -559,8 +565,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_updateArrow : function() {
 
-		var arrowElem = this._params.arrow;
-		arrowElem && arrowElem[(this._getStorage().isEmpty()? 'add' : 'remove') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
+		this._getArrowElem()[(this._getStorage().isEmpty()? 'add' : 'remove') + 'Class'](this.__self.CSS_CLASS_HIDDEN);
 
 	},
 
@@ -598,13 +603,14 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_unbindAll : function() {
 
 		this.__base();
-		this._params.arrow && this._params.arrow.unbind();
+		this._getArrowElem.unbind();
 
 	}
 
 }, {
 
 	CSS_CLASS_LIST           : JZ.CSS_CLASS_WIDGET + '-list',
+	CSS_CLASS_ARROW          : JZ.CSS_CLASS_WIDGET + '-comboarrow',
 	CSS_CLASS_ARROW_PRESSED  : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
 	CSS_CLASS_ARROW_DISABLED : JZ.CSS_CLASS_WIDGET + '-comboarrow-disabled',
 

@@ -10,7 +10,7 @@ JZ.Builder = $.inherit({
 
 	build : function(elem) {
 
-		var _this = this, fromIndex = this._widgets.length, widget, initWidget;
+		var _this = this, fromIndex = _this._widgets.length, widget, initWidget;
 		$.each(elem.add(elem.find('.' + JZ.CSS_CLASS_WIDGET)), function(i) {
 			widget = _this._makeWidgetByElem($(this));
 			_this._widgets.push(_this._widgetsById[widget.getId()] = widget);
@@ -25,13 +25,13 @@ JZ.Builder = $.inherit({
 
 		// Перебираем, строим зависимости, потому что только здесь знаем имена виджетов
 		while(widget = widgets[fromIndex++]) {
-			this._buildDependencies(widget);
+			_this._buildDependencies(widget);
 		}
 
 		if(elem[0].tagName.toLowerCase() == 'form') {
-			elem.data('jz-builder', this);
+			elem.data('jz-builder', _this);
 			initWidget
-				.bind('remove', $.proxy(this._onFormRemove, this))
+				.bind('remove', $.proxy(_this._onFormRemove, _this))
 				.init();
 		}
 		else {
@@ -46,11 +46,11 @@ JZ.Builder = $.inherit({
 
 		var _self = this.__self,
 			params = _self._extractParamsFromElem(elem),
-			result = new (_self._getWidgetClassByType(params.type))(elem, _self._getClassElem(elem, params), params);
+			res = new (_self._getWidgetClassByType(params.type))(elem, _self._getClassElem(elem, params), params);
 
-		params.type != 'form' && this._getParentWidget(elem).addChild(result);
+		params.type != 'form' && this._getParentWidget(elem).addChild(res);
 
-		return result;
+		return res;
 
 	},
 
@@ -153,16 +153,11 @@ JZ.Builder = $.inherit({
 
 	_extractParamsFromElem : function(elem) {
 
-		var result = elem[0].onclick? elem[0].onclick().jz || {} : {};
+		var res = elem[0].onclick? elem[0].onclick().jz || {} : {};
 
-		result.type || (result.type = this._extractTypeFromElem(elem));
+		res.type || (res.type = this._extractTypeFromElem(elem));
 
-		if(result.type == 'combo') {
-			var arrow = elem.parent().find('.' + JZ.CSS_CLASS_WIDGET + '-comboarrow');
-			arrow.length && (result.arrow = arrow);
-		}
-
-		return result;
+		return res;
 
 	},
 
