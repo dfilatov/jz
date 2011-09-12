@@ -462,7 +462,13 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_getMeasurerElem : $.memoize(function() {
 
-		return this._params.measurer? this._classElem.find(this._params.measurer) : this._elem;
+		var measuser = this._params.measurer;
+
+		return measuser?
+			this._classElem.is(measuser)?
+				this._classElem :
+				this._classElem.find(measuser) :
+			this._elem;
 
 	}),
 
@@ -603,7 +609,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_unbindAll : function() {
 
 		this.__base();
-		this._getArrowElem.unbind();
+		this._getArrowElem().unbind();
 
 	}
 
