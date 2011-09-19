@@ -438,7 +438,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			}
 
 			_this._focusOnBlur && setTimeout(function() {
-				_this._focusOnBlur = _this._preventUpdate  = false;
+				_this._preventOnBlur = _this._focusOnBlur = _this._preventUpdate  = false;
 			}, 50);
 
 			return !_this._focusOnBlur;
