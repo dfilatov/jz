@@ -6,8 +6,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		_this.__base.apply(_this, arguments);
 
-		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus =
-			_this._preventUpdate = _this._focusOnBlur = false;
+		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus = _this._preventUpdate = false;
 		_this._hiddenElem = _this._items = _this._lastSearchVal = _this._keyDownValue =
 			_this._updateList = _this._reposTimer = _this._lastOffset = null;
 		_this._hilightedIndex = -1;
@@ -182,14 +181,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		else {
 			_this.__base();
 			_this._hideList();
-		}
-
-		if(_this._focusOnBlur) {
-			_this._preventUpdate = true;
-			_this._focusOnBlur = false;
-			setTimeout(function() {
-				_this._refocus();
-			}, 0);
 		}
 
 	},
@@ -425,23 +416,26 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				'<ul/></div>');
 
 		_this._bindTo(res, 'mousedown', function(e) {
-			var itemNode = $(e.target).closest('li')[0];
+			var itemNode = $(e.target).closest('li')[0],
+				needRefocus = false;
+
 			if(itemNode && $(itemNode).hasClass(_this.__self.CSS_CLASS_SELECTABLE)) {
 				_this
 					._selectItemByIndex(itemNode.onclick())
 					._hideList()
 					._onSelect();
-				_this._focusOnBlur = !params.blurOnSelect;
+				needRefocus = !params.blurOnSelect;
 				params.blurOnSelect && _this.blur();
 			} else {
-				_this._preventOnBlur = _this._focusOnBlur = _this._preventUpdate = true;
+				_this._preventOnBlur = needRefocus = true;
 			}
 
-			_this._focusOnBlur && setTimeout(function() {
-				_this._preventOnBlur = _this._focusOnBlur = _this._preventUpdate  = false;
-			}, 50);
+			needRefocus && setTimeout(function() {
+				_this._preventUpdate = true;
+				_this._refocus();
+			}, 0);
 
-			return !_this._focusOnBlur;
+			return !needRefocus;
 		});
 
 		return res.appendTo('body');
