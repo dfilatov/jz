@@ -588,15 +588,16 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_destruct : function() {
 
-		this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
-		this._hiddenElem.remove();
-		this._hiddenElem = null;
+		if(this._isInited) {
+			this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
+			this._hiddenElem.remove();
+			this._hiddenElem = null;
 
-		var listContainer = this._getListContainer();
-		this
-			._hideList()
-			.__base();
-		listContainer.remove();
+			this._hideList();
+			this._getListContainer().remove();
+		}
+
+		this.__base();
 
 	},
 

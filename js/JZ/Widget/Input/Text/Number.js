@@ -129,9 +129,11 @@ JZ.Widget.Input.Text.Number = $.inherit(JZ.Widget.Input.Text, {
 
 	_destruct : function() {
 
-		this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
-		this._hiddenElem.remove();
-		this._hiddenElem = null;
+		if(this._isInited) {
+			this._hiddenElem.attr('name') && this._elem.attr('name', this._hiddenElem.attr('name'));
+			this._hiddenElem.remove();
+			this._hiddenElem = null;
+		}
 
 		this.__base();
 
