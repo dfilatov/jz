@@ -7,8 +7,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		_this.__base.apply(_this, arguments);
 
 		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus = _this._preventUpdate = false;
-		_this._hiddenElem = _this._items = _this._lastSearchVal = _this._keyDownValue =
-			_this._updateList = _this._reposTimer = _this._lastOffset = null;
+		_this._hiddenElem = _this._items = _this._lastSearchVal =
+            _this._keyDownValue = _this._reposTimer = _this._lastOffset = null;
 		_this._hilightedIndex = -1;
 
 	},
@@ -28,16 +28,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		_this._getArrowElem().attr('tabIndex', -1);
 		_this._updateArrow();
 
-		_this._updateList = $.debounce(function(val) {
-
-			if(_this._elem) { // widget not destructed
-				if(!_this._params.showListOnEmpty && _this._elem.val() === '') {
-					return _this._hideList();
-				}
-				var searchVal = typeof val == 'undefined'? _this._elem.val() : val;
-				_this._getStorage().filter(_this._lastSearchVal = searchVal, $.proxy(_this._onStorageFilter, _this));
-			}
-
+		_this._doUpdateList = $.debounce(function(val) {
+			_this._getStorage().filter(val, $.proxy(_this._onStorageFilter, _this));
 		}, _this._params.debounceInterval);
 
 		return _this;
@@ -69,6 +61,18 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		this.__base(this._createVal(this._getValMapper().toString(val), true));
 
 	},
+
+    _updateList : function(val) {
+
+        var _this = this;
+        if(_this._elem) { // widget not destructed
+            if(!_this._params.showListOnEmpty && _this._elem.val() === '') {
+                return _this._hideList();
+            }
+            _this._doUpdateList(_this._lastSearchVal = typeof val === 'undefined'? _this._elem.val() : val);
+        }
+
+    },
 
 	_onStorageFilter : function(searchVal, list) {
 
@@ -156,18 +160,9 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 		else {
 			_this.__base();
-			if(_this._preventUpdate) {
-				_this._preventUpdate = false;
-			}
-			else {
-				if(_this._params.showAllOnFocus) {
-					_this._updateList('');
-					_this._lastSearchVal = _this._elem.val();
-				}
-				else {
-					_this._updateList();
-				}
-			}
+			_this._preventUpdate?
+				_this._preventUpdate = false :
+                _this._updateList(_this._params.showAllOnFocus? '' : undefined);
 		}
 
 	},
