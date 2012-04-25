@@ -404,7 +404,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				});
 		}
 
-		_this._params.reposList && (_this._reposTimer = setTimeout($.proxy(_this._reposList, _this), 50));
+		if(_this._params.reposList) {
+            _this._reposTimer && clearTimeout(_this._reposTimer);
+            _this._reposTimer = setTimeout($.proxy(_this._reposList, _this), 50);
+        }
 
 	},
 
