@@ -7,7 +7,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		_this.__base.apply(_this, arguments);
 
 		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus = _this._preventUpdate = false;
-		_this._hiddenElem = _this._items = _this._lastSearchVal =
+		_this._hiddenElem = _this._items = _this._lastSearchVal = _this._lastListWidth =
             _this._keyDownValue = _this._reposTimer = _this._lastOffset = null;
 		_this._hilightedIndex = -1;
 
@@ -110,12 +110,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			_this._showList();
 
-			var css = {
-				overflow : 'auto',
-				width    : Math.max(
-					listElem.outerWidth(),
-					_this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
-			};
+            var prevListWidth = _this._lastListWidth,
+                css = {
+                    overflow : 'auto',
+                    width    : _this._lastListWidth = Math.max(
+                        listElem.outerWidth(),
+                        _this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
+                };
+
+            (prevListWidth !== _this._lastListWidth) && _this._reposList();
 
 			list.length > _this._params.listSize &&
 				(css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
@@ -384,9 +387,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_reposList : function() {
 
 		var _this = this,
+            listWidth = _this._getListContainer().outerWidth(),
 			elem = _this._getMeasurerElem(),
 			offset = elem.offset(),
-			offsetLeft = offset.left,
+			offsetLeft = offset.left + listWidth > $(window).width()?
+                offset.left + elem.outerWidth() - listWidth :
+                offset.left,
 			offsetTop = offset.top + elem.outerHeight();
 
 		if(!(_this._lastOffset && _this._lastOffset.left == offsetLeft && _this._lastOffset.top == offsetTop)) {
