@@ -29,7 +29,7 @@ JZ.Widget.Input.State = $.inherit(JZ.Widget.Input, {
 
 	_isChecked : function() {
 
-		return this._elem.attr('checked');
+		return !!this._elem.attr('checked');
 
 	},
 
