@@ -423,16 +423,19 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	_processEnabledDependenceCheck : function(check) {
 
+		var _this = this;
 		if(check.result) {
-			var isEnabled = this.isEnabled();
-			this
+			var isEnabled = _this.isEnabled();
+			_this
 				.enable()
 				.show();
-			check.params.focusOnEnable && !isEnabled && this.focus();
+			check.params.focusOnEnable && !isEnabled && setTimeout(function() {
+				_this.focus();
+			}, 0);
 		}
 		else {
-			this.disable();
-			check.params.hideOnDisable && this.hide();
+			_this.disable();
+			check.params.hideOnDisable && _this.hide();
 		}
 
 	},
