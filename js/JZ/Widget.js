@@ -139,30 +139,44 @@ JZ.Widget = $.inherit(JZ.Observable, {
 			return _this._checkDependencies('enabled');
 		}
 
-		_this._enableElems();
-		var isReady = _this.removeCSSClass(_this.__self.CSS_CLASS_DISABLED).isReady();
+		var isReady = _this.isReady();
 		_this._isEnabled = true;
+		_this._enable();
 		isReady != _this.isReady() && _this.trigger('ready-change', _this);
 		_this.isChanged() && _this.trigger('initial-value-change', true);
 		return _this.trigger('enable', _this);
 
 	},
 
+	_enable : function() {
+
+		this._enableElems();
+		this.removeCSSClass(this.__self.CSS_CLASS_DISABLED);
+
+    },
+
 	disable : function() {
 
 		var _this = this;
 
 		if(_this.isEnabled()) {
-			_this._isFocused && this.blur();
-			_this._disableElems();
-			var isReady = _this.addCSSClass(_this.__self.CSS_CLASS_DISABLED).isReady();
+            var isReady = _this.isReady();
 			_this._isEnabled = false;
+			_this._disable();
 			isReady != _this.isReady() && _this.trigger('ready-change', _this);
 			_this.isChanged() && _this.trigger('initial-value-change', false);
 			_this.trigger('disable', _this);
 		}
 
 		return _this;
+
+	},
+
+	_disable : function() {
+
+        this._isFocused && this.blur();
+		this._disableElems();
+		this.addCSSClass(this.__self.CSS_CLASS_DISABLED).isReady();
 
 	},
 

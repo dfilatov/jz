@@ -53,22 +53,6 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 
 	},
 
-	enable : function(byParent) {
-
-		return this
-			.__base(byParent)
-			._applyFnToChildren('enable', [true]);
-
-	},
-
-	disable : function() {
-
-		return this
-			.__base()
-			._applyFnToChildren('disable');
-
-	},
-
 	reset : function() {
 
 		return this
@@ -87,6 +71,21 @@ JZ.Widget.Container = $.inherit(JZ.Widget, {
 			}
 		}
 		return false;
+
+	},
+
+	_enable : function() {
+
+		this.__base();
+		this._applyFnToChildren('enable', [true]);
+
+	},
+
+	_disable : function() {
+
+		this
+			._applyFnToChildren('disable')
+			.__base();
 
 	},
 
