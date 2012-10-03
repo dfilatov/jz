@@ -21,8 +21,11 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var _this = this,
 			elem = _this.__base()._elem.attr('autocomplete', 'off');
 
-		elem.after(_this._hiddenElem = $('<input type="hidden" value="' + elem.val() + '"' +
+		elem.after(_this._hiddenElem = $('<input type="hidden"' +
 			(elem.attr('id')? ' id="value-' + elem.attr('id') + '"' : '') + '/>'));
+
+		_this._hiddenElem.val(elem.val());
+
 		if(elem.attr('name')) {
 			_this._hiddenElem.attr('name', elem.attr('name'));
 			elem.removeAttr('name');
