@@ -1,4 +1,4 @@
-JQUERY_PLUGINS_SRC = $(foreach i, inherit debounce identify memoize fieldselection, js/jquery/jquery.$i.js)
+JQUERY_PLUGINS_SRC = $(foreach i, inherit debounce identify fieldselection, js/jquery/jquery.$i.js)
 CORE_SRC = js/JZ.js $(foreach i, \
 	Observable \
 	Widget \

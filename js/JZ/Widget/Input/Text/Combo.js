@@ -10,8 +10,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		_this._isListShowed = _this._preventOnBlur = _this._preventOnFocus = _this._preventUpdate = false;
 		_this._hiddenElem = _this._lastSearchVal = _this._lastListWidth =
-            _this._keyDownValue = _this._reposTimer = _this._lastOffset = null;
-        _this._items = [];
+			_this._keyDownValue = _this._reposTimer = _this._lastOffset = null;
+		_this._items = [];
 		_this._hilightedIndex = -1;
 
 	},
@@ -65,17 +65,17 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-    _updateList : function(val) {
+	_updateList : function(val) {
 
-        var _this = this;
-        if(_this._elem) { // widget not destructed
-            if(!_this._params.showListOnEmpty && _this._elem.val() === '') {
-                return _this._hideList();
-            }
-            _this._doUpdateList(_this._lastSearchVal = typeof val === 'undefined'? _this._elem.val() : val);
-        }
+		var _this = this;
+		if(_this._elem) { // widget not destructed
+			if(!_this._params.showListOnEmpty && _this._elem.val() === '') {
+				return _this._hideList();
+			}
+			_this._doUpdateList(_this._lastSearchVal = typeof val === 'undefined'? _this._elem.val() : val);
+		}
 
-    },
+	},
 
 	_onStorageFilter : function(searchVal, list) {
 
@@ -113,15 +113,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 			_this._showList();
 
-            var prevListWidth = _this._lastListWidth,
-                css = {
-                    overflow : 'auto',
-                    width    : _this._lastListWidth = Math.max(
-                        listElem.outerWidth(),
-                        _this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
-                };
+			var prevListWidth = _this._lastListWidth,
+				css = {
+					overflow : 'auto',
+					width    : _this._lastListWidth = Math.max(
+						listElem.outerWidth(),
+						_this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
+				};
 
-            (prevListWidth !== _this._lastListWidth) && _this._reposList();
+			(prevListWidth !== _this._lastListWidth) && _this._reposList();
 
 			list.length > _this._params.listSize &&
 				(css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
@@ -168,7 +168,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			_this.__base();
 			_this._preventUpdate?
 				_this._preventUpdate = false :
-                _this._updateList(_this._params.showAllOnFocus? '' : undefined);
+				_this._updateList(_this._params.showAllOnFocus? '' : undefined);
 		}
 
 	},
@@ -284,7 +284,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 		if(this._isListShowed) {
 			var itemProcessor = this._getItemProcessor(),
-                len = this._items.length,
+				len = this._items.length,
 				i = this._hilightedIndex === -1 && direction === -1? len : this._hilightedIndex;
 
 			do {
@@ -390,12 +390,12 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_reposList : function() {
 
 		var _this = this,
-            listWidth = _this._getListContainer().outerWidth(),
+			listWidth = _this._getListContainer().outerWidth(),
 			elem = _this._getMeasurerElem(),
 			offset = elem.offset(),
 			offsetLeft = offset.left + listWidth > $(window).width()?
-                offset.left + elem.outerWidth() - listWidth :
-                offset.left,
+				offset.left + elem.outerWidth() - listWidth :
+				offset.left,
 			offsetTop = offset.top + elem.outerHeight();
 
 		if(!(_this._lastOffset && _this._lastOffset.left == offsetLeft && _this._lastOffset.top == offsetTop)) {
@@ -408,18 +408,22 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		}
 
 		if(_this._params.reposList) {
-            _this._reposTimer && clearTimeout(_this._reposTimer);
-            _this._reposTimer = setTimeout($.proxy(_this._reposList, _this), 50);
-        }
+			_this._reposTimer && clearTimeout(_this._reposTimer);
+			_this._reposTimer = setTimeout($.proxy(_this._reposList, _this), 50);
+		}
 
 	},
 
-	_getListContainer : $.memoize(function() {
+	_getListContainer : function() {
 
-		var _this = this,
-			params = _this._params,
+		var _this = this;
+		if(_this._listContainer) {
+			return _this._listContainer;
+		}
+
+		var params = _this._params,
 			res = $('<div class="' + _this.__self.CSS_CLASS_LIST + ' ' + _this.__self.CSS_CLASS_INVISIBLE + '">' +
-		   			(params.useIframeUnder? '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/>' : '') +
+					(params.useIframeUnder? '<iframe frameborder="0" tabindex="-1" src="javascript:void(0)"/>' : '') +
 				'<ul/></div>');
 
 		_this._bindTo(res, 'mousedown', function(e) {
@@ -440,56 +444,69 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			needRefocus && setTimeout(function() {
 				_this._preventUpdate = true;
 				_this._refocus();
+				_this._preventUpdate = false;
 			}, 0);
 
 			return !needRefocus;
 		});
 
-		return res.appendTo('body');
+		return _this._listContainer = res.appendTo('body');
 
-	}),
+	},
 
-	_getList : $.memoize(function() {
+	_getList : function() {
 
-		return this._getListContainer().find('ul');
+		return this._list || (this._list = this._getListContainer().find('ul'));
 
-	}),
+	},
 
-	_getArrowElem : $.memoize(function() {
+	_getArrowElem : function() {
 
-		return this._classElem.find('.' + this.__self.CSS_CLASS_ARROW);
+		return this._arrow || (this._arrow = this._classElem.find('.' + this.__self.CSS_CLASS_ARROW));
 
-	}),
+	},
 
-	_getMeasurerElem : $.memoize(function() {
+	_getMeasurerElem : function() {
+
+		if(this._measuser) {
+			return this._measuser;
+		}
 
 		var measuser = this._params.measurer;
 
-		return measuser?
+		return this._measuser = measuser?
 			this._classElem.is(measuser)?
 				this._classElem :
 				this._classElem.find(measuser) :
 			this._elem;
 
-	}),
+	},
 
-	_getItemProcessor : $.memoize(function() {
+	_getItemProcessor : function() {
+
+		if(this._itemProcessor) {
+			return this._itemProcessor;
+		}
 
 		var itemProcessor = this._params.itemProcessor;
-		return new (itemProcessor === 'default'?
+		return this._itemProcessor = (new (itemProcessor === 'default'?
 			itemProcessors['default'] :
-			$.inherit(itemProcessors['default'], itemProcessors[itemProcessor]))(this._params.caseSensitivity);
+			$.inherit(itemProcessors['default'], itemProcessors[itemProcessor]))(this._params.caseSensitivity));
 
-	}),
+	},
 
-	_getValMapper : $.memoize(function() {
+	_getValMapper : function() {
+
+		if(this._valMapper) {
+			return this._valMapper;
+		}
 
 		var valMapper = this._params.valMapper;
-		return new (valMapper === 'default'?
+		return this._valMapper = (new (valMapper === 'default'?
 			valMappers['default'] :
-			$.inherit(valMappers['default'], valMappers[valMapper]))(this);
+			$.inherit(valMappers['default'], valMappers[valMapper]))(this));
 
-	}),
+	},
 
 	_getStorage : function() {
 
@@ -505,7 +522,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 					name = $.trim(name);
 					return name? _this._form.getWidgetByName(name) : null;
 				}),
-                itemProcessor : this._getItemProcessor()
+				itemProcessor : this._getItemProcessor()
 			}, _this._params.storage),
 			source = _this._params.storage.source;
 
@@ -599,8 +616,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 			this._hiddenElem.remove();
 			this._hiddenElem = null;
 
-			this._hideList();
-			this._getListContainer().remove();
+			if(this._listContainer) {
+				this._hideList();
+				this._getListContainer().remove();
+			}
 		}
 
 		this.__base();
@@ -610,7 +629,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_unbindAll : function() {
 
 		this.__base();
-		this._getArrowElem().unbind();
+		this._arrow && this._arrow.unbind();
 
 	}
 
@@ -625,122 +644,124 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 var itemProcessors = {
 
-        'default' : $.inherit({
+		'default' : $.inherit({
 
-            __constructor : function(caseSensitivity) {
+			__constructor : function(caseSensitivity) {
 
-                this._caseSensitivity = caseSensitivity;
+				this._caseSensitivity = caseSensitivity;
 
-            },
+			},
 
-            toHtml : function(item, searchVal, buffer) {
+			toHtml : function(item, searchVal, buffer) {
 
-                var val = this.toString(item);
+				var val = this.toString(item);
 
-                if(this.isSelectable(item)) {
-                    var startIndex = (this._caseSensitivity? val : val.toLowerCase())
-                            .indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())),
-                        searchValLen = searchVal.length;
+				if(this.isSelectable(item)) {
+					var startIndex = searchVal?
+							(this._caseSensitivity? val : val.toLowerCase())
+								.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())) :
+							-1,
+						searchValLen = searchVal.length;
 
-                    startIndex > -1?
-                        buffer.push(
-                            val.substr(0, startIndex),
-                            '<strong>',
-                            val.substr(startIndex, searchValLen),
-                            '</strong>',
-                            val.substr(startIndex + searchValLen)) :
-                        buffer.push(val);
-                }
-                else {
-                    buffer.push(val);
-                }
+					startIndex > -1?
+						buffer.push(
+							val.substr(0, startIndex),
+							'<strong>',
+							val.substr(startIndex, searchValLen),
+							'</strong>',
+							val.substr(startIndex + searchValLen)) :
+						buffer.push(val);
+				}
+				else {
+					buffer.push(val);
+				}
 
-            },
+			},
 
-            toString : function(item) {
+			toString : function(item) {
 
-                return item;
+				return item;
 
-            },
+			},
 
-            isSelectable : function(item) {
+			isSelectable : function(item) {
 
-                return true;
+				return true;
 
-            },
+			},
 
-            isSelected : function(item, searchVal) {
+			isSelected : function(item, searchVal) {
 
-                if(!this.isSelectable(item)) {
-                    return false;
-                }
+				if(!this.isSelectable(item)) {
+					return false;
+				}
 
-                var val = this.toString(item);
-                return (this._caseSensitivity? val : val.toLowerCase()) ===
-                    (this._caseSensitivity? searchVal : searchVal.toLowerCase());
+				var val = this.toString(item);
+				return (this._caseSensitivity? val : val.toLowerCase()) ===
+					(this._caseSensitivity? searchVal : searchVal.toLowerCase());
 
-            }
+			}
 
-        }),
+		}),
 
-        'val-with-label' : {
+		'val-with-label' : {
 
-            toString : function(item) {
+			toString : function(item) {
 
-                return item.label;
+				return item.label;
 
-            }
+			}
 
-        }
+		}
 
-    },
-    valMappers = {
+	},
+	valMappers = {
 
-        'default' : $.inherit({
+		'default' : $.inherit({
 
-            toVal : function(str, list) {
+			toVal : function(str, list) {
 
-                return str;
+				return str;
 
-            },
+			},
 
-            toString : function(val, list) {
+			toString : function(val, list) {
 
-                return val;
+				return val;
 
-            }
+			}
 
-        }),
+		}),
 
-        'val-with-label' : {
+		'val-with-label' : {
 
-            toVal : function(str, list) {
+			toVal : function(str, list) {
 
-                var item, i = 0;
-                while(item = list[i++]) {
-                    if(item.label == str) {
-                        return item.val;
-                    }
-                }
+				var item, i = 0;
+				while(item = list[i++]) {
+					if(item.label == str) {
+						return item.val;
+					}
+				}
 
-                return '';
+				return '';
 
-            },
+			},
 
-            toString : function(val, list) {
+			toString : function(val, list) {
 
-                var item, i = 0;
-                while(item = list[i++]) {
-                    if(item.val == val) {
-                        return item.label;
-                    }
-                }
+				var item, i = 0;
+				while(item = list[i++]) {
+					if(item.val == val) {
+						return item.label;
+					}
+				}
 
-                return '';
+				return '';
 
-            }
+			}
 
-        }
+		}
 
 	};
 

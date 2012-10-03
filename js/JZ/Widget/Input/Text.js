@@ -69,17 +69,17 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	},
 
-	_getPlaceholder : $.memoize(function() {
+	_getPlaceholder : function() {
 
-		return $('<label for="' + this.getId() + '" class="' + this.__self.CSS_CLASS_PLACEHOLDER + '">' +
+		return this._placeholder || (this._placeholder = $('<label for="' + this.getId() + '" class="' + this.__self.CSS_CLASS_PLACEHOLDER + '">' +
 			this._params.placeholder + '</label>')
-			.insertBefore(this._elem.attr('id', this.getId()));
+			.insertBefore(this._elem.attr('id', this.getId())));
 
-	}),
+	},
 
 	_destruct : function() {
 
-		this._params.placeholder && this._getPlaceholder().remove();
+		this._placeholder && this._placeholder.remove();
 		this.__base();
 
 	}

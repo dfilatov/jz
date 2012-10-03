@@ -24,17 +24,17 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
-	getId : $.memoize(function() {
+	getId : function() {
 
-		return JZ._identifyNode(this._elem[0]);
+		return this._id || (this._id = JZ._identifyNode(this._elem[0]));
 
-	}),
+	},
 
-	getName : $.memoize(function() {
+	getName : function() {
 
-		return this._extractName();
+		return this._name || (this._name = this._extractName());
 
-	}),
+	},
 
 	isFocusable : function() {
 
@@ -575,10 +575,14 @@ JZ.Widget = $.inherit(JZ.Observable, {
 	CSS_CLASS_NOREADY_REQUIRED : JZ.CSS_CLASS_WIDGET + '-noready-required',
 	CSS_CLASS_NOREADY_INVALID  : JZ.CSS_CLASS_WIDGET + '-noready-invalid',
 
-	_dependenceTypeToFn : $.memoize(function(type) {
+    _dependenceTypesToFns : {},
 
-		return '_process' + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase() + 'DependenceCheck';
+	_dependenceTypeToFn : function(type) {
 
-	})
+		return this._dependenceTypesToFns[type] ||
+			(this._dependenceTypesToFns[type] = '_process' + type.charAt(0).toUpperCase() +
+				type.substr(1).toLowerCase() + 'DependenceCheck');
+
+	}
 
 });
