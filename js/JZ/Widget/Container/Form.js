@@ -115,8 +115,8 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 		if(_this.isReady()) {
 			_this._beforeSubmit();
 			var preventSubmit = _this._params.preventSubmit;
-			_this.trigger('before-submit', _this);
 			_this._submitted = true;
+			_this.trigger('before-submit', _this);
 			return !preventSubmit;
 		}
 
