@@ -177,7 +177,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			});
 
 		widget._hasVal() &&
-			widget.bind('initial-value-change', _this._onWidgetInitialValueChange, _this);
+			_this._bindTo(widget, {
+				'value-change'         : _this._onWidgetChange,
+				'initial-value-change' : _this._onWidgetInitialValueChange
+			});
 
 	},
 
@@ -195,6 +198,10 @@ JZ.Widget.Container.Form = $.inherit(JZ.Widget.Container, {
 			_this.trigger('ready-change', _this);
 		}
 
+	},
+
+	_onWidgetChange : function(e, widget) {
+		this.trigger('value-change', widget);
 	},
 
 	_onWidgetInitialValueChange : function(e, isInitialValueChanged) {
