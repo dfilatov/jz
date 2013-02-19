@@ -52,7 +52,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 		if(this._params.placeholder) {
 			var showHint = this._hintShowed,
-				isValEmpty = this._getVal().isEmpty();
+				isValEmpty = !this._elem.val();
 			this._hintShowed?
 				(this._isFocused || !isValEmpty) && (showHint = false) :
 				(!this._isFocused && isValEmpty) && (showHint = true);
