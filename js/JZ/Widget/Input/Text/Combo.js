@@ -48,6 +48,16 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
+	_initVal : function() {
+
+		var _this = this;
+		_this._getStorage().filter(_this._elem.val(), function(searchVal, list) {
+			_this._items = list;
+		});
+		_this.__base();
+
+	},
+
 	_createVal : function(val, preventMapping) {
 
 		return this.__base(preventMapping? val : this._getValMapper().toVal(val, this._items));
