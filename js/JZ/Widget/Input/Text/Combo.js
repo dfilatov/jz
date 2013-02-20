@@ -93,7 +93,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	_onStorageFilter : function(searchVal, list) {
 
 		var _this = this;
-		if(_this._lastSearchVal == searchVal) {
+		if(_this._elem && _this._lastSearchVal == searchVal) {
 			_this._items = list;
 			_this._hilightedIndex = -1;
 
