@@ -3,6 +3,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 	__constructor : function() {
 
 		this.__base.apply(this, arguments);
+		this._elemLastVal = this._elem.val();
 		this._hintShowed = false;
 
 	},
@@ -44,7 +45,10 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 	_onChange : function() {
 
-		this._updateVal();
+		if(this._elemLastVal != this._elem.val()) {
+			this._elemLastVal = this._elem.val();
+			this._updateVal();
+		}
 
 	},
 
@@ -66,6 +70,7 @@ JZ.Widget.Input.Text = $.inherit(JZ.Widget.Input, {
 
 		this._updatePlaceholder();
 		this.__base.apply(this, arguments);
+		this._elemLastVal = this._elem.val();
 
 	},
 
