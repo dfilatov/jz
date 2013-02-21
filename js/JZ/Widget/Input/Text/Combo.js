@@ -112,7 +112,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 				html.push('<li');
 				itemProcessor.isSelectable(item) && html.push(' class="', this.__self.CSS_CLASS_SELECTABLE, '"');
 				html.push(' onclick="return ', i++, '"');
-				if(isSelected = itemProcessor.isSelected(item, searchVal)) {
+				if(_this._hilightedIndex == -1 && (isSelected = itemProcessor.isSelected(item, searchVal))) {
 					_this._hilightedIndex = i - 1;
 				}
 				html.push('>');
@@ -284,8 +284,8 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		var _this = this;
 		if(_this._isListShowed && _this._hilightedIndex > -1) {
 			_this._params.blurOnSelect && this.blur();
+			_this._selectItemByIndex(_this._hilightedIndex);
 			_this
-				._setVal(this._createVal(_this._lastSearchVal = _this._keyDownValue))
 				._hideList()
 				._onSelect();
 			return false;
@@ -352,7 +352,10 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 		if(_this._isListShowed) {
 			var item = _this._items[index];
 			if(item) {
-				_this._onSelectItem(item, _this._lastSearchVal = _this._getItemProcessor().toString(item));
+				var itemProcessor = _this._getItemProcessor();
+				_this._lastSearchVal = itemProcessor.toString(item);
+				_this._setVal(_this._createVal(itemProcessor.toVal(item), true));
+
 				var node = _this._elem[0];
 				if(node.createTextRange && !node.selectionStart) {
 					var range = node.createTextRange();
@@ -366,11 +369,6 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	},
 
-	_onSelectItem : function(item, val) {
-
-		this._setVal(this._createVal(val));
-
-	},
 
 	_showList : function() {
 
@@ -691,6 +689,12 @@ var itemProcessors = {
 
 			},
 
+			toVal : function(item) {
+
+				return item;
+
+			},
+
 			toString : function(item) {
 
 				return item;
@@ -718,6 +722,12 @@ var itemProcessors = {
 		}),
 
 		'val-with-label' : {
+
+			toVal : function(item) {
+
+				return item.val;
+
+			},
 
 			toString : function(item) {
 
