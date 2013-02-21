@@ -266,6 +266,25 @@ JZ.Widget = $.inherit(JZ.Observable, {
 
 	},
 
+	_unbindFrom : function(observable, type, fn) {
+
+		var _this = this;
+		typeof type == 'string'?
+			observable.unbind(type, $.proxy(fn, _this)) :
+			$.each(type, function(type) {
+				_this._unbindFrom(observable, type, this);
+			});
+
+		return _this;
+
+	},
+
+	_unbindFromElem : function(type, fn) {
+
+		return this._unbindFrom(this._elem, type, fn);
+
+	},
+
 	_init : function() {
 
 		this
