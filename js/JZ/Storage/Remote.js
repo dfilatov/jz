@@ -1,12 +1,22 @@
 JZ.Storage.Remote = $.inherit(JZ.Storage, {
 
+	__constructor : function(params) {
+
+		this.__base(params);
+		this._checkInitialList = true;
+
+	},
+
 	filter : function(value, callback) {
 
 		var params = this._params;
 
-		if(params.list) {
-			callback(value, params.list);
-			delete params.list;
+		if(this._checkInitialList) {
+			this._checkInitialList = false;
+			if(params.list) {
+				callback(value, params.list);
+				delete params.list;
+			}
 			return;
 		}
 
