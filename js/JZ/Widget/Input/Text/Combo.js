@@ -1,4 +1,4 @@
-(function() {
+(function(undef) {
 
 JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
@@ -495,27 +495,15 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 
 	_getItemProcessor : function() {
 
-		if(this._itemProcessor) {
-			return this._itemProcessor;
-		}
-
-		var itemProcessor = this._params.itemProcessor;
-		return this._itemProcessor = (new (itemProcessor === 'default'?
-			itemProcessors['default'] :
-			$.inherit(itemProcessors['default'], itemProcessors[itemProcessor]))(this._params.caseSensitivity));
+		return this._itemProcessor || (this._itemProcessor =
+			new itemProcessors[this._params.itemProcessor || 'default'](this._params.caseSensitivity));
 
 	},
 
 	_getValMapper : function() {
 
-		if(this._valMapper) {
-			return this._valMapper;
-		}
-
-		var valMapper = this._params.valMapper;
-		return this._valMapper = (new (valMapper === 'default'?
-			valMappers['default'] :
-			$.inherit(valMappers['default'], valMappers[valMapper]))(this));
+		return this._valMapper || (this._valMapper =
+			new valMappers[this._params.valMapper || 'default']());
 
 	},
 
@@ -649,143 +637,157 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 	CSS_CLASS_LIST           : JZ.CSS_CLASS_WIDGET + '-list',
 	CSS_CLASS_ARROW          : JZ.CSS_CLASS_WIDGET + '-comboarrow',
 	CSS_CLASS_ARROW_PRESSED  : JZ.CSS_CLASS_WIDGET + '-comboarrow-pressed',
-	CSS_CLASS_ARROW_DISABLED : JZ.CSS_CLASS_WIDGET + '-comboarrow-disabled'
+	CSS_CLASS_ARROW_DISABLED : JZ.CSS_CLASS_WIDGET + '-comboarrow-disabled',
+
+	registerItemProcessor : function(name, base, props) {
+
+		if(!props) {
+			props = base;
+			base = undef;
+		}
+
+		itemProcessors[name] = $.inherit(itemProcessors[base || 'default'], props);
+
+	},
+
+	registerValMapper : function(name, base, props) {
+
+		if(!props) {
+			props = base;
+			base = undef;
+		}
+
+		valMappers[name] = $.inherit(valMappers[base || 'default'], props);
+
+	}
 
 });
 
-var itemProcessors = {
+var itemProcessors = {};
 
-		'default' : $.inherit({
+itemProcessors['default'] = $.inherit({
 
-			__constructor : function(caseSensitivity) {
+	__constructor : function(caseSensitivity) {
 
-				this._caseSensitivity = caseSensitivity;
-
-			},
-
-			toHtml : function(item, searchVal, buffer) {
-
-				var val = this.toString(item);
-
-				if(this.isSelectable(item)) {
-					var startIndex = searchVal?
-							(this._caseSensitivity? val : val.toLowerCase())
-								.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())) :
-							-1,
-						searchValLen = searchVal.length;
-
-					startIndex > -1?
-						buffer.push(
-							val.substr(0, startIndex),
-							'<strong>',
-							val.substr(startIndex, searchValLen),
-							'</strong>',
-							val.substr(startIndex + searchValLen)) :
-						buffer.push(val);
-				}
-				else {
-					buffer.push(val);
-				}
-
-			},
-
-			toVal : function(item) {
-
-				return item;
-
-			},
-
-			toString : function(item) {
-
-				return item;
-
-			},
-
-			isSelectable : function(item) {
-
-				return true;
-
-			},
-
-			isSelected : function(item, searchVal) {
-
-				if(!this.isSelectable(item)) {
-					return false;
-				}
-
-				var val = this.toString(item);
-				return (this._caseSensitivity? val : val.toLowerCase()) ===
-					(this._caseSensitivity? searchVal : searchVal.toLowerCase());
-
-			}
-
-		}),
-
-		'val-with-label' : {
-
-			toVal : function(item) {
-
-				return item.val;
-
-			},
-
-			toString : function(item) {
-
-				return item.label;
-
-			}
-
-		}
+		this._caseSensitivity = caseSensitivity;
 
 	},
-	valMappers = {
 
-		'default' : $.inherit({
+	toHtml : function(item, searchVal, buffer) {
 
-			toVal : function(str, list) {
+		var val = this.toString(item);
+		buffer.push(this.isSelectable(item)? this.hilight(val, searchVal) : val);
 
-				return str;
+	},
 
-			},
+    hilight : function(val, searchVal) {
+		var startIndex = searchVal?
+				(this._caseSensitivity? val : val.toLowerCase())
+					.indexOf((this._caseSensitivity? searchVal : searchVal.toLowerCase())) :
+				-1,
+			searchValLen = searchVal.length;
 
-			toString : function(val, list) {
+		return startIndex > -1?
+			val.substr(0, startIndex) +
+				'<strong>' + val.substr(startIndex, searchValLen) + '</strong>' +
+				val.substr(startIndex + searchValLen) :
+			val;
+    },
 
-				return val;
+	toVal : function(item) {
 
-			}
+		return item;
 
-		}),
+	},
 
-		'val-with-label' : {
+	toString : function(item) {
 
-			toVal : function(str, list) {
+		return item;
 
-				var item, i = 0;
-				while(item = list[i++]) {
-					if(item.label == str) {
-						return item.val;
-					}
-				}
+	},
 
-				return '';
+	isSelectable : function(item) {
 
-			},
+		return true;
 
-			toString : function(val, list) {
+	},
 
-				var item, i = 0;
-				while(item = list[i++]) {
-					if(item.val == val) {
-						return item.label;
-					}
-				}
+	isSelected : function(item, searchVal) {
 
-				return '';
-
-			}
-
+		if(!this.isSelectable(item)) {
+			return false;
 		}
 
-	};
+		var val = this.toString(item);
+		return (this._caseSensitivity? val : val.toLowerCase()) ===
+			(this._caseSensitivity? searchVal : searchVal.toLowerCase());
+
+	}
+
+});
+
+itemProcessors['val-with-label'] = $.inherit(itemProcessors['default'], {
+
+	toVal : function(item) {
+
+		return item.val;
+
+	},
+
+	toString : function(item) {
+
+		return item.label;
+
+	}
+
+});
+
+var valMappers = {};
+
+valMappers['default'] = $.inherit({
+
+	toVal : function(str, list) {
+
+		return str;
+
+	},
+
+	toString : function(val, list) {
+
+		return val;
+
+	}
+
+});
+
+valMappers['val-with-label'] = $.inherit(valMappers['default'], {
+
+	toVal : function(str, list) {
+
+		var item, i = 0;
+		while(item = list[i++]) {
+			if(item.label == str) {
+				return item.val;
+			}
+		}
+
+		return '';
+
+	},
+
+	toString : function(val, list) {
+
+		var item, i = 0;
+		while(item = list[i++]) {
+			if(item.val == val) {
+				return item.label;
+			}
+		}
+
+		return '';
+
+	}
+
+});
 
 })();
