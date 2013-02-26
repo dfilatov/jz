@@ -134,7 +134,7 @@ JZ.Widget.Input.Text.Combo = $.inherit(JZ.Widget.Input.Text, {
 						_this._getMeasurerElem().outerWidth() - parseInt(listElem.parent().css('border-left-width'), 10) * 2)
 				};
 
-			(prevListWidth !== _this._lastListWidth) && _this._reposList();
+			_this._isFocused && (prevListWidth !== _this._lastListWidth) && _this._reposList();
 
 			list.length > _this._params.listSize &&
 				(css.height = listElem.find('li:first').outerHeight() * _this._params.listSize);
